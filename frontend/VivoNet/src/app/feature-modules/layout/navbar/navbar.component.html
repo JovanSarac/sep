@@ -1,0 +1,27 @@
+<div class="full-navbar">
+    <div class="typeuser">
+        <div class="typeuser-container">
+            <p class="type-user" [ngClass]="{'active': selectedType === 'personal'}" (click)="selectType('personal')">Personal</p>
+            <p class="type-user" [ngClass]="{'active': selectedType === 'business'}" (click)="selectType('business')">Business</p>
+        </div>
+    </div>
+    <div class="navbar">
+        <div class="navbar-container">
+        <div class="navbar-logo">
+            VivoNet.
+        </div>
+        <ul class="navbar-links">
+            <li><a href="#home">Mobile Phones</a></li>
+            <li><a href="#products">Landline</a></li>
+            <li><a href="#services">Internet</a></li>
+            <li><a href="#contact">TV</a></li>
+        </ul>
+        
+        <span class="cart-button">
+            <i class="bi bi-cart4"></i>
+            </span>
+        <button class="navbar-button"><i class="bi bi-person" style="margin-right: 5px;"></i>Log in</button>
+        </div>
+    </div>
+</div>
+  

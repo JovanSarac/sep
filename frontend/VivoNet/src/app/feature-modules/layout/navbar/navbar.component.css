@@ -1,0 +1,115 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.full-navbar{
+    display: flex;
+    flex-direction: column;
+}
+
+.typeuser{
+    display: flex;
+    justify-content: center;
+    background-color: var(--border-light-color);
+    padding: 0.3rem;
+}
+
+.typeuser-container{
+    display: flex;
+    justify-content: flex-end;
+    width: 70%;
+}
+
+.typeuser-container p {
+    margin-left: 20px;
+    font-size: 13px;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.typeuser-container p:hover {
+    text-decoration: underline;
+}
+
+
+.typeuser-container p.active {
+    font-weight: bold;
+    text-decoration: underline;
+    text-decoration-color: #fe9e1b;
+    text-decoration-thickness: 3px;
+    text-underline-offset: 3px;
+}
+
+.navbar {
+    display: flex;
+    justify-content: center;
+    background-color: var(--primary-color);
+    padding: 1rem;
+}
+
+.navbar-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 70%;
+}
+
+.navbar-logo {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: #ffffff;
+    font-family: "Pacifico", cursive;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.navbar-links {
+    list-style: none;
+    display: flex;
+    gap: 1.5rem;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.navbar-links a {
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 1.2rem;
+    transition: color 0.3s, text-shadow 0.3s;
+}
+
+.navbar-links a:hover {
+    color: var(--secondary-color);
+    text-shadow: 2px 4px 4px rgba(254, 158, 27, 0.8);
+}
+
+.cart-button {
+    color: #ffffff;
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: color 0.3s, text-shadow 0.3s;
+}
+
+.cart-button:hover {
+    color: var(--secondary-color);
+    text-shadow: 2px 2px 4px rgba(112, 112, 112, 0.8);
+}
+
+.navbar-button {
+    background-color: var(--secondary-color);
+    color: #ffffff;
+    border: none;
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    cursor: pointer;
+    border-radius: 20px;
+    transition: background-color 0.3s;
+    font-family: "Poppins" sans-serif;
+    margin-left: 20px;
+}
+
+.navbar-button:hover {
+    background-color: #e68a00;
+}
