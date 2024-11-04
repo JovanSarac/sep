@@ -1,0 +1,8 @@
+@import '@fortawesome/fontawesome-free/css/all.min.css';
+
+
+
+.link-name:hover{
+    color: var(--secondary-color);
+    text-shadow: 2px 4px 4px rgba(254, 158, 27, 0.8);
+}
