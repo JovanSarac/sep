@@ -7,14 +7,14 @@
     </div>
     <div class="navbar">
         <div class="navbar-container">
-        <div class="navbar-logo">
+        <div class="navbar-logo" (click)="goToHome()">
             VivoNet.
         </div>
         <ul class="navbar-links">
-            <li><a href="#home">Mobile Phones</a></li>
-            <li><a href="#products">Landline</a></li>
-            <li><a href="#services">Internet</a></li>
-            <li><a href="#contact">TV</a></li>
+            <li><a [href]="startUrl + 'mobile-services'">Mobile Phones</a></li>
+            <li><a [href]="startUrl + 'landline-services'">Landline</a></li>
+            <li><a [href]="startUrl + 'internet-services'">Internet</a></li>
+            <li><a [href]="startUrl + 'television-services'">TV</a></li>
         </ul>
         
         <span class="cart-button">
