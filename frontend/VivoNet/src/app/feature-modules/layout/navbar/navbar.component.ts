@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'xp-navbar',
@@ -6,9 +7,17 @@ import { Component } from '@angular/core';
   styleUrls: ['./navbar.component.css']
 })
 export class NavbarComponent {
-  selectedType: string = 'personal'; // Podrazumevano stanje
+
+  constructor(private router: Router){
+
+  }
+  selectedType: string = 'personal';
 
   selectType(type: string): void {
-    this.selectedType = type; // Postavite izabrani tip
+    this.selectedType = type;
+  }
+
+  goToLogin(){
+    this.router.navigate(['/login']);
   }
 }

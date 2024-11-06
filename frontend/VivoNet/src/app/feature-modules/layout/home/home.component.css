@@ -154,3 +154,38 @@
 .one-service:hover .overlay {
   top: 0;
 }
+
+@media (max-width: 1650px) {
+  .one-service {
+    width: 230px;
+    height: 230px;
+  }
+}
+
+@media (max-width: 1450px) {
+  .one-service {
+    width: 210px;
+    height: 210px;
+  }
+}
+
+@media (max-width: 1300px) {
+  .one-service {
+    width: 190px;
+    height: 190px;
+  }
+}
+
+@media (max-width: 1200px) {
+  .one-service {
+    width: 180px;
+    height: 180px;
+  }
+}
+
+@media (max-width: 1110px) {
+  .one-service {
+    width: 160px;
+    height: 160px;
+  }
+}

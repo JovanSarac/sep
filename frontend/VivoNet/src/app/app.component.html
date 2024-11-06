@@ -1,3 +1,13 @@
-<xp-navbar></xp-navbar>
+<xp-navbar 
+    *ngIf="
+    this.router.url !== '/login' &&
+    this.router.url !== '/registration'
+    "
+></xp-navbar>
 <router-outlet></router-outlet>
-<xp-footer></xp-footer>
+<xp-footer
+    *ngIf="
+    this.router.url !== '/login' &&
+    this.router.url !== '/registration'
+    "
+></xp-footer>

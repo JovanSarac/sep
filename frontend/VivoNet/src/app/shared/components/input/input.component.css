@@ -1,0 +1,72 @@
+.form-label {
+  color: var(--text-heading-color);
+  font-size: clamp(14px, 1.2vw, 24px); 
+  margin-bottom: 0.3vh;
+  font-weight: 500;
+}
+
+.form-input {
+  border-radius: 8px;
+  border: 2px solid var(--border-light-color);
+  height: inherit;
+  font-size: clamp(14px, 0.9vw, 22px);
+  color: var(--text-color);
+  padding: 0.8em 1em;
+}
+
+.form-input:focus {
+  border: 2px solid var(--primary-color);
+  box-shadow: 0 0 6px rgba(0, 123, 255, 0.4);
+}
+
+.form-input:hover {
+  border: 2px solid var(--primary-hover-color);
+}
+
+.form-input:disabled {
+  color: var(--disabled-color);
+  border: px dashed var(--disabled-color);
+}
+
+.form-input:focus::placeholder {
+  opacity: 0.5;
+}
+
+.red-border {
+  border-color: var(--error-color);
+  background-color: rgba(255, 0, 0, 0.05);
+}
+
+.red {
+  color: var(--error-color);
+  font-size: smaller;
+  font-weight: 500;
+}
+
+.input-container {
+  width: 100%;
+}
+
+.eye-icon {
+  cursor: pointer;
+  z-index: 1;
+  border-radius: 0px 8px 8px 0px;
+  border: 1px solid var(--border-light-color);
+  color: var(--text-color);
+  background-color: var(--background-color);
+  height: inherit;
+  display: flex;
+  align-items: center;
+  padding: 0 15px;
+  transition: color 0.2s ease-in-out;
+  height: 100%;
+}
+
+.eye-icon:hover {
+  color: var(--primary-color);
+}
+
+input[type="password"]::-ms-reveal,
+input[type="password"]::-ms-clear {
+  display: none;
+}
