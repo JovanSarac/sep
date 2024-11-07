@@ -10,6 +10,8 @@ import { SharedModule } from './shared/shared.module';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { JwtInterceptor } from './infrastructure/auth/jwt/jwt.interceptor';
 import { ServiceOfferingsModule } from './feature-modules/service-offerings/service-offerings.module';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ToastrModule } from 'ngx-toastr';
 
 @NgModule({
   declarations: [
@@ -24,7 +26,17 @@ import { ServiceOfferingsModule } from './feature-modules/service-offerings/serv
     AuthModule,
     SharedModule,
     ServiceOfferingsModule,
-    HttpClientModule
+    BrowserAnimationsModule,
+    HttpClientModule,
+    ToastrModule.forRoot({
+      timeOut: 4000,
+      extendedTimeOut: 1000,
+      maxOpened: 3,
+      positionClass: 'toast-bottom-right',
+      progressBar: true,
+      progressAnimation: 'increasing',
+    }),
+
   ],
   providers: [
     {

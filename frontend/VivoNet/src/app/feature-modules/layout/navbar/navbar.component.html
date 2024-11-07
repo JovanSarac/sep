@@ -19,7 +19,8 @@
         
         <span class="cart-button">
             <i class="bi bi-cart4"></i>
-            </span>
+            <span class="cart-count" *ngIf="cartCount > 0">{{ cartCount }}</span> 
+        </span>
         <button class="navbar-button" (click)="goToLogin()"><i class="bi bi-person" style="margin-right: 5px;"></i>Log in</button>
         </div>
     </div>
