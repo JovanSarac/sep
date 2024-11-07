@@ -1,3 +1,52 @@
 <div class="full-page">
-    <p>landline-services</p>
+    <div class="landline-services-container" *ngFor="let landlineservice of landlineServices">
+        <div class="one-service">
+            <div class="user-type-badge">
+                {{ landlineservice.typeUser === 0 ? 'Personal' : 'Business' }}
+            </div>
+            <h2 class="service-name">{{landlineservice.name}}</h2>
+            <p class="service-description">{{landlineservice.description}}</p>
+            <div class="tariff-plans">
+                <div class="one-tariff" *ngFor="let tariffPlan of landlineservice.tariffPlans">
+                    <h4 class="tariff-name">{{tariffPlan.name}}</h4>
+                    <div class="tariff-services">
+                        <div class="one-atribute" *ngIf="tariffPlan.numberMinute != null">
+                            <h6>Minutes</h6>
+                            <h5>{{tariffPlan.numberMinute === -1 ? 'Unlimited' : tariffPlan.numberMinute}}</h5>
+                        </div>
+
+
+                    </div>
+
+                    <div class="separator"></div>
+                    <div class="price">
+                        <h3>{{tariffPlan.price}} $</h3>
+                    </div>
+                    
+                    <div class="tariff-description">
+                        <p>{{tariffPlan.description}}</p>
+                    </div>
+
+                    <div class="one-atribute">
+                        <h6>Contract duration</h6>
+                        <h5>{{tariffPlan.durationContract}} months</h5>
+
+                    </div>
+
+                    <div class="separator"></div>
+
+                    <xp-primary-button
+                        style="width: 100%; margin-top: 5%;"
+                        buttonId="login-button"
+                        buttonType="button"
+                        iconClass="bi bi-cart4"
+                        textValue="Add to cart"
+                    >
+                    </xp-primary-button>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
 </div>

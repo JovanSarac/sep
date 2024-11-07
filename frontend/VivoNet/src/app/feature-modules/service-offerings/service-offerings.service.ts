@@ -142,4 +142,114 @@ export class ServiceOfferingsService {
 
     return mobileServices;
   }
+
+  getLandlineServices(): Service[] {
+    const landlineServices: Service[] = [
+      // Personal plans
+      {
+        id: 5,
+        name: 'Landline Basic Plan',
+        description: 'Basic landline plan with limited local calls.',
+        typeUser: TypeUser.Personal,
+        typeService: TypeService.Landline,
+        tariffPlans: [
+          {
+            id: 9,
+            name: 'Basic Call Plan',
+            description: 'Includes 100 local minutes per month.',
+            price: 15,
+            durationContract: 12,
+            numberMinute: 100
+          },
+          {
+            id: 10,
+            name: 'Extended Call Plan',
+            description: 'Includes 300 local minutes and 50 national minutes.',
+            price: 25,
+            durationContract: 12,
+            numberMinute: 350
+          }
+        ]
+      },
+      {
+        id: 6,
+        name: 'Landline Premium Plan',
+        description: 'Premium landline plan with unlimited local calls and national call discounts.',
+        typeUser: TypeUser.Personal,
+        typeService: TypeService.Landline,
+        tariffPlans: [
+          {
+            id: 11,
+            name: 'Unlimited Local Plan',
+            description: 'Unlimited local calls and 100 national minutes.',
+            price: 35,
+            durationContract: 24,
+            numberMinute: -1  // Neograničeni minuti
+          },
+          {
+            id: 12,
+            name: 'National Plus Plan',
+            description: 'Unlimited local calls, 300 national minutes.',
+            price: 50,
+            durationContract: 24,
+            numberMinute: -1  // Neograničeni minuti
+          }
+        ]
+      },
+
+      // Business plans
+      {
+        id: 7,
+        name: 'Business Landline Plan',
+        description: 'Landline plan for small businesses with flexible call packages.',
+        typeUser: TypeUser.Business,
+        typeService: TypeService.Landline,
+        tariffPlans: [
+          {
+            id: 13,
+            name: 'Business Starter Plan',
+            description: '200 local minutes and 100 national minutes for small businesses.',
+            price: 40,
+            durationContract: 12,
+            numberMinute: 300
+          },
+          {
+            id: 14,
+            name: 'Business Unlimited Plan',
+            description: 'Unlimited local and national calls with priority support.',
+            price: 80,
+            durationContract: 24,
+            numberMinute: -1  // Neograničeni minuti
+          }
+        ]
+      },
+      {
+        id: 8,
+        name: 'Enterprise Landline Plan',
+        description: 'Comprehensive landline solution for large enterprises with shared minutes.',
+        typeUser: TypeUser.Business,
+        typeService: TypeService.Landline,
+        tariffPlans: [
+          {
+            id: 15,
+            name: 'Enterprise Plan 5000 Minutes',
+            description: '5000 shared minutes for national and international calls.',
+            price: 200,
+            durationContract: 36,
+            numberMinute: 5000
+          },
+          {
+            id: 16,
+            name: 'Enterprise Premium Plan',
+            description: 'Unlimited calls with shared lines and priority support.',
+            price: 300,
+            durationContract: 36,
+            numberMinute: -1  // Neograničeni minuti
+          }
+        ]
+      }
+    ];
+
+    return landlineServices;
+  }
 }

@@ -12,7 +12,8 @@ import { SharedModule } from 'src/app/shared/shared.module';
 
 @NgModule({
   declarations: [
-    MobileComponent
+    MobileComponent,
+    LandlineComponent
   ],
   imports: [
     CommonModule,
@@ -21,7 +22,8 @@ import { SharedModule } from 'src/app/shared/shared.module';
     SharedModule
   ],
   exports:[
-    MobileComponent
+    MobileComponent,
+    LandlineComponent
   ]
 })
 export class ServiceOfferingsModule { }
