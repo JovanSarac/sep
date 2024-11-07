@@ -9,6 +9,7 @@ import { AuthModule } from './infrastructure/auth/auth.module';
 import { SharedModule } from './shared/shared.module';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { JwtInterceptor } from './infrastructure/auth/jwt/jwt.interceptor';
+import { ServiceOfferingsModule } from './feature-modules/service-offerings/service-offerings.module';
 
 @NgModule({
   declarations: [
@@ -22,6 +23,7 @@ import { JwtInterceptor } from './infrastructure/auth/jwt/jwt.interceptor';
     MaterialModule,
     AuthModule,
     SharedModule,
+    ServiceOfferingsModule,
     HttpClientModule
   ],
   providers: [

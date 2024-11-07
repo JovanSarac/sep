@@ -1,3 +1,60 @@
 <div class="full-page">
-    <p>mobile-services</p>
+    <div class="mobile-services-container" *ngFor="let mobileservice of mobileServices">
+        <div class="one-service">
+            <div class="user-type-badge">
+                {{ mobileservice.typeUser === 0 ? 'Personal' : 'Business' }}
+            </div>
+            <h2 class="service-name">{{mobileservice.name}}</h2>
+            <p class="service-description">{{mobileservice.description}}</p>
+            <div class="tariff-plans">
+                <div class="one-tariff" *ngFor="let tariffPlan of mobileservice.tariffPlans">
+                    <h4 class="tariff-name">{{tariffPlan.name}}</h4>
+                    <div class="tariff-services">
+                        <div class="one-atribute" *ngIf="tariffPlan.numberMinute != null">
+                            <h6>Minutes</h6>
+                            <h5>{{tariffPlan.numberMinute === -1 ? 'Unlimited' : tariffPlan.numberMinute}}</h5>
+                        </div>
+
+                        <div class="one-atribute" *ngIf="tariffPlan.numberSMS != null">
+                            <h6>SMS</h6>
+                            <h5>{{tariffPlan.numberSMS}}</h5>
+                        </div>
+
+                        <div class="one-atribute" *ngIf="tariffPlan.internetGb != null">
+                            <h6>Internet GB</h6>
+                            <h5>{{tariffPlan.internetGb}}</h5>
+                        </div>
+                    </div>
+
+                    <div class="separator"></div>
+                    <div class="price">
+                        <h3>{{tariffPlan.price}} $</h3>
+                    </div>
+                    
+                    <div class="tariff-description">
+                        <p>{{tariffPlan.description}}</p>
+                    </div>
+
+                    <div class="one-atribute">
+                        <h6>Contract duration</h6>
+                        <h5>{{tariffPlan.durationContract}} months</h5>
+
+                    </div>
+
+                    <div class="separator"></div>
+
+                    <xp-primary-button
+                        style="width: 100%; margin-top: 5%;"
+                        buttonId="login-button"
+                        buttonType="button"
+                        iconClass="bi bi-cart4"
+                        textValue="Add to cart"
+                    >
+                    </xp-primary-button>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
 </div>
