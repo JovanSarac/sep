@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { ServiceOfferingsService } from '../service-offerings.service';
-import { Service } from '../model/services.model';
+import { Service, TypeService, TypeUser } from '../model/services.model';
 import { ActivatedRoute } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { CartService } from '../../layout/cart.service';
+import { CartItem } from '../model/cartitem.model';
 
 @Component({
   selector: 'app-mobile',
@@ -37,14 +38,22 @@ export class MobileComponent implements OnInit {
     });
   }
 
-  addToCart(tariffPlan: any): void {
-    const exists = this.cartService.getCartItems().some((item: any) => item.id === tariffPlan.id);
+
+  addToCart(tariffPlan: any, mobileserviceId: number, typeUser: TypeUser, typeService: TypeService): void {
+    const cartItem: CartItem = {
+        ...tariffPlan,
+        mobileServiceId: mobileserviceId,
+        typeUser: typeUser,
+        typeService: typeService
+    };
+    
+    const exists = this.cartService.getCartItems().some((item: any) => item.id === cartItem.id);
 
     if (exists) {
       this.toastr.warning('This service is already in the cart.', 'Warning');
     } else {
-      this.cartService.addItem(tariffPlan);
-      this.toastr.success('Successfully added the ' + tariffPlan.name + ' service to the cart.', 'Success');
+      this.cartService.addItem(cartItem);
+      this.toastr.success('Successfully added the ' + cartItem.name + ' service to the cart.', 'Success');
     }
   }
 }

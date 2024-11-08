@@ -5,4 +5,133 @@
     width: 70%;
     min-height: 80dvh;
     margin: auto;
+    padding-bottom: 30px;
+}
+
+.internet-services-container{
+    display: flex;
+    flex-direction: column;
+    margin-top: 30px;
+    width: 80%;
+}
+
+.one-service{
+    display: flex;
+    flex-direction: column;
+    border: 2px solid var(--primary-color);
+    background-color: var(--border-light-color);
+    border-radius: 12px;
+    position: relative;
+    overflow: hidden;
+}
+
+.user-type-badge {
+    position: absolute;
+    top: 52px;
+    right: -20px;
+    background-color: var(--secondary-color);
+    color: #fff;
+    padding: 5px 30px; 
+    font-weight: bold;
+    font-size: 14px;
+    text-transform: uppercase;
+    transform: rotate(40deg); /* Rotiramo trakicu pod uglom od 45 stepeni */
+    transform-origin: top right;
+    text-align: center;
+    width: 120px; /* Širina trakice */
+    box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3); /* Opcionalno: blagi senčenje za bolji izgled */
+}
+
+
+.service-name{
+    display: flex;
+    color: var(--primary-color);
+    justify-content: center;
+    align-items: center;
+    font-weight: 600;
+    margin-top: 10px;
+}
+
+.service-description{
+    margin: 15px 50px;
+    line-height: 1.5;
+}
+
+.tariff-plans{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    width: 95%;
+    margin: auto;
+    margin-bottom: 20px;
+    gap: 25px;
+}
+
+.one-tariff{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    background-color: aliceblue;
+    border-radius: 12px;
+    padding: 5px 20px;
+    width: 310px;
+}
+
+.tariff-name{
+    display: flex;
+    align-items: center;
+    text-align: center;
+    justify-content: center;
+    color: var(--primary-color);
+    width: 100%;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.tariff-services{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 100%;
+}
+
+
+.one-atribute{
+    display: flex;
+    flex-direction: column;
+    margin-right: 40px; 
+}
+
+.tariff-services > .one-atribute:nth-child(3n) {
+    margin-right: 0;
+}
+
+.one-atribute h5{
+    color: var(--primary-color);
+}
+
+
+.separator{
+    width: 100%;
+    border-bottom: 1px solid black;
+}
+
+.price{
+    display: flex;
+    width: 100%;
+    justify-content: flex-end;
+    align-items: flex-end;
+}
+
+.price h3{
+    color: var(--secondary-color);
+    font-weight: bold;
+}
+
+.tariff-description{
+    display: flex;
+    width: 100%;
+    color: #5e5e5e;
+    text-align: justify;
+    font-size: 13px;
 }

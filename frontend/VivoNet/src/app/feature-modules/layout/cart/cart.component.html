@@ -2,7 +2,10 @@
     <div class="items" *ngIf="cartItems.length != 0">
         <div class="one-item" *ngFor="let item of cartItems">
             <div class="item-pic">
-                <i class="bi bi-phone-fill"></i>
+                <i class="bi bi-phone-fill" *ngIf="item.typeService == 0"></i>
+                <i class="bi bi-telephone-fill" *ngIf="item.typeService == 1"></i>
+                <i class="bi bi-router-fill" *ngIf="item.typeService == 2"></i>
+                <i class="bi bi-tv-fill" *ngIf="item.typeService == 3"></i>
             </div>
             <div class="basic-info">
                 <h1>{{item.name}}</h1>
@@ -19,7 +22,22 @@
 
                     <div class="one-atribute" *ngIf="item.internetGb != null">
                         <h6>Internet GB</h6>
-                        <h5>{{item.internetGb}}</h5>
+                        <h5>{{item.internetGb === -1 ? 'Unlimited' : item.internetGb}}</h5>
+                    </div>
+
+                    <div class="one-atribute" *ngIf="item.speedInternetMbps != null">
+                        <h6>Speed</h6>
+                        <h5>{{item.speedInternetMbps}} Mbps</h5>
+                    </div>
+
+                    <div class="one-atribute" *ngIf="item.numberChannel != null">
+                        <h6>Number of channel</h6>
+                        <h5>{{item.numberChannel}}</h5>
+                    </div>
+
+                    <div class="one-atribute" *ngIf="item.HDChannel != null">
+                        <h6>HD Channels</h6>
+                        <h5>{{item.HDChannel === true ? 'Yes' : 'No'}}</h5>
                     </div>
                 </div>
                 <div class="separator"></div>

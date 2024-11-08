@@ -35,6 +35,8 @@
 .item-pic i{
     font-size: 120px;
     color: var(--secondary-color);
+    padding-left: 20px;
+    padding-right: 20px;
 }
 
 .basic-info{

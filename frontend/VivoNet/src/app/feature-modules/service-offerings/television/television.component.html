@@ -1,3 +1,57 @@
 <div class="full-page">
-    <p>television-services</p>
+    <div class="television-services-container" *ngFor="let televisionservice of televisionServices">
+        <div class="one-service">
+            <div class="user-type-badge">
+                {{ televisionservice.typeUser === 0 ? 'Personal' : 'Business' }}
+            </div>
+            <h2 class="service-name">{{televisionservice.name}}</h2>
+            <p class="service-description">{{televisionservice.description}}</p>
+            <div class="tariff-plans">
+                <div class="one-tariff" *ngFor="let tariffPlan of televisionservice.tariffPlans">
+                    <h4 class="tariff-name">{{tariffPlan.name}}</h4>
+                    <div class="tariff-services">
+                        <div class="one-atribute" *ngIf="tariffPlan.numberChannel != null">
+                            <h6>Number of channel</h6>
+                            <h5>{{tariffPlan.numberChannel}}</h5>
+                        </div>
+
+                        <div class="one-atribute" *ngIf="tariffPlan.HDChannel != null">
+                            <h6>HD Channels</h6>
+                            <h5>{{tariffPlan.HDChannel === true ? 'Yes' : 'No'}}</h5>
+                        </div>
+
+                    </div>
+
+                    <div class="separator"></div>
+                    <div class="price">
+                        <h3>{{tariffPlan.price}} $</h3>
+                    </div>
+                    
+                    <div class="tariff-description">
+                        <p>{{tariffPlan.description}}</p>
+                    </div>
+
+                    <div class="one-atribute">
+                        <h6>Contract duration</h6>
+                        <h5>{{tariffPlan.durationContract}} months</h5>
+
+                    </div>
+
+                    <div class="separator"></div>
+
+                    <xp-primary-button
+                        style="width: 100%; margin-top: 5%;"
+                        buttonId="login-button"
+                        buttonType="button"
+                        iconClass="bi bi-cart4"
+                        textValue="Add to cart"
+                        (click)="addToCart(tariffPlan, televisionservice.id!, televisionservice.typeUser, televisionservice.typeService)"
+                    >
+                    </xp-primary-button>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
 </div>
