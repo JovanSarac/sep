@@ -39,7 +39,7 @@ export class ServiceOfferingsService {
             numberSMS: 100
           },
           {
-            id: 2,
+            id: 9,
             name: 'Advanced Data Plan',
             description: 'Provides 5GB of data, 300 minutes of calls, and 100 SMS.',
             price: 20,

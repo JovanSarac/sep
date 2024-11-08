@@ -1,0 +1,72 @@
+<div class="full-page">
+    <div class="items" *ngIf="cartItems.length != 0">
+        <div class="one-item" *ngFor="let item of cartItems">
+            <div class="item-pic">
+                <i class="bi bi-phone-fill"></i>
+            </div>
+            <div class="basic-info">
+                <h1>{{item.name}}</h1>
+                <div class="tariff-services">
+                    <div class="one-atribute" *ngIf="item.numberMinute != null">
+                        <h6>Minutes</h6>
+                        <h5>{{item.numberMinute === -1 ? 'Unlimited' : item.numberMinute}}</h5>
+                    </div>
+
+                    <div class="one-atribute" *ngIf="item.numberSMS != null">
+                        <h6>SMS</h6>
+                        <h5>{{item.numberSMS}}</h5>
+                    </div>
+
+                    <div class="one-atribute" *ngIf="item.internetGb != null">
+                        <h6>Internet GB</h6>
+                        <h5>{{item.internetGb}}</h5>
+                    </div>
+                </div>
+                <div class="separator"></div>
+                <div class="item-description">
+                    <p>{{item.description}}</p>
+                </div>
+                <div class="contract-duration">
+                    <h6>Contract duration: </h6>
+                    <h5>{{item.durationContract}} months</h5>
+
+                </div>
+
+                <div class="price">
+                    <p>{{item.price}} $</p>
+                </div>
+            </div>
+            <div class="delete-button" (click)="deleteFromCart(item.id)">
+                <i class="bi bi-trash3-fill"></i>
+            </div>
+        </div>
+    </div>
+    <div class="empty-cart" *ngIf="cartItems.length == 0">
+        <img src="../../../../assets/images/emptycart.png" alt="no-pic">
+        <h2>No items in your cart!</h2>
+        <p>Browse our services and add items to your cart to see them here.</p>
+    </div>
+    <div class="details-cart">
+        <p class="details-cart-title">Cart summary</p>
+
+        <div class="total-items">
+            <p>Total items:</p>
+            <h3>{{totalItems}}</h3>
+        </div>
+
+        <div class="total-price">
+            <p>Total amount:</p>
+            <h3>{{totalPrice}} $</h3>
+        </div>
+
+        <xp-primary-button
+            style="width: 100%; margin-top: 5%;"
+            buttonId="login-button"
+            buttonType="button"
+            iconClass="bi bi-bag-check-fill"
+            textValue="Checkout"
+        >
+        </xp-primary-button>
+        
+    </div>
+</div>

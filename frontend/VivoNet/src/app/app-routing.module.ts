@@ -7,6 +7,7 @@ import { MobileComponent } from './feature-modules/service-offerings/mobile/mobi
 import { LandlineComponent } from './feature-modules/service-offerings/landline/landline.component';
 import { InternetComponent } from './feature-modules/service-offerings/internet/internet.component';
 import { TelevisionComponent } from './feature-modules/service-offerings/television/television.component';
+import { CartComponent } from './feature-modules/layout/cart/cart.component';
 
 const routes: Routes = [
   {path: '', component:  HomeComponent},
@@ -15,7 +16,8 @@ const routes: Routes = [
   {path: 'mobile-services', component: MobileComponent},
   {path: 'landline-services', component: LandlineComponent},
   {path: 'internet-services', component: InternetComponent},
-  {path: 'television-services', component: TelevisionComponent}
+  {path: 'television-services', component: TelevisionComponent},
+  {path: 'cart', component: CartComponent}
 ];
 
 @NgModule({

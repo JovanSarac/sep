@@ -17,7 +17,7 @@
             <li><a [href]="startUrl + 'television-services'">TV</a></li>
         </ul>
         
-        <span class="cart-button">
+        <span class="cart-button" (click)="goToCart()">
             <i class="bi bi-cart4"></i>
             <span class="cart-count" *ngIf="cartCount > 0">{{ cartCount }}</span> 
         </span>
