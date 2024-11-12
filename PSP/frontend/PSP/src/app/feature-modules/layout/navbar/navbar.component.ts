@@ -1,17 +1,17 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 
 @Component({
   selector: 'xp-navbar',
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.css']
 })
-export class NavbarComponent implements OnInit, OnDestroy {
+export class NavbarComponent implements OnInit {
 
-  selectedType: string = 'personal';
-  startUrl: string = 'http://localhost:4200/';
+  startUrl: string = 'http://localhost:4201/';
   cartItems: any[] = [];
   cartCount: number = 0;
+  selectedTab : string = '';
 
   constructor(
     private router: Router,
@@ -19,31 +19,12 @@ export class NavbarComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit(): void {
-    
-    this.activatedRoute.queryParams.subscribe(params => {
-      if (params['type'] === 'business') {
-        this.selectedType = 'business'; 
+    this.router.events.subscribe(event => {
+      if (event instanceof NavigationEnd) {
+        this.selectedTab = event.urlAfterRedirects;
       }
     });
-
     
-  }
-
-  ngOnDestroy(): void {}
-
-  selectType(type: string): void {
-    this.selectedType = type;
-    if (type === 'business') {
-      this.router.navigate([], {
-        relativeTo: this.activatedRoute,
-        queryParams: { type: 'business' },
-        queryParamsHandling: 'merge'
-      });
-    } else if (type === 'personal') {
-      this.router.navigate([], {
-        relativeTo: this.activatedRoute,
-      });
-    }
   }
 
   goToLogin() {
@@ -52,10 +33,6 @@ export class NavbarComponent implements OnInit, OnDestroy {
 
   goToHome() {
     this.router.navigate(['']);
-  }
-
-  goToCart(){
-    this.router.navigate(['cart']);
   }
 
 

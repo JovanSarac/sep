@@ -1,63 +1,8 @@
 <div class="full-page">
-    <div class="banner">
-      <div class="slider">
-        <img [src]="slideImg" id="slideImg" [class.fade]="isFading" />
-      </div>
-      <div class="overlay2">
-        <div [class.fade]="isFading" class="content">
-          <h1>{{ header1 }}</h1>
-          <p>{{ header2 }}</p>
-        </div>
-      </div>
-      <div class="dots">
-        <span
-          *ngFor="let dot of images; let i = index"
-          class="dot"
-          [ngClass]="{ active: i === currentIndex }"
-          (click)="setSlide(i)"
-        >
-        </span>
-      </div>
-    </div>
-    <div class="title-services-section">
-      <h1>
-        Discover Our Services
-      </h1>
-      <p>
-        Whether you need <b>mobile services</b>, <b>reliable fixed-line communication</b>, <b>high-speed internet</b>, or <b>top-quality digital television</b>, 
-        we have a solution for you. Browse our offerings and find the plan that suits your needs. Enjoy seamless connectivity, 
-        tailored packages, and exceptional support every step of the way. Discover how our services can enhance your everyday communication 
-        and entertainment experiences.
-      </p>
-    </div>
-    <div class="services-section">
-      <div class="one-service">
-        <i class="bi bi-phone-fill"></i>
-        <p>Mobile Services</p>
-        <div class="overlay">
-          <p>Connect with flexible plans.</p>
-        </div>
-      </div>
-      <div class="one-service">
-        <i class="bi bi-telephone-fill"></i>
-        <p>Fixed Telephony</p>
-        <div class="overlay">
-          <p>Stable, high-quality connection for home and business.</p>
-        </div>
-      </div>
-      <div class="one-service">
-        <i class="bi bi-router-fill"></i>
-        <p>Internet</p>
-        <div class="overlay">
-          <p>Speed and stability for everyday surfing.</p>
-        </div>
-      </div>
-      <div class="one-service">
-        <i class="bi bi-tv-fill"></i>
-        <p>TV</p>
-        <div class="overlay">
-          <p>Entertainment for all ages and interests.</p>
-        </div>
-      </div> 
-    </div>
+  <div class="left-side">
+    <h1><span class="highlight">Secure</span>, <span class="highlight">Fast</span>, and <span class="highlight">Effortless</span> Payments for Your Business.</h1>
+  </div>
+  <div class="right-side">
+    <img src="../../../../assets/images/home_illustration.png" alt="">
+  </div>
 </div>

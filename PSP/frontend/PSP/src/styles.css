@@ -1,1 +1,56 @@
 /* You can add global styles to this file, and also import other style files */
+@import "~bootstrap-icons/font/bootstrap-icons.css";
+@import "@angular/material/prebuilt-themes/indigo-pink.css";
+
+
+:root {
+    --primary-color: #99e420;         
+    --secondary-color: #7AB1A0;
+    --error-color: #e03e3e;
+    --background-color: #333333; 
+    --border-light-color: #d3d3d3;      
+  
+    --text-on-primary-color: white;
+    --text-on-secondary-color: white;
+    --text-heading-color: #99e420;   
+    --text-color: #ffffff;              /* Glavna boja teksta za tamne pozadine, čitljivija od crne */
+    --text-lighter-color: #cccccc;      /* Svetlija siva za sekundarne informacije */
+    --text-placeholder-color: #aaaaaa;  /* Svetlo siva za placeholder tekst */
+    --disabled-color: #666666;          /* Siva za onemogućene elemente, dovoljno različita od aktivnih boja */
+    
+    --primary-hover-color: #81be1f;     /* Tamnija nijansa primarne boje za hover */
+    --secondary-hover-color: #3ca383;   /* Tamnija nijansa ljubičaste za hover */
+    --info-color: #17a2b8;              /* Svetla plava za informativne oznake */
+    --warning-color: #ffc107;           /* Žuta za upozorenja, lako uočljiva */
+    --success-color: #28a745;           /* Zelena za uspešne akcije i poruke */
+    --accent-color: #ff5733;            /* Svetlo narandžasta za isticanje ključnih elemenata */
+  }
+  
+
+* {
+  scroll-behavior: smooth !important;
+  font-family: "Poppins", "sans-serif";
+}
+
+html {
+  height: 100%;
+}
+
+body {
+  height: 100%;
+  margin: 0;
+  font-family: "Poppins", "sans-serif";
+  background-image: url('/assets/images/background.jpg');
+  background-size: cover;      /* Ensures the image covers the entire div */
+  background-position: center; /* Centers the image within the div */
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+  font-family: "Poppins", "sans-serif";
+}

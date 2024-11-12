@@ -7,5 +7,5 @@ import { Component } from '@angular/core';
 })
 export class FooterComponent {
 
-  startUrl: string = 'http://localhost:4200/';
+  startUrl: string = 'http://localhost:4201/';
 }
