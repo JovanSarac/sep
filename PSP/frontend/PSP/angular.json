@@ -63,10 +63,10 @@
           },
           "configurations": {
             "production": {
-              "browserTarget": "PSP:build:production"
+              "buildTarget": "PSP:build:production"
             },
             "development": {
-              "browserTarget": "PSP:build:development"
+              "buildTarget": "PSP:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -74,7 +74,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "PSP:build"
+            "buildTarget": "PSP:build"
           }
         },
         "test": {
