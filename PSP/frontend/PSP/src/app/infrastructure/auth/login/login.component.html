@@ -1,0 +1,52 @@
+<div class="full-page">
+    <div class="left-side">
+        <h1>
+            VivoNet.
+        </h1>
+        <form [formGroup]="loginForm" class="login-form">
+            <xp-input
+                style="width: 100%;"
+                [control]="loginForm.controls.username"
+                inputType="text"
+                inputId="username"
+                label="Username:"
+                [customErrorMessages]="{ required: 'Username is required!' }"
+                [wrongRedBorder]="wrongCredential"
+                >
+            </xp-input>
+
+            <xp-input
+                style="width: 100%; margin-top: 5%;"
+                [control]="loginForm.controls.password"
+                inputType="password"
+                inputId="password"
+                label="Password:"
+                [customErrorMessages]="{ required: 'Password is required!' }"
+                [wrongRedBorder]="wrongCredential"
+                >
+            </xp-input>
+
+            <xp-primary-button
+                style="width: 100%; margin-top: 5%;"
+                buttonId="login-button"
+                buttonType="button"
+                textValue="Log in"
+            >
+            </xp-primary-button>
+
+            <div class="separator"></div>
+
+            <div class="register">
+                <p>Not register yet? <span class="register-link" (click)="goToRegistration()">Create account</span>.</p>
+            </div>
+
+        </form>
+    </div>
+    <div class="right-side">
+        <div class="overlay">
+            <h2 class="welcome-message">Welcome to VivoNet!</h2>
+            <p class="welcome-subtext">Stay connected, stay ahead. Log in to explore the world of seamless communication and exclusive offers.</p>
+        </div>
+    </div>
+     
+</div>

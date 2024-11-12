@@ -1,0 +1,95 @@
+@import "~bootstrap-icons/font/bootstrap-icons.css";
+
+.primary-button {
+  background-color: var(--secondary-color);
+  color: var(--text-on-secondary-color);
+  border: 0;
+  font-size: inherit;
+  padding-left: 25px;
+  padding-right: 25px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  border-radius: 15px;
+  width: inherit;
+  height: inherit;
+  transition: 300ms ease-in;
+  font-weight: inherit;
+}
+
+.primary-button:hover {
+  background-color: var(--secondary-hover-color);
+}
+
+
+@media (max-width: 2000px) {
+  .primary-button {
+    font-size: 1rem;
+    padding-left: 23px;
+    padding-right: 23px;
+    padding-top: 9px;
+    padding-bottom: 9px;
+  }
+}
+
+@media (max-width: 1800px) {
+  .primary-button {
+    font-size: 1rem;
+    padding-left: 22px;
+    padding-right: 22px;
+  }
+}
+
+@media (max-width: 1650px) {
+  .primary-button {
+    font-size: 1rem;
+    padding-left: 21px;
+    padding-right: 21px;
+    padding-top: 9px;
+    padding-bottom: 9px;
+  }
+}
+
+@media (max-width: 1500px) {
+  .primary-button {
+    font-size: 0.95rem;
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    border-radius: 13px;
+  }
+}
+
+@media (max-width: 1050px) {
+  .primary-button {
+    font-size: 0.85rem;
+  }
+}
+
+@media (max-width: 780px) {
+  .primary-button {
+    font-size: 0.8rem;
+    padding-left: 18px;
+    padding-right: 18px;
+    padding-top: 7px;
+    padding-bottom: 7px;
+    border-radius: 11px;
+  }
+}
+
+@media (max-width: 500px) {
+  .primary-button {
+    font-size: 0.75rem;
+    padding-left: 16px;
+    padding-right: 16px;
+    border-radius: 8px;
+  }
+}
+
+@media (max-width: 400px) {
+  .primary-button {
+    font-size: 0.7rem;
+    padding-left: 14px;
+    padding-right: 14px;
+  }
+}
