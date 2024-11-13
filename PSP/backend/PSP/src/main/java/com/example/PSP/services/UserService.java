@@ -5,6 +5,7 @@ import com.example.PSP.dtos.RegistrationDto;
 import com.example.PSP.models.User;
 import com.example.PSP.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,6 +14,8 @@ import java.util.Optional;
 @Service
 public class UserService {
     private final UserRepository userRepository;
+    @Autowired
+    PasswordEncoder encoder;
     @Autowired
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
@@ -67,7 +70,7 @@ public class UserService {
                 registrationDto.getWebsiteUrl(),
                 registrationDto.getCompanyAddress(),
                 registrationDto.getUsername(),
-                registrationDto.getPassword(),
+                encoder.encode(registrationDto.getPassword()),
                 false
         );
 

@@ -80,3 +80,58 @@
 .navbar-button:hover {
     background-color: var(--secondary-hover-color);
 }
+
+
+.account-image{
+    display: flex;
+    flex-direction: row;
+    padding: 5px;
+    position: relative;
+}
+
+
+.icon-images{
+    display: flex;
+    flex-direction: row;
+    padding: 5px;
+    font-size: 1.4rem;
+    color: white;
+    gap: 5px;
+}
+
+.icon-images:hover{
+    color: var(--primary-color);
+    cursor: pointer;
+}
+
+.dropdown-menu{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+    position: absolute;
+    top: 100%;
+    right: 20%;
+    width: 60px;
+    height: auto;
+    padding: 5px;
+}
+
+.menu-item{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: start;
+    width: 100%;
+    padding: 15px 10px;
+    gap: 5px;
+    cursor: pointer;
+    background-color: aliceblue;
+    border-radius: 10px;
+}
+
+.menu-item:hover{
+    background-color: var(--primary-hover-color);
+}
+

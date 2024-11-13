@@ -6,6 +6,7 @@ import { FooterComponent } from './footer/footer.component';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MaterialModule } from 'src/app/infrastructure/material/material.module';
+import { MyProfileComponent } from './my-profile/my-profile.component';
 
 
 
@@ -14,6 +15,7 @@ import { MaterialModule } from 'src/app/infrastructure/material/material.module'
     NavbarComponent,
     HomeComponent,
     FooterComponent,
+    MyProfileComponent
   ],
   imports: [
     CommonModule,

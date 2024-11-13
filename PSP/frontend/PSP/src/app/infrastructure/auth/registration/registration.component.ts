@@ -94,7 +94,8 @@ export class RegistrationComponent {
             username: registeredPerson.username,
           },
         });*/
-        this.toast.success(response,  'Success!');
+
+        this.toast.success('Registration Succesfull',  'Success!');
         this.router.navigate(['login'])
       },
       error: (err: any) => {   

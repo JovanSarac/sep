@@ -12,7 +12,23 @@
             <li><a [href]="startUrl + ''" [ngClass]="{'active': selectedTab === '/services'}">Services</a></li>
         </ul>
         
-        <button class="navbar-button" (click)="goToLogin()"><i class="bi bi-person" style="margin-right: 5px;"></i>Log in</button>
+        <button *ngIf="user.id == 0" class="navbar-button" (click)="goToLogin()"><i class="bi bi-person" style="margin-right: 5px;"></i>Log in</button>
+        <div *ngIf="user.id != 0" class="account-image">
+                <div class="icon-images" (click)="showMenu()">
+                    <i class="bi bi-person-square"></i>
+                    <i class="bi bi-caret-down-fill"></i>
+                </div>
+                <div *ngIf="dropdownOpen" class="dropdown-menu" (click)="goToMyProfile()">
+                    <div class="menu-item">
+                        <i class="bi bi-person-square"></i>
+                        <p>My profile</p>
+                    </div>
+                    <div class="menu-item" (click)="onLogout()">
+                        <i class="bi bi-box-arrow-in-left"></i>
+                        <p>Log out</p>
+                    </div>
+                </div>
+        </div>
         </div>
     </div>
 </div>
