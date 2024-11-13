@@ -74,8 +74,10 @@ img{
 .wrongPasswords {
     display: flex;
     justify-content: center;
-    color: var(--error-color);
+    width: 100%;
+    color: red;
     font-size: smaller;
+    text-align: center;
 }
 
 .separator{

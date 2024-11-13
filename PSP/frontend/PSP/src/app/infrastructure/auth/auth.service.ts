@@ -31,15 +31,15 @@ export class AuthService {
       );
   }
 
-  register(registration: Registration): Observable<AuthenticationResponse> {
+
+  register(
+    registration: Registration
+  ): Observable<string> {
     return this.http
-    .post<AuthenticationResponse>(environment.apiHost + 'users', registration)
-    .pipe(
-      tap((authenticationResponse) => {
-        this.tokenStorage.saveAccessToken(authenticationResponse.accessToken);
-        this.setUser();
-      })
-    );
+      .post<string>(
+        environment.apiHost + 'auth/register',
+        registration
+      );
   }
 
   logout(): void {

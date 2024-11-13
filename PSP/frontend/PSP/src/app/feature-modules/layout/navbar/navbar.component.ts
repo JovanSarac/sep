@@ -11,7 +11,7 @@ export class NavbarComponent implements OnInit {
   startUrl: string = 'http://localhost:4201/';
   cartItems: any[] = [];
   cartCount: number = 0;
-  selectedTab : string = '';
+  selectedTab : string = '/';
 
   constructor(
     private router: Router,

@@ -23,7 +23,8 @@
     --info-color: #17a2b8;              
     --warning-color: #ffc107;       
     --success-color: #28a745;           
-    --accent-color: #ff5733;           
+    --accent-color: #ff5733;  
+    --error-color: #f33308 ;     
   }
   
 
