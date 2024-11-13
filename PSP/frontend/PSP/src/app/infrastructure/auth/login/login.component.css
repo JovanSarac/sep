@@ -7,22 +7,28 @@
     width: 100dvw;
 }
 
-.left-side{
+.center-side{
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    width: 50dvw;
+    width: 55dvw;
     height: 100dvh;
 }
 
-.left-side h1{
+.center-side h1{
     font-size: 60px;
-    font-weight: bold;
-    color: var(--primary-color);
-    font-family: "Pacifico", cursive;
-    font-weight: 500;
-    cursor: pointer;
+    color: white;
+    font-family: "Alegreya", serif;
+    font-optical-sizing: auto;
+    font-weight: 600;
+    font-style: normal;
+}
+
+img{
+    width: 60px;
+    height: 60px;
+    margin-right: 10px;
 }
 
 .login-form{
@@ -45,7 +51,7 @@
     justify-content: center;
     margin-top: 5%;
     width: 100%;
-    color: var(--text-heading-color);
+    color: white;
 }
 
 .register-link {
@@ -57,44 +63,4 @@
 .register-link:hover {
     cursor: pointer;
     color: var(--secondary-hover-color);
-}
-
-
-.right-side{
-    display: flex;
-    flex-direction: column;
-    width: 50dvw;
-    height: 100dvh;
-    background-image: url('../../../../assets/images/loginpic.png');
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    position: relative;
-}
-
-.overlay {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    position: absolute;
-    color: #fff;
-    text-align: center;
-    padding: 20px;
-    height: 100%;
-}
-  
-.welcome-message {
-    color: white;
-    font-size: 2.2rem;
-    margin-bottom: 10px;
-    font-weight: 800;
-}
-  
-.welcome-subtext {
-    color: white;
-    font-size: 1.4rem;
-    font-weight: 400;
-    max-width: 80%; 
-    line-height: 1.7;
 }

@@ -1,26 +1,27 @@
 .form-label {
-  color: var(--text-heading-color);
+  color: var(--text-on-primary-color);
   font-size: clamp(14px, 1.2vw, 24px); 
   margin-bottom: 0.3vh;
   font-weight: 500;
 }
 
 .form-input {
-  border-radius: 8px;
+  border-radius: 28px;
   border: 2px solid var(--border-light-color);
   height: inherit;
   font-size: clamp(14px, 0.9vw, 22px);
   color: var(--text-color);
   padding: 0.8em 1em;
+  background-color: rgb(75, 77, 76, 0.4);
 }
 
 .form-input:focus {
-  border: 2px solid var(--primary-color);
+  border: 2px solid var(--secondary-hover-color);
   box-shadow: 0 0 6px rgba(0, 123, 255, 0.4);
 }
 
 .form-input:hover {
-  border: 2px solid var(--primary-hover-color);
+  border: 2px solid var(--secondary-hover-color);
 }
 
 .form-input:disabled {
@@ -50,20 +51,21 @@
 .eye-icon {
   cursor: pointer;
   z-index: 1;
-  border-radius: 0px 8px 8px 0px;
+  border-radius: 0px 28px 28px 0px;
   border: 1px solid var(--border-light-color);
   color: var(--text-color);
   background-color: var(--background-color);
   height: inherit;
   display: flex;
   align-items: center;
-  padding: 0 15px;
+  padding: 0 16px;
   transition: color 0.2s ease-in-out;
   height: 100%;
+  font-size: 22px;
 }
 
 .eye-icon:hover {
-  color: var(--primary-color);
+  color: var(--secondary-hover-color);
 }
 
 input[type="password"]::-ms-reveal,

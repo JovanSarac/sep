@@ -19,11 +19,16 @@ export class RegistrationComponent {
     name: new FormControl('', Validators.required),
     surname: new FormControl('', Validators.required),
     email: new FormControl('', Validators.required),
+    companyName: new FormControl('', Validators.required),
+    websiteUrl: new FormControl('', Validators.required),
+    companyAddress: new FormControl('', Validators.required),
     username: new FormControl('', Validators.required),
     password: new FormControl('', Validators.required),
     repeatPassword: new FormControl('', Validators.required),
-    isAuthor: new FormControl(false),
   });
+
+  registrationInfo : number = 0;
+
 
   constructor(
     private authService: AuthService,
@@ -32,6 +37,14 @@ export class RegistrationComponent {
 
   goToLogin(){
     this.router.navigate(['login'])
+  }
+
+  nextPartOfRegistration(){
+    this.registrationInfo += 1;
+  }
+
+  backPartOfRegistration(){
+    this.registrationInfo -= 1;
   }
 
 }
