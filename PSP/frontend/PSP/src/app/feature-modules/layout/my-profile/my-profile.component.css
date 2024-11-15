@@ -1,0 +1,148 @@
+.full-page{
+    display: flex;
+    flex-direction: column;
+    width: 70%;
+    margin: auto;
+    overflow-y: auto;
+}
+
+.headline{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-end;
+    width: 100%;
+    padding: 15px;
+    border-bottom: 2px solid #757575;
+}
+
+.headline h2{
+    color: white;
+    font-size: 25px;
+    font-weight: 600;
+    margin: 0;
+    padding: 0;
+}
+
+.row-container{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
+
+.tab-menu{
+    display: flex;
+    flex-direction: column;
+    width: 25%;
+    height: 70dvh;
+    padding: 20px 15px;
+}
+
+.tab-menu img{
+    width: 170px;
+    height: 170px;
+}
+
+.tabs{
+    display: flex;
+    flex-direction: column;
+    margin-top: 40px;
+    text-align: start;
+    gap: 10px;
+}
+
+.tabs p{
+    color: white;
+    font-size: 20px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.tabs p:hover{
+    color: var(--primary-color);
+}
+
+.tabs p.activetab{
+    color: var(--primary-color);
+}
+
+.show-info{
+    display: flex;
+    flex-direction: column;
+    width: 75%;
+    height: 70dvh;
+    padding: 15px;
+}
+
+.personal-information{
+    display: flex;
+    flex-direction: column;
+    color: white;
+}
+
+.personal-information h1{
+    font-weight: 600;
+}
+
+.personal-item{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 100%;
+    gap: 30px;
+    margin-top: 20px;
+}
+
+.one-item{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 47%;
+    height: 170px;
+    background-color:whitesmoke;
+    border-radius: 25px;
+    border: 1px solid #757575;
+    gap: 20px;
+}
+
+.first-row{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-end;
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.first-row h3{
+    font-weight: 600;
+    color: black;
+    font-size: 24px;
+    margin: 0;
+    padding: 0;
+}
+
+.first-row i{
+    font-weight: 600;
+    color: var(--secondary-color);
+    font-size: 24px;
+}
+
+
+.one-item p{
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+    color: rgb(88, 88, 88);
+}
+
+.edit-btn{
+    display: flex;
+    width: 100%;
+    justify-content: flex-end;
+    margin-top: 40px;
+}
+
+
+

@@ -1,5 +1,7 @@
 package com.example.PSP.security.jwt;
 
+import com.example.PSP.models.User;
+import com.example.PSP.repositories.UserRepository;
 import com.example.PSP.security.services.UserDetailsImpl;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
@@ -8,6 +10,7 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Component;
@@ -41,7 +44,7 @@ public class JwtUtils {
                 .findFirst()
                 .orElse(null); // This assumes there's always at least one authority
         String jwt = generateTokenFrom(userPrincipal.getId(), authority, userPrincipal.getUsername());
-        ResponseCookie cookie = ResponseCookie.from(jwtCookie, jwt).path("/api").maxAge(24 * 60 * 60).httpOnly(true).build();
+        ResponseCookie cookie = ResponseCookie.from(jwtCookie, jwt).path("/api").maxAge(15* 60).httpOnly(true).build();
         return cookie;
     }
     public ResponseCookie getCleanJwtCookie() {

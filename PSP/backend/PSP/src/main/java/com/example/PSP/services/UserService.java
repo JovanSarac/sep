@@ -7,6 +7,7 @@ import com.example.PSP.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import com.example.PSP.dtos.UserInfoDto;
 
 import java.util.List;
 import java.util.Optional;
@@ -28,24 +29,6 @@ public class UserService {
 
     public User getUserById(Long id) {
         Optional<User> user=userRepository.findById(id);
-        return user.orElse(null);
-    }
-
-    public User loginUser(CredentialDto credential){
-        List<User> users = getAllUsers();
-        for(User user : users){
-            if(user.getUsername().equals(credential.getUsername())){
-                if(user.getPassword().equals(credential.getPassword())){
-                    return user;
-                }
-            }
-        }
-        return null;
-
-    }
-
-    public User getByUsername(String username){
-        Optional<User> user = userRepository.findByUsername(username);
         return user.orElse(null);
     }
 
@@ -81,6 +64,29 @@ public class UserService {
     private boolean isValidPassword(String password) {
         String regex = "^(?=.*[A-Z])(?=.*\\d)(?=.*[#!%?&])[A-Za-z\\d#!%?&]{8,}$";
         return password.matches(regex);
+    }
+
+    public UserInfoDto getUserInfoById(Long id) {
+        Optional<User> userOptional = userRepository.findById(id);
+
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+            return mapToUserInfoDto(user);
+        } else {
+            throw new RuntimeException("User not found with id: " + id);
+        }
+    }
+
+    private UserInfoDto mapToUserInfoDto(User user) {
+        return new UserInfoDto(
+                user.getId(),
+                user.getFirstName(),
+                user.getLastName(),
+                user.getEmail(),
+                user.getCompanyName(),
+                user.getWebURL(),
+                user.getCopmanyAddress()
+        );
     }
 
 }

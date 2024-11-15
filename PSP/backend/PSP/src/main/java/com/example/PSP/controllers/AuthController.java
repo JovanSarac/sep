@@ -30,8 +30,6 @@ public class AuthController {
     @Autowired
     AuthenticationManager authenticationManager;
     @Autowired
-    PasswordEncoder encoder;
-    @Autowired
     JwtUtils jwtUtils;
     @Autowired
     private UserService userService;

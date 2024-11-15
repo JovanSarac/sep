@@ -1,1 +1,116 @@
-<p>my-profile works!</p>
+<div class="full-page" *ngIf="userInfo != undefined">
+    <div class="headline">
+        <h2>{{userInfo.firstName}} {{userInfo.lastName}}</h2>
+        <xp-secondary-button
+            style="width: 150px;"
+            buttonId="login-button"
+            buttonType="button"
+            textValue="Log out"
+            iconClass="bi bi-box-arrow-in-left"
+        >
+        </xp-secondary-button>
+    </div>
+    <div class="row-container">
+        <div class="tab-menu">
+            <img src="../../../../assets/images/account.png" alt="no-pic">
+
+            <div class="tabs">
+                <p [ngClass]="{'activetab': selectedTab == 'personal'}" (click)="changeTab('personal')">Personal information</p>
+                <p [ngClass]="{'activetab': selectedTab == 'business'}" (click)="changeTab('business')">Business information</p>
+            </div>
+        </div>
+        <div class="show-info">
+            <div class="personal-information" *ngIf="selectedTab == 'personal'">
+                <h1>Personal information</h1>
+                <p>Manage your personal information, including website URL and  company address where can you be contacted.</p>
+
+                <div class="personal-item">
+                    <div class="one-item">
+                        <div class="first-row">
+                            <h3>Full name</h3>
+                            <i class="bi bi-person-circle"></i>
+                        </div>
+                        <p>{{userInfo.firstName}} {{userInfo.lastName}}</p>
+                    </div>
+                    <div class="one-item">
+                        <div class="first-row">
+                            <h3>Contact email</h3>
+                            <i class="bi bi-envelope-at-fill"></i>
+                        </div>
+                        <p>{{userInfo.email}}</p>
+                    </div>
+                    <div class="one-item">
+                        <div class="first-row">
+                            <h3>Date of Birth</h3>
+                            <i class="bi bi-calendar-event-fill"></i>
+                        </div>
+                        <p>-</p>
+                    </div>
+                    <div class="one-item">
+                        <div class="first-row">
+                            <h3>Phone Number</h3>
+                            <i class="bi bi-telephone-fill"></i>
+                        </div>
+                        <p>-</p>
+                    </div>
+
+                </div>
+                <div class="edit-btn">
+                    <xp-secondary-button
+                        style="width: 150px;"
+                        buttonId="edit-button"
+                        buttonType="button"
+                        textValue="Edit"
+                        iconClass="bi bi-pencil-fill"
+                    >
+                    </xp-secondary-button>
+                </div>
+
+            </div>
+
+            <div class="personal-information" *ngIf="selectedTab == 'business'">
+                <h1>Business information</h1>
+                <p>Manage your business information, including phone numbers and email address where can you be contacted.</p>
+
+                <div class="personal-item">
+                    <div class="one-item">
+                        <div class="first-row">
+                            <h3>Company name</h3>
+                            <i class="bi bi-building-fill"></i>
+                        </div>
+                        <p>{{userInfo.companyName}}</p>
+                    </div>
+                    <div class="one-item">
+                        <div class="first-row">
+                            <h3>Website URL</h3>
+                            <i class="bi bi-browser-chrome"></i>
+                        </div>
+                        <p>{{userInfo.webURL}}</p>
+                    </div>
+                    <div class="one-item">
+                        <div class="first-row">
+                            <h3>Company Address</h3>
+                            <i class="bi bi-geo-alt-fill"></i>
+                        </div>
+                        <p>{{userInfo.copmanyAddress}}</p>
+                    </div>
+
+                </div>
+                <div class="edit-btn">
+                    <xp-secondary-button
+                        style="width: 150px;"
+                        buttonId="edit-button-business"
+                        buttonType="button"
+                        textValue="Edit"
+                        iconClass="bi bi-pencil-fill"
+                    >
+                    </xp-secondary-button>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

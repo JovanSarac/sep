@@ -54,6 +54,7 @@ export class NavbarComponent implements OnInit {
   }
 
   goToMyProfile(){
+    this.dropdownOpen = false;
     this.router.navigate(['/my-profile']);
   }
 
