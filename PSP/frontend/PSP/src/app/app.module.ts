@@ -11,6 +11,7 @@ import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@a
 import { JwtInterceptor } from './infrastructure/auth/jwt/jwt.interceptor';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
+import { PaymentsModule } from './feature-modules/payments/payments.module';
 
 @NgModule({ declarations: [
         AppComponent
@@ -19,6 +20,7 @@ import { ToastrModule } from 'ngx-toastr';
     bootstrap: [AppComponent], imports: [BrowserModule,
         AppRoutingModule,
         LayoutModule,
+        PaymentsModule,
         MaterialModule,
         AuthModule,
         SharedModule,

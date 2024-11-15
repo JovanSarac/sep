@@ -1,0 +1,30 @@
+<div class="full-page">
+    <div class="payment-services-container">
+        <div class="one-payment-service" *ngFor="let ps of paymentServices">
+            <div class="first-row">
+                <h2>{{ps.name}}</h2>
+                <h1>{{ps.monthlyFee}} $</h1>
+            </div>
+            <p>{{ps.description}}</p>
+
+            <h3>Supported payments:</h3>
+            <div class="last-row">
+                <div class="supported-payments">
+                    <div class="one-supported" *ngFor="let sp of ps.supportedPaymentMethods">
+                        <p>{{sp}}</p>
+                    </div>
+                </div>
+                <xp-secondary-button
+                    style="width: 150px;"
+                    buttonId="subscription-button"
+                    buttonType="button"
+                    textValue="Subscription"
+                >
+                </xp-secondary-button>
+
+            </div>
+
+        </div>
+    </div>
+
+</div>

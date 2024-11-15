@@ -1,0 +1,95 @@
+.full-page{
+    display: flex;
+    flex-direction: column;
+    width: 70%;
+    margin: auto;
+    min-height: 80dvh;
+    overflow-y: auto;
+}
+
+.payment-services-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    gap: 30px;
+    padding: 20px;
+}
+
+.one-payment-service{
+    display: flex;
+    flex-direction: column;
+    width: 90%;
+    margin: auto;
+    background-color: white;
+    border-radius: 30px;
+    padding: 25px;
+}
+
+.first-row{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+    padding: 10px 15px;
+    align-items: flex-end;
+    margin: 0;
+}
+
+.first-row h2{
+    color: black;
+    font-size: 25px;
+    font-weight: 700;
+}
+
+.first-row h1{
+    color: var(--primary-color);
+    font-size: 25px;
+    font-weight: 700;
+}
+
+.one-payment-service p{
+    color: rgb(88, 88, 88);
+    padding-left: 15px;
+    padding-right: 15px;
+    width: 85%;
+    text-align: justify;
+}
+
+.one-payment-service h3{
+    font-size: 18px;
+    font-weight: 700;
+    width: 100%;
+    text-align: justify;
+    padding-left: 15px;
+    color: var(--secondary-color);
+}
+
+.last-row{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+    padding: 10px 15px
+}
+
+.supported-payments{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 30px;
+}
+
+.one-supported{
+    display: flex;
+    width: auto;
+}
+
+.one-supported p{
+    color: var(--primary-color);
+    width: auto;
+    font-size: 18px;
+    padding: 0;
+    margin: 0;
+}
