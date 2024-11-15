@@ -27,7 +27,6 @@ export class MyProfileComponent implements OnInit{
     this.layoutService.getUserInfoById(this.user.id).subscribe({
       next: (result) =>{
         this.userInfo = result;
-        console.log(this.userInfo)
       }
     })
   }
@@ -36,4 +35,7 @@ export class MyProfileComponent implements OnInit{
     this.selectedTab = tab;
   }
 
+  onLogout(): void {
+    this.authService.logout();
+  }
 }
