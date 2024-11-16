@@ -1,0 +1,151 @@
+.full-dialog{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    background-image: url('/assets/images/background.jpg');
+    background-size: cover;
+    background-position: center;
+}
+
+.topbar{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+    height: auto;
+    border-bottom: 1px solid var(--border-light-color);
+    justify-content: space-between;
+}
+
+.topbar p{
+    display: flex;
+    margin: 0;
+    align-items: center;
+    font-size: 20px;
+    color: var(--primary-color);
+    font-weight: 700;
+    padding: 15px;
+    
+}
+
+.exit-icon{
+    font-size: 20px;
+    padding-right: 15px;
+    color: white;
+}
+
+.exit-icon:hover{
+    color: var(--primary-color);
+    cursor: pointer;
+}
+
+
+.dialog-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: auto;
+    width: 90%;
+    margin-left: 5%;
+    margin-right: 5%;
+    margin-top: 2%;
+    margin-bottom: 2%;
+    gap: 15px;
+}
+
+.dialog-container h1{
+    color: white;
+    font-size: 25px;
+    font-weight: 700;
+}
+
+.dialog-container p{
+    color: rgb(151, 151, 151);
+    padding-left: 15px;
+    padding-right: 15px;
+    width: 90%;
+    text-align: justify;
+}
+
+.one-row{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 90%;
+    justify-content: flex-start;
+    gap: 15px;
+    padding-left: 15px;
+}
+
+.one-row p{
+    width: auto;
+    color: var(--secondary-color);
+    font-size: 16px;
+    padding: 0;
+    margin: 0;
+}
+
+.one-row h3{
+    font-size: 18px;
+    color: var(--primary-color);
+    font-weight: 600;
+    padding: 0;
+    margin: 0;
+}
+
+.supported-payments{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 15px;
+}
+
+.supported-payments h3{
+    font-size: 18px;
+    color: var(--primary-color);
+    font-weight: 600;
+    padding: 0;
+    margin: 0;
+}
+
+.subscribe-form{
+    display: flex;
+    width: 90%;
+    padding: 15px;
+}
+
+.full-price{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 90%;
+    padding: 15px;
+    gap: 15px;
+}
+
+.full-price p{
+    color: var(--secondary-color);
+    font-size: 22px;
+    font-weight: 600;
+    width: auto;
+    margin: 0;
+    padding: 0;
+}
+
+
+.full-price h3{
+    color: var(--primary-color);
+    font-size: 24px;
+    font-weight: 600;
+    margin: 0;
+    padding: 0;
+}
+
+.subscribe-btn{
+    display: flex;
+    width: 90%;
+    padding: 15px;
+}

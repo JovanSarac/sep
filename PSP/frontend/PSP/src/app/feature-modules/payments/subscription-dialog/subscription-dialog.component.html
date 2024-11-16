@@ -1,0 +1,59 @@
+<div class="full-dialog">
+    <div class="topbar">
+        <p>Subscribe dialog</p>
+        <i class="bi bi-x-circle-fill exit-icon" (click)="closeDialog()" ></i>
+    </div>
+    <div class="dialog-container">
+        <h1>{{data.name}}</h1>
+        <p>{{data.description}}</p>
+
+        <div class="one-row">
+            <p>-Supported payments:</p>
+            <div class="supported-payments">
+                <h3 *ngFor="let sp of data.supportedPaymentMethods">{{sp}}</h3>
+            </div>
+
+        </div>
+
+        <div class="one-row">
+            <p>-Monthly fee:</p>
+            <h3>{{data.monthlyFee}}</h3>
+        </div>
+
+        <form [formGroup]="subscribeForm" class="subscribe-form">
+            <xp-input
+                style="width: 100%;"
+                [control]="subscribeForm.controls.subscriptionDuration"
+                inputType="number"
+                inputId="subscriptionDuration"
+                label="Enter the number of months for the subscription:"
+                [customErrorMessages]="{
+                     required: 'Subscription duration is required!' ,
+                     pattern: 'The duration must be a positive whole number!'
+                    }"
+                >
+            </xp-input>
+        </form>
+
+        <div class="full-price">
+            <p>Full price:</p>
+            <h3>{{fullPrice}} $</h3>
+        </div>
+
+        <div class="subscribe-btn">
+            <xp-primary-button
+                style="width: 100%;"
+                buttonId="subscribe-button"
+                buttonType="button"
+                textValue="Subscriibe"
+                (click)="subscribe()"
+            >
+            </xp-primary-button>
+        </div>
+
+
+        
+
+    </div>
+
+</div>

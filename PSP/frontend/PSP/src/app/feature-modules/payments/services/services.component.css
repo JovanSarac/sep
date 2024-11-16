@@ -49,6 +49,12 @@
     font-weight: 700;
 }
 
+.monthly{
+    color: black;
+    font-size: 14px;
+    font-weight: 100;
+}
+
 .one-payment-service p{
     color: rgb(88, 88, 88);
     padding-left: 15px;
