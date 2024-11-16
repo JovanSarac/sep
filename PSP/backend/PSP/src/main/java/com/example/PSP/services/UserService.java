@@ -2,6 +2,7 @@ package com.example.PSP.services;
 
 import com.example.PSP.dtos.CredentialDto;
 import com.example.PSP.dtos.RegistrationDto;
+import com.example.PSP.exceptions.ResourceNotFoundException;
 import com.example.PSP.models.User;
 import com.example.PSP.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,16 +67,11 @@ public class UserService {
         return password.matches(regex);
     }
 
-    public UserInfoDto getUserInfoById(Long id) {
+    public Optional<UserInfoDto> getUserInfoById(Long id) {
         Optional<User> userOptional = userRepository.findById(id);
-
-        if (userOptional.isPresent()) {
-            User user = userOptional.get();
-            return mapToUserInfoDto(user);
-        } else {
-            throw new RuntimeException("User not found with id: " + id);
-        }
+        return userOptional.map(this::mapToUserInfoDto);
     }
+
 
     private UserInfoDto mapToUserInfoDto(User user) {
         return new UserInfoDto(

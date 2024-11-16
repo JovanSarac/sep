@@ -19,7 +19,6 @@ export class ServicesComponent implements OnInit{
     this.service.getActivePaymentServices().subscribe({
       next: (result)=>{
         this.paymentServices = result;
-        console.log(this.paymentServices)
       }
     })
   }
