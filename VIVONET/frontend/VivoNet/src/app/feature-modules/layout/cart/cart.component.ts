@@ -29,5 +29,9 @@ export class CartComponent implements OnInit{
   deleteFromCart(itemId: any): void {
     this.cartService.removeItem(itemId);
   }
+
+  OnCheckout(){
+    window.open('http://localhost:4201/', '_blank');
+  }
 }
 

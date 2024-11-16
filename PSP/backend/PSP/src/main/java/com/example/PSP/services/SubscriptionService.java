@@ -7,6 +7,7 @@ import com.example.PSP.models.User;
 import com.example.PSP.repositories.PSPServiceRepository;
 import com.example.PSP.repositories.SubscriptionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -18,7 +19,6 @@ public class SubscriptionService {
 
     @Autowired
     private SubscriptionRepository subscriptionRepository;
-
     @Autowired
     private PSPServiceRepository pspServiceRepository;
 
@@ -39,7 +39,7 @@ public class SubscriptionService {
 
         SubscriptionDto subscriptionDTO = new SubscriptionDto();
         subscriptionDTO.setId(subscription.getId());
-        subscriptionDTO.setServiceId(subscription.getService().getId());
+        subscriptionDTO.setService(subscription.getService());
         subscriptionDTO.setUserId(subscription.getUser().getId());
         subscriptionDTO.setStartDate(subscription.getStartDate());
         subscriptionDTO.setEndDate(subscription.getEndDate());
@@ -50,13 +50,13 @@ public class SubscriptionService {
         return subscriptionDTO;
     }
 
-    public List<SubscriptionDto> getSubscriptionsByUserId(Long userId) {
-        List<Subscription> subscriptions = subscriptionRepository.findSubscriptionsByUserId(userId);
+    public List<SubscriptionDto> getActiveSubscriptionsByUserId(Long userId) {
+        List<Subscription> subscriptions = subscriptionRepository.findActiveSubscriptionsByUserId(userId);
         return subscriptions.stream().map(sub -> {
             SubscriptionDto dto = new SubscriptionDto();
             dto.setId(sub.getId());
-            dto.setServiceId(sub.getService().getId());
-            dto.setUserId(sub.getUser().getId()); // Samo ID korisnika
+            dto.setService(sub.getService());
+            dto.setUserId(sub.getUser().getId());
             dto.setStartDate(sub.getStartDate());
             dto.setEndDate(sub.getEndDate());
             dto.setTotalCost(sub.getTotalCost());
@@ -64,6 +64,22 @@ public class SubscriptionService {
             dto.setSubscriptionDuration(sub.getSubscriptionDuration());
             return dto;
         }).collect(Collectors.toList());
+    }
+
+    @Scheduled(cron = "0 0 0 * * ?")
+    public void updateSubscriptionStatus() {
+        List<Subscription> subscriptions = subscriptionRepository.findAll();
+        LocalDate today = LocalDate.now();
+
+        for (Subscription subscription : subscriptions) {
+            if (subscription.getEndDate() != null) {
+                boolean isActive = subscription.getEndDate().isAfter(today);
+                if (!subscription.getIsActive().equals(isActive)) {
+                    subscription.setIsActive(isActive);
+                    subscriptionRepository.save(subscription);
+                }
+            }
+        }
     }
 }
 

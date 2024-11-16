@@ -1,6 +1,8 @@
+import { PaymentService } from "./payment_service.model";
+
 export interface SubscriptionDto{
     id: number;
-    serviceId: number;
+    service: PaymentService;
     userId: number;
     startDate: Date;
     endDate: Date;

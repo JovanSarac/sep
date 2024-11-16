@@ -1,11 +1,13 @@
 package com.example.PSP.dtos;
 
+import com.example.PSP.models.PSPService;
+
 import java.time.LocalDate;
 
 public class SubscriptionDto {
     private Long id;
-    private Long serviceId; // ID usluge
-    private Long userId; // Samo ID korisnika
+    private PSPService service;
+    private Long userId;
     private LocalDate startDate;
     private LocalDate endDate;
     private Double totalCost;
@@ -21,12 +23,12 @@ public class SubscriptionDto {
         this.id = id;
     }
 
-    public Long getServiceId() {
-        return serviceId;
+    public PSPService getService() {
+        return service;
     }
 
-    public void setServiceId(Long serviceId) {
-        this.serviceId = serviceId;
+    public void setService(PSPService service) {
+        this.service = service;
     }
 
     public Long getUserId() {

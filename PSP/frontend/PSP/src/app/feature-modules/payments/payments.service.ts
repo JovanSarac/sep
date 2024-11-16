@@ -22,5 +22,9 @@ export class PaymentsService {
   createSubscription(subscriptionDuration: SubscriptionRequest) : Observable<SubscriptionDto>{
     return this.http.post<SubscriptionDto>(environment.apiHost + 'user/create_subscription', subscriptionDuration)
   }
+
+  getSubscriptionsForUser(userId: number): Observable<SubscriptionDto[]> {
+    return this.http.get<SubscriptionDto[]>(environment.apiHost + 'user_active_subscription/' + userId);
+  }
   
 }

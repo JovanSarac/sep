@@ -12,12 +12,14 @@ import { JwtInterceptor } from './infrastructure/auth/jwt/jwt.interceptor';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
 import { PaymentsModule } from './feature-modules/payments/payments.module';
+import { DatePipe } from '@angular/common';
 
 @NgModule({ declarations: [
         AppComponent
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA],
-    bootstrap: [AppComponent], imports: [BrowserModule,
+    bootstrap: [AppComponent],
+    imports: [BrowserModule,
         AppRoutingModule,
         LayoutModule,
         PaymentsModule,
@@ -32,7 +34,9 @@ import { PaymentsModule } from './feature-modules/payments/payments.module';
             positionClass: 'toast-bottom-right',
             progressBar: true,
             progressAnimation: 'increasing',
-        })], providers: [
+        })], 
+    providers: [
+        DatePipe,
         {
             provide: HTTP_INTERCEPTORS,
             useClass: JwtInterceptor,

@@ -3,6 +3,8 @@ import { AuthService } from 'src/app/infrastructure/auth/auth.service';
 import { User } from 'src/app/infrastructure/auth/model/user.model';
 import { LayoutService } from '../layout.service';
 import { UserInfo } from '../model/userinfo';
+import { SubscriptionDto } from '../../payments/model/subscription.model';
+import { PaymentsService } from '../../payments/payments.service';
 
 @Component({
   selector: 'app-my-profile',
@@ -13,10 +15,12 @@ export class MyProfileComponent implements OnInit{
   user!: User;
   userInfo!: UserInfo;
   selectedTab: string = 'personal'
+  subscriptions: SubscriptionDto[]= [];
 
   constructor(
     private authService: AuthService,
-    private layoutService: LayoutService
+    private layoutService: LayoutService,
+    private paymentService: PaymentsService
   ){}
 
   ngOnInit(): void {
@@ -27,8 +31,16 @@ export class MyProfileComponent implements OnInit{
     this.layoutService.getUserInfoById(this.user.id).subscribe({
       next: (result) =>{
         this.userInfo = result;
+        this.paymentService.getSubscriptionsForUser(this.user.id).subscribe({
+          next:(result)=>{
+            this.subscriptions = result
+            console.log(this.subscriptions)
+          }
+        })
       }
-    })
+    });
+
+    
   }
 
   changeTab(tab: string){

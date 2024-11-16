@@ -5,8 +5,10 @@ import com.example.PSP.models.PSPService;
 import com.example.PSP.models.Subscription;
 import com.example.PSP.models.User;
 import com.example.PSP.repositories.PSPServiceRepository;
+import com.example.PSP.repositories.SubscriptionRepository;
 import com.example.PSP.repositories.UserRepository;
 import com.example.PSP.exceptions.ResourceNotFoundException;
+import com.example.PSP.exceptions.BadRequestException;
 import com.example.PSP.services.SubscriptionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -31,6 +33,9 @@ public class SubscriptionController {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private SubscriptionRepository subscriptionRepository;
+
     public SubscriptionController(SubscriptionService subscriptionService) {
         this.subscriptionService = subscriptionService;
     }
@@ -41,14 +46,20 @@ public class SubscriptionController {
         PSPService service = pspServiceRepository.findById(request.getServiceId()).orElseThrow(() -> new ResourceNotFoundException("Service not found"));
         User user = userRepository.findById(request.getUserId()).orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
+        boolean activeSubscriptionExists = subscriptionRepository.existsByServiceAndUserAndIsActive(service, user, true);
+
+        if (activeSubscriptionExists) {
+            throw new BadRequestException("You already have an active subscription to this payment service.");
+        }
+
         SubscriptionDto subscription = subscriptionService.createSubscription(user, service, request.getSubscriptionDuration());
 
         return ResponseEntity.status(HttpStatus.CREATED).body(subscription);
     }
 
-    @GetMapping("/user_subscription/{userId}")
+    @GetMapping("/user_active_subscription/{userId}")
     @PreAuthorize("hasRole('ROLE_USER')")
-    public List<SubscriptionDto> getSubscriptionsByUserId(@PathVariable Long userId) {
-        return subscriptionService.getSubscriptionsByUserId(userId);
+    public List<SubscriptionDto> getActiveSubscriptionsByUserId(@PathVariable Long userId) {
+        return subscriptionService.getActiveSubscriptionsByUserId(userId);
     }
 }
