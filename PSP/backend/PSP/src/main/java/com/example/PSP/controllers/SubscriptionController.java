@@ -17,7 +17,9 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import com.example.PSP.dtos.SubscriptionDto;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 //for Angular Client (withCredentials)
 //@CrossOrigin(origins = "http://localhost:4201", maxAge = 3600, allowCredentials="true")
@@ -61,5 +63,20 @@ public class SubscriptionController {
     @PreAuthorize("hasRole('ROLE_USER')")
     public List<SubscriptionDto> getActiveSubscriptionsByUserId(@PathVariable Long userId) {
         return subscriptionService.getActiveSubscriptionsByUserId(userId);
+    }
+
+    @PutMapping("/user/update_subscription")
+    @PreAuthorize("hasRole('ROLE_USER')")
+    public ResponseEntity<Map<String, String>> updateSubscription(@RequestBody SubscriptionDto subscriptionDTO) {
+        try {
+            subscriptionService.updateSubscription(subscriptionDTO);
+            Map<String, String> response = new HashMap<>();
+            response.put("message", "Subscription updated successfully.");
+            return ResponseEntity.ok(response);
+        } catch (IllegalArgumentException ex) {
+            Map<String, String> response = new HashMap<>();
+            response.put("error", ex.getMessage());
+            return ResponseEntity.badRequest().body(response);
+        }
     }
 }

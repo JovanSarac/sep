@@ -5,13 +5,15 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MaterialModule } from 'src/app/infrastructure/material/material.module';
 import { ServicesComponent } from './services/services.component';
 import { SubscriptionDialogComponent } from './subscription-dialog/subscription-dialog.component';
+import { ExtendSubscriptionDialogComponent } from './extend-subscription-dialog/extend-subscription-dialog.component';
 
 
 
 @NgModule({
   declarations: [
     ServicesComponent,
-    SubscriptionDialogComponent
+    SubscriptionDialogComponent,
+    ExtendSubscriptionDialogComponent
   ],
   imports: [
     CommonModule,
@@ -21,7 +23,8 @@ import { SubscriptionDialogComponent } from './subscription-dialog/subscription-
   ],
   exports: [
     ServicesComponent,
-    SubscriptionDialogComponent
+    SubscriptionDialogComponent,
+    ExtendSubscriptionDialogComponent
   ]
 })
 export class PaymentsModule { }

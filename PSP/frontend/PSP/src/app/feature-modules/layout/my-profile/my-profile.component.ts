@@ -5,6 +5,9 @@ import { LayoutService } from '../layout.service';
 import { UserInfo } from '../model/userinfo';
 import { SubscriptionDto } from '../../payments/model/subscription.model';
 import { PaymentsService } from '../../payments/payments.service';
+import { SubscriptionDialogComponent } from '../../payments/subscription-dialog/subscription-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
+import { ExtendSubscriptionDialogComponent } from '../../payments/extend-subscription-dialog/extend-subscription-dialog.component';
 
 @Component({
   selector: 'app-my-profile',
@@ -14,13 +17,14 @@ import { PaymentsService } from '../../payments/payments.service';
 export class MyProfileComponent implements OnInit{
   user!: User;
   userInfo!: UserInfo;
-  selectedTab: string = 'personal'
+  selectedTab: string = 'subscription'
   subscriptions: SubscriptionDto[]= [];
 
   constructor(
     private authService: AuthService,
     private layoutService: LayoutService,
-    private paymentService: PaymentsService
+    private paymentService: PaymentsService,
+    private dialog: MatDialog
   ){}
 
   ngOnInit(): void {
@@ -49,5 +53,14 @@ export class MyProfileComponent implements OnInit{
 
   onLogout(): void {
     this.authService.logout();
+  }
+
+  extendSubscription(subscription: SubscriptionDto){
+    let dialogRef = this.dialog.open(ExtendSubscriptionDialogComponent, {
+      width: '800px',
+      height: '800px',
+      data: subscription,
+      panelClass: 'custom-modalbox',
+    });
   }
 }

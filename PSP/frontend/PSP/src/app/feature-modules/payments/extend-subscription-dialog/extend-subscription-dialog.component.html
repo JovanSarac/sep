@@ -1,0 +1,72 @@
+<div class="full-dialog">
+    <div class="topbar">
+        <p>Extend subscription dialog</p>
+        <i class="bi bi-x-circle-fill exit-icon" (click)="closeDialog()" ></i>
+    </div>
+    <div class="dialog-container">
+        <h1>{{data.service.name}}</h1>
+        <p>{{data.service.description}}</p>
+
+        <div class="one-row">
+            <p>-Supported payments:</p>
+            <div class="supported-payments">
+                <h3 *ngFor="let sp of data.service.supportedPaymentMethods">{{sp}}</h3>
+            </div>
+        </div>
+
+        <div class="one-row">
+            <p>-Monthly fee:</p>
+            <h3>{{data.service.monthlyFee}}</h3>
+        </div>
+
+        <div class="your-subscription">
+            <h1>Your subscription:</h1>
+            <div class="one-row">
+                <p>Subscription duration date:</p>
+                <h3>{{data.startDate | date: 'dd.MM.yyyy'}}</h3>
+                <h3>-</h3>
+                <h3>{{data.endDate | date: 'dd.MM.yyyy'}}</h3>
+            </div>
+            <div class="one-row">
+                <p>Subscription price:</p>
+                <h3>{{data.totalCost  | number:'1.2-2'}} $</h3>
+            </div>
+        </div>
+
+        <form [formGroup]="subscribeForm" class="subscribe-form">
+            <xp-input
+                style="width: 100%;"
+                [control]="subscribeForm.controls.subscriptionDuration"
+                inputType="number"
+                inputId="subscriptionDuration"
+                label="Enter the number of months for the extend subscription:"
+                [customErrorMessages]="{
+                     required: 'Subscription duration is required!' ,
+                     pattern: 'The duration must be a positive whole number!'
+                    }"
+                >
+            </xp-input>
+        </form>
+
+        <div class="full-price">
+            <p>Full price:</p>
+            <h3>{{data.totalCost  | number:'1.2-2'}} $ + {{fullPrice  | number:'1.2-2'}} $ = {{(data.totalCost + fullPrice)  | number:'1.2-2'}} $</h3>
+        </div>
+        <div class="full-price">
+            <p>End date of subscription:</p>
+            <h3>{{data.endDate  | date: 'dd.MM.yyyy'}} + {{duration}} months =  {{ convertDateToString(calculateEndDate(data.endDate, duration)) }}</h3>
+        </div>
+
+        <div class="subscribe-btn">
+            <xp-primary-button
+                style="width: 100%;"
+                buttonId="extend-button"
+                buttonType="button"
+                textValue="Extend"
+                (click)="extend()"
+            >
+            </xp-primary-button>
+        </div>
+    </div>
+
+</div>

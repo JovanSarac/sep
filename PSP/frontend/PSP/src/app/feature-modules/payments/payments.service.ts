@@ -26,5 +26,9 @@ export class PaymentsService {
   getSubscriptionsForUser(userId: number): Observable<SubscriptionDto[]> {
     return this.http.get<SubscriptionDto[]>(environment.apiHost + 'user_active_subscription/' + userId);
   }
+
+  updateSubscription(subscriptionDTO: SubscriptionDto): Observable<any> {
+    return this.http.put<any>(environment.apiHost + 'user/update_subscription', subscriptionDTO);
+  }
   
 }

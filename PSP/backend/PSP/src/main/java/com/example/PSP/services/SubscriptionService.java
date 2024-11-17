@@ -6,6 +6,7 @@ import com.example.PSP.models.Subscription;
 import com.example.PSP.models.User;
 import com.example.PSP.repositories.PSPServiceRepository;
 import com.example.PSP.repositories.SubscriptionRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -80,6 +81,18 @@ public class SubscriptionService {
                 }
             }
         }
+    }
+
+    public void updateSubscription(SubscriptionDto subscriptionDTO) {
+        Subscription subscription = subscriptionRepository.findById(subscriptionDTO.getId())
+                .orElseThrow(() -> new IllegalArgumentException("Subscription with ID " + subscriptionDTO.getId() + " does not exist."));
+
+
+        subscription.setEndDate(subscriptionDTO.getEndDate());
+        subscription.setTotalCost(subscriptionDTO.getTotalCost());
+        subscription.setSubscriptionDuration(subscriptionDTO.getSubscriptionDuration());
+        subscriptionRepository.save(subscription);
+
     }
 }
 
