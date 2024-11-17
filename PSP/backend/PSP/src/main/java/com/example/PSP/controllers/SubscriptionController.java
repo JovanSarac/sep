@@ -60,13 +60,13 @@ public class SubscriptionController {
     }
 
     @GetMapping("/user_active_subscription/{userId}")
-    @PreAuthorize("hasRole('ROLE_USER')")
+    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
     public List<SubscriptionDto> getActiveSubscriptionsByUserId(@PathVariable Long userId) {
         return subscriptionService.getActiveSubscriptionsByUserId(userId);
     }
 
     @PutMapping("/user/update_subscription")
-    @PreAuthorize("hasRole('ROLE_USER')")
+    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
     public ResponseEntity<Map<String, String>> updateSubscription(@RequestBody SubscriptionDto subscriptionDTO) {
         try {
             subscriptionService.updateSubscription(subscriptionDTO);

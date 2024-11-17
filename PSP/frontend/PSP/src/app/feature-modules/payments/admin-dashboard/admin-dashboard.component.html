@@ -1,0 +1,85 @@
+<div class="full-page">
+
+
+    <ul class="nav nav-tabs mb-3" id="dashboardTabs" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link active" id="users-tab" data-bs-toggle="tab" href="#users" role="tab" aria-controls="users" aria-selected="true">Users</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="transactions-tab" data-bs-toggle="tab" href="#transactions" role="tab" aria-controls="transactions" aria-selected="false">Transactions</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="services-tab" data-bs-toggle="tab" href="#services" role="tab" aria-controls="services" aria-selected="false">Services</a>
+        </li>
+    </ul>
+
+    <div class="tab-content" id="dashboardTabsContent">
+        <div class="tab-pane fade show active" id="users" role="tabpanel" aria-labelledby="users-tab">
+            <h3 style="color: white;">Users Management</h3>
+            <table class="table table-bordered mt-3">
+                <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Company Name</th>
+                    <th>Company Address</th>
+                    <th>Web URL</th>
+                    <th>Subscriptions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let u of users; let i = index">
+                    <td>{{i+1}}</td>
+                    <td>{{u.firstName}} {{u.lastName}}</td>
+                    <td>{{u.email}}</td>
+                    <td>{{u.companyName}}</td>
+                    <td>{{u.copmanyAddress}}</td>
+                    <td><a [href]="u.webURL" target="_blank">{{ u.webURL }}</a></td>
+                    <td>       
+                        <xp-secondary-button
+                            style="width: 150px;"
+                            buttonId="edit-button"
+                            buttonType="button"
+                            textValue="Open"
+                            iconClass="bi bi-book-fill"
+                            (click)="openSubscriptions(u)"
+                        >
+                        </xp-secondary-button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="tab-pane fade" id="transactions" role="tabpanel" aria-labelledby="transactions-tab">
+            <h3 style="color: white;">Transactions Overview</h3>
+            <table class="table table-hover mt-3">
+                <thead>
+                <tr>
+                    <th>Transaction ID</th>
+                    <th>User</th>
+                    <th>Amount</th>
+                    <th>Status</th>
+                    <th>Date</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>TXN12345</td>
+                    <td>John Doe</td>
+                    <td>$50.00</td>
+                    <td>Success</td>
+                    <td>2024-11-17</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="tab-pane fade" id="services" role="tabpanel" aria-labelledby="services-tab">
+            <h3 style="color: white;">Service Settings</h3>
+
+        </div>
+    </div>
+
+</div>

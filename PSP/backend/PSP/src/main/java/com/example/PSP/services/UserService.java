@@ -12,6 +12,7 @@ import com.example.PSP.dtos.UserInfoDto;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -24,9 +25,6 @@ public class UserService {
     }
 
 
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
-    }
 
     public User getUserById(Long id) {
         Optional<User> user=userRepository.findById(id);
@@ -70,6 +68,13 @@ public class UserService {
     public Optional<UserInfoDto> getUserInfoById(Long id) {
         Optional<User> userOptional = userRepository.findById(id);
         return userOptional.map(this::mapToUserInfoDto);
+    }
+
+    public List<UserInfoDto> getAllUsers() {
+        List<User> users = userRepository.findAll();
+        return users.stream()
+                .map(this::mapToUserInfoDto)
+                .collect(Collectors.toList());
     }
 
 

@@ -1,0 +1,29 @@
+<div class="full-dialog">
+    <div class="topbar">
+        <p>{{data.firstName}} {{data.lastName}} - Subscriptions</p>
+        <i class="bi bi-x-circle-fill exit-icon" (click)="closeDialog()" ></i>
+    </div>
+    <div class="dialog-container">
+        <h1>Active subscriptions:</h1>
+        <table class="subscriptions-table" *ngIf="activeSubscriptions.length != 0">
+            <tr>
+                <th>Name service</th>
+                <th>Subscription Start Date</th>
+                <th>Subscription End Date</th>
+                <th>Total Payment</th>
+                
+            </tr>
+            <tr *ngFor="let s of activeSubscriptions">
+                <td>{{s.service.name}}</td>
+                <td>{{s.startDate | date: 'dd.MM.yyyy'}}</td>
+                <td>{{s.endDate | date: 'dd.MM.yyyy'}}</td>
+                <td>{{s.totalCost | number:'1.2-2'}} $</td>
+
+            </tr>
+        
+        </table>
+        <p *ngIf="activeSubscriptions.length == 0">You dont have active subscrtiprions!</p>
+        
+    </div>
+
+</div>

@@ -6,6 +6,7 @@ import { RegistrationComponent } from './infrastructure/auth/registration/regist
 import { MyProfileComponent } from './feature-modules/layout/my-profile/my-profile.component';
 import { AuthGuard } from './infrastructure/auth/auth.guard';
 import { ServicesComponent } from './feature-modules/payments/services/services.component';
+import { AdminDashboardComponent } from './feature-modules/payments/admin-dashboard/admin-dashboard.component';
 
 const routes: Routes = [
   {path: '', component:  HomeComponent},
@@ -13,6 +14,7 @@ const routes: Routes = [
   {path: 'registration', component: RegistrationComponent},
   {path: 'my-profile', component: MyProfileComponent, canActivate:[AuthGuard]},
   {path: 'services', component: ServicesComponent, canActivate:[AuthGuard]},
+  {path: 'admin-dashboard', component: AdminDashboardComponent, canActivate:[AuthGuard]},
 ];
 
 @NgModule({

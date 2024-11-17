@@ -17,7 +17,7 @@ import { ExtendSubscriptionDialogComponent } from '../../payments/extend-subscri
 export class MyProfileComponent implements OnInit{
   user!: User;
   userInfo!: UserInfo;
-  selectedTab: string = 'subscription'
+  selectedTab: string = 'personal'
   subscriptions: SubscriptionDto[]= [];
 
   constructor(
@@ -35,12 +35,15 @@ export class MyProfileComponent implements OnInit{
     this.layoutService.getUserInfoById(this.user.id).subscribe({
       next: (result) =>{
         this.userInfo = result;
-        this.paymentService.getSubscriptionsForUser(this.user.id).subscribe({
-          next:(result)=>{
-            this.subscriptions = result
-            console.log(this.subscriptions)
-          }
-        })
+        if(this.user.role == 'ROLE_USER'){
+          this.paymentService.getSubscriptionsForUser(this.user.id).subscribe({
+            next:(result)=>{
+              this.subscriptions = result
+              console.log(this.subscriptions)
+            }
+          });
+        }
+        
       }
     });
 

@@ -15,6 +15,7 @@
                     </div>
                 </div>
                 <xp-secondary-button
+                    *ngIf="user.role == 'ROLE_USER'"
                     style="width: 150px;"
                     buttonId="subscription-button"
                     buttonType="button"

@@ -5,6 +5,7 @@ import { PaymentService } from './model/payment_service.model';
 import { environment } from 'src/env/environment';
 import { SubscriptionRequest } from './model/subscription-request.model';
 import { SubscriptionDto } from './model/subscription.model';
+import { UserInfo } from '../layout/model/userinfo';
 
 @Injectable({
   providedIn: 'root'
@@ -29,6 +30,10 @@ export class PaymentsService {
 
   updateSubscription(subscriptionDTO: SubscriptionDto): Observable<any> {
     return this.http.put<any>(environment.apiHost + 'user/update_subscription', subscriptionDTO);
+  }
+
+  getAllUsersForAdmin():Observable<UserInfo[]>{
+    return this.http.get<UserInfo[]>(environment.apiHost + 'admin/users');
   }
   
 }

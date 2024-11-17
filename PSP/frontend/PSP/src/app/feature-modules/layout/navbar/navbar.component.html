@@ -10,6 +10,7 @@
         <ul class="navbar-links">
             <li><a [href]="startUrl + ''" [ngClass]="{'active': selectedTab === '/'}">Home</a></li>
             <li><a [href]="startUrl + 'services'" [ngClass]="{'active': selectedTab === '/services'}">Services</a></li>
+            <li><a [href]="startUrl + 'admin-dashboard'" [ngClass]="{'active': selectedTab === '/admin-dashboard'}" *ngIf="user.role =='ROLE_ADMIN'">Admin Dashborad</a></li>
         </ul>
         
         <button *ngIf="user.id == 0" class="navbar-button" (click)="goToLogin()"><i class="bi bi-person" style="margin-right: 5px;"></i>Log in</button>

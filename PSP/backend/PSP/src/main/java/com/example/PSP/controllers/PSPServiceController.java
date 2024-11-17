@@ -24,7 +24,7 @@ public class PSPServiceController {
     }
 
     @GetMapping("/user/active_payment_services")
-    @PreAuthorize("hasRole('ROLE_USER')")
+    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
     public ResponseEntity<List<PSPService>> getActiveServices() {
         List<PSPService> activeServices = pspServiceService.getActiveServices();
         return ResponseEntity.ok(activeServices);

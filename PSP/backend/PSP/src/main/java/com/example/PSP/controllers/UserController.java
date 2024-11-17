@@ -15,7 +15,7 @@ import java.util.List;
 //@CrossOrigin(origins = "http://localhost:4201", maxAge = 3600, allowCredentials="true")
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
-@RequestMapping(path = "/api/user")
+@RequestMapping(path = "/api")
 public class UserController {
 
     private final UserService userService;
@@ -26,13 +26,20 @@ public class UserController {
     }
 
 
-    @GetMapping("/{id}")
-    @PreAuthorize("hasRole('ROLE_USER')")
+    @GetMapping("/user/{id}")
+    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
     public ResponseEntity<UserInfoDto> getUserInfoById(@PathVariable Long id) {
         UserInfoDto user = userService.getUserInfoById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + id));
 
         return ResponseEntity.ok(user);
+    }
+
+    @GetMapping("/admin/users")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public ResponseEntity<List<UserInfoDto>> getAllUsers() {
+        List<UserInfoDto> users = userService.getAllUsers();
+        return ResponseEntity.ok(users);
     }
 
 }

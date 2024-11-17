@@ -17,8 +17,8 @@
 
             <div class="tabs">
                 <p [ngClass]="{'activetab': selectedTab == 'personal'}" (click)="changeTab('personal')">Personal information</p>
-                <p [ngClass]="{'activetab': selectedTab == 'business'}" (click)="changeTab('business')">Business information</p>
-                <p [ngClass]="{'activetab': selectedTab == 'subscription'}" (click)="changeTab('subscription')">Your subscriptions</p>
+                <p [ngClass]="{'activetab': selectedTab == 'business'}" (click)="changeTab('business')" *ngIf="user.role == 'ROLE_USER'">Business information</p>
+                <p [ngClass]="{'activetab': selectedTab == 'subscription'}" (click)="changeTab('subscription')" *ngIf="user.role == 'ROLE_USER'">Your subscriptions</p>
             </div>
         </div>
         <div class="show-info">
