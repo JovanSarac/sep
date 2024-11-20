@@ -1,5 +1,6 @@
 package com.vivo_psp.PSP_MQ.controllers;
 
+import com.vivo_psp.PSP_MQ.dtos.SubscriptionDto;
 import com.vivo_psp.PSP_MQ.dtos.SubscriptionRequest;
 import com.vivo_psp.PSP_MQ.models.SubscriptionMessage;
 import com.vivo_psp.PSP_MQ.configs.MQConfig;
@@ -32,10 +33,13 @@ public class MessageController {
         return "Message published";
     }
 
-    @PostMapping("/publishUpdateSubscription")
-    public String publishUpdateSubscription(@RequestBody SubscriptionMessage message){
-        message.setMessageId("UPDATE" + UUID.randomUUID().toString());
-        message.setMessageDate(new Date());
+    @PutMapping("/publishUpdateSubscription")
+    public String publishUpdateSubscription(@RequestHeader Map<String, String> headers,
+                                            @RequestBody SubscriptionDto subscriptionDto){
+        SubscriptionMessage message = new SubscriptionMessage("UPDATE" + UUID.randomUUID().toString(),
+                headers.get("authorization"),
+                subscriptionDto,
+                new Date());
         template.convertAndSend(MQConfig.EXCHANGE_SUBSCRIPTION,
                 MQConfig.ROUTING_KEY_SUBSCRIPTION, message);
 

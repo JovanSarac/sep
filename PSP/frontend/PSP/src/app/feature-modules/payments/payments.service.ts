@@ -29,7 +29,7 @@ export class PaymentsService {
   }
 
   updateSubscription(subscriptionDTO: SubscriptionDto): Observable<any> {
-    return this.http.put<any>(environment.apiHost + 'user/update_subscription', subscriptionDTO);
+    return this.http.put<any>(environment.rabbitMQ + 'publishUpdateSubscription', subscriptionDTO);
   }
 
   getAllUsersForAdmin():Observable<UserInfo[]>{

@@ -24,19 +24,23 @@ public class MessageListener {
 
     @RabbitListener(queues = MQConfig.QUEUE_SUBSCRIPTION)
     public void subscriptionListener(SubscriptionMessage message){
+        boolean isCreate = message.getMessageId().contains("CREATE") ?
+                    true : false;
 
-        String url = message.getMessageId().contains("CREATE") ?
+        String url = isCreate ?
                 "http://localhost:8090/api/user/create_subscription"
                 : "http://localhost:8090/api/user/update_subscription";
 
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", message.getJWTToken());
 
-        HttpEntity<SubscriptionRequest> requestEntity = new HttpEntity<>(message.getRequest(), headers);
-
+        var requestEntity = new HttpEntity<>(
+                isCreate ?
+                        message.getRequest() : message.getSubscription(), headers);
+        var method = isCreate ?
+                    HttpMethod.POST : HttpMethod.PUT;
         try {
-            String response = restTemplate.exchange(url, HttpMethod.POST, requestEntity, String.class).getBody();
-            System.out.println("Response from endpoint: " + response);
+            String response = restTemplate.exchange(url, method, requestEntity, String.class).getBody();
         } catch (HttpClientErrorException e) {
             System.out.println("Error calling endpoint: " + e.getMessage());
         }
