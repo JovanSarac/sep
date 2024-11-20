@@ -1,4 +1,4 @@
-package com.vivo_psp.PSP_MQ;
+package com.vivo_psp.PSP_MQ.configs;
 
 import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
@@ -11,18 +11,18 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class MQConfig {
 
-    public static final String MESSAGE_QUE = "message_queue";
-    public static final String MESSAGE_EXCHANGE = "message_exchange";
-    public static final String MESSAGE_ROUTING_KEY = "message_routing_key";
+    public static final String QUEUE_SUBSCRIPTION = "queue_subscription";
+    public static final String EXCHANGE_SUBSCRIPTION = "exchange_subscription";
+    public static final String ROUTING_KEY_SUBSCRIPTION = "routing_key_subscription";
 
     @Bean
     public Queue queue(){
-        return new Queue(MESSAGE_QUE);
+        return new Queue(QUEUE_SUBSCRIPTION);
     }
 
     @Bean
     public TopicExchange exchange(){
-        return new TopicExchange(MESSAGE_EXCHANGE);
+        return new TopicExchange(EXCHANGE_SUBSCRIPTION);
     }
 
     @Bean
@@ -30,7 +30,7 @@ public class MQConfig {
         return BindingBuilder
                 .bind(queue)
                 .to(exchange)
-                .with(MESSAGE_ROUTING_KEY);
+                .with(ROUTING_KEY_SUBSCRIPTION);
     }
 
     @Bean

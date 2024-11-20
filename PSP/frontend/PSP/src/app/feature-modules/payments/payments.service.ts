@@ -21,7 +21,7 @@ export class PaymentsService {
   }
 
   createSubscription(subscriptionDuration: SubscriptionRequest) : Observable<SubscriptionDto>{
-    return this.http.post<SubscriptionDto>(environment.apiHost + 'user/create_subscription', subscriptionDuration)
+    return this.http.post<SubscriptionDto>(environment.rabbitMQ + 'publishCreateSubscription', subscriptionDuration)
   }
 
   getSubscriptionsForUser(userId: number): Observable<SubscriptionDto[]> {
