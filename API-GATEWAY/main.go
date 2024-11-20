@@ -13,7 +13,7 @@ func main() {
 	// register the handler function with the server
 
 	router := mux.NewRouter()
-	//router.HandleFunc("/card", proxy("/card", "http://localhost:8082")).Methods("GET")
+	router.HandleFunc("/card", proxy("/card", "http://localhost:8082")).Methods("GET")
 
 	log.Fatal(http.ListenAndServe(":8080", router))
 }
