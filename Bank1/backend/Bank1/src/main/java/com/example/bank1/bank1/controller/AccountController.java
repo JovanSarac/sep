@@ -19,18 +19,19 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RequestMapping("/api/bank1/accounts")
 public class AccountController {
-    private final AccountService accountService;
+    @Autowired
+    private AccountService accountService;
     @Autowired
     private UserRepository userRepository;
 
     @GetMapping("/validateData")
     public ResponseEntity<String> validateData(UserIdentificationDto userIdentificationDto) {
-        User user = userRepository.findById(userIdentificationDto.getUserId()).orElseThrow(() -> new RuntimeException("User not found"));
+        User user = userRepository.findById(userIdentificationDto.userId).orElseThrow(() -> new RuntimeException("User not found"));
         Account account = user.getAccount();
         if (!accountService.validateData(userIdentificationDto, account)) {
             return new ResponseEntity<>("An error occurred", HttpStatus.BAD_REQUEST);
         }
-        if (!accountService.validateName(user.getName(), userIdentificationDto.getCardHolderName())) {
+        if (!accountService.validateName(user.getName(), userIdentificationDto.cardHolderName)) {
             return new ResponseEntity<>("An error occurred", HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<>("Response OK", HttpStatus.OK);

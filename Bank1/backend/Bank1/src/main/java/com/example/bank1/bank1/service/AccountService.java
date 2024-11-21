@@ -24,11 +24,11 @@ public class AccountService {
         //check pan
         //check security code
         //check if bank is the same
-        if (userIdentificationDto.getPAN() != account.getPAN()) {
+        if (userIdentificationDto.PAN != account.getPAN()) {
             return false;
         }
 
-        if (userIdentificationDto.getCardExpirationDate() != account.getCardExpirationDate()) {
+        if (userIdentificationDto.cardExpirationDate != account.getCardExpirationDate()) {
             return false;
         }
 
@@ -37,7 +37,7 @@ public class AccountService {
             return false;
         }
 
-        if (validatePAN(userIdentificationDto.getPAN()) % 10 != 0) {
+        if (validatePAN(userIdentificationDto.PAN) % 10 != 0) {
             return false;
         }
 
@@ -83,7 +83,7 @@ public class AccountService {
 
     public Boolean checkBanks(TransactionDto transactionDto) {
         List<Long> numbers = new ArrayList<>();
-        Long panTemp = transactionDto.getPAN();
+        Long panTemp = transactionDto.PAN;
 
         while (panTemp > 0) {
             Long digit = panTemp % 10;

@@ -14,8 +14,8 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 public class TransactionDto {
-    private Double amount;
-    private String sourceAccountNumber;
-    private String destinationAccountNumber;
-    private Long PAN;
+    public Double amount;
+    public String sourceAccountNumber;
+    public String destinationAccountNumber;
+    public Long PAN;
 }
