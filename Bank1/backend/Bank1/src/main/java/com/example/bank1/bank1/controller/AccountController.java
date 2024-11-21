@@ -2,6 +2,7 @@ package com.example.bank1.bank1.controller;
 
 import com.example.bank1.bank1.dto.UserIdentificationDto;
 import com.example.bank1.bank1.model.Account;
+import com.example.bank1.bank1.model.CardType;
 import com.example.bank1.bank1.model.User;
 import com.example.bank1.bank1.repository.UserRepository;
 import com.example.bank1.bank1.service.AccountService;
@@ -39,5 +40,16 @@ public class AccountController {
     public ResponseEntity<Long> validatePAN(@PathVariable Long PAN) {
         Long number = accountService.validatePAN(PAN);
         return ResponseEntity.ok(number);
+    }
+
+    @GetMapping("/checkCardType/{PAN}")
+    public ResponseEntity<?> checkCardType(@PathVariable Long PAN) {
+        CardType type = accountService.checkCardType(PAN);
+        if (type != null) {
+            return ResponseEntity.ok(type);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("Card type not found for the given PAN: " + PAN);
+        }
     }
 }

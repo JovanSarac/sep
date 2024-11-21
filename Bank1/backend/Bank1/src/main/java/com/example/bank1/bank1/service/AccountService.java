@@ -3,6 +3,7 @@ package com.example.bank1.bank1.service;
 import com.example.bank1.bank1.dto.TransactionDto;
 import com.example.bank1.bank1.dto.UserIdentificationDto;
 import com.example.bank1.bank1.model.Account;
+import com.example.bank1.bank1.model.CardType;
 import com.example.bank1.bank1.model.User;
 import com.example.bank1.bank1.repository.AccountRepository;
 import com.example.bank1.bank1.repository.UserRepository;
@@ -90,7 +91,7 @@ public class AccountService {
             panTemp /= 10;
         }
 
-        List<Long> bankDigits = numbers.subList(Math.max(numbers.size() - 6, 0), numbers.size() - 1);
+        List<Long> bankDigits = numbers.subList(Math.max(numbers.size() - 6, 0), numbers.size() - 2);
 
         //cifre prve banke su 11111
         for (Long digit : bankDigits) {
@@ -100,5 +101,29 @@ public class AccountService {
         }
 
         return true;
+    }
+
+
+    public CardType checkCardType(Long PAN) {
+        List<Long> numbers = new ArrayList<>();
+        Long panTemp = PAN;
+
+        while (panTemp > 0) {
+            Long digit = panTemp % 10;
+            numbers.add(digit);
+            panTemp /= 10;
+        }
+
+        List<Long> cardDigits = numbers.subList(Math.max(numbers.size() - 2, 0), numbers.size());
+
+        if (cardDigits.get(1) == 5 && cardDigits.get(0) > 0 && cardDigits.get(0) <= 5) {
+            return CardType.CREDIT;
+        }
+
+        if (cardDigits.get(1) == 4) {
+            return CardType.DEBIT;
+        }
+
+        return null;
     }
 }
