@@ -18,11 +18,13 @@ export class AuthService {
 
   constructor(private http: HttpClient,
     private tokenStorage: TokenStorage,
-    private router: Router) { }
+    private router: Router
+  ) { }
 
+  
   login(login: Login): Observable<AuthenticationResponse> {
     return this.http
-      .post<AuthenticationResponse>(environment.apiHost + 'users/login', login)
+      .post<AuthenticationResponse>(environment.apiHost + 'auth/login', login)
       .pipe(
         tap((authenticationResponse) => {
           this.tokenStorage.saveAccessToken(authenticationResponse.accessToken);
@@ -31,19 +33,20 @@ export class AuthService {
       );
   }
 
-  register(registration: Registration): Observable<AuthenticationResponse> {
+
+  register(
+    registration: Registration
+  ): Observable<string> {
     return this.http
-    .post<AuthenticationResponse>(environment.apiHost + 'users', registration)
-    .pipe(
-      tap((authenticationResponse) => {
-        this.tokenStorage.saveAccessToken(authenticationResponse.accessToken);
-        this.setUser();
-      })
-    );
+      .post(
+        environment.apiHost + 'auth/register',
+        registration,
+        { responseType: 'text' }
+      );
   }
 
   logout(): void {
-    this.router.navigate(['/home']).then(_ => {
+    this.router.navigate(['']).then(_ => {
       this.tokenStorage.clear();
       this.user$.next({username: "", id: 0, role: "" });
       }
@@ -64,9 +67,7 @@ export class AuthService {
     const user: User = {
       id: +jwtHelperService.decodeToken(accessToken).id,
       username: jwtHelperService.decodeToken(accessToken).username,
-      role: jwtHelperService.decodeToken(accessToken)[
-        'http://schemas.microsoft.com/ws/2008/06/identity/claims/role'
-      ],
+      role: jwtHelperService.decodeToken(accessToken).role,
     };
     this.user$.next(user);
   }
