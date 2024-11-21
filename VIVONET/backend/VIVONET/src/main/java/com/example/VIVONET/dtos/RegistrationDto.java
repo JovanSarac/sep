@@ -1,5 +1,7 @@
 package com.example.VIVONET.dtos;
 
+import com.example.VIVONET.models.UserType;
+
 public class RegistrationDto {
     private String firstName;
     private String lastName;
@@ -7,14 +9,17 @@ public class RegistrationDto {
     private String username;
     private String password;
     private String confirmPassword;
+    private UserType userType;
 
-    public RegistrationDto(String firstName, String lastName, String email, String username, String password, String confirmPassword) {
+
+    public RegistrationDto(String firstName, String lastName, String email, String username, String password, String confirmPassword, UserType userType) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.username = username;
         this.password = password;
         this.confirmPassword = confirmPassword;
+        this.userType = userType;
     }
 
     public String getFirstName() {
@@ -67,5 +72,13 @@ public class RegistrationDto {
 
     public boolean isMacthingPassword(){
         return password.equals(confirmPassword);
+    }
+
+    public UserType getUserType() {
+        return userType;
+    }
+
+    public void setUserType(UserType userType) {
+        this.userType = userType;
     }
 }

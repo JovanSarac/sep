@@ -3,7 +3,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../auth.service';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import { Registration } from '../model/registration.model';
+import { Registration, TypeUser } from '../model/registration.model';
 
 @Component({
   selector: 'app-registration',
@@ -24,6 +24,7 @@ export class RegistrationComponent {
     username: new FormControl('', Validators.required),
     password: new FormControl('', Validators.required),
     repeatPassword: new FormControl('', Validators.required),
+    userType: new FormControl('PERSONAL_USER', Validators.required)
   });
 
   constructor(
@@ -34,6 +35,10 @@ export class RegistrationComponent {
 
   goToLogin(){
     this.router.navigate(['login'])
+  }
+
+  onCheckboxChange(selectedType: string): void {
+    this.registerForm.controls.userType.setValue(selectedType);
   }
 
   register() {
@@ -63,6 +68,7 @@ export class RegistrationComponent {
       username: this.registerForm.value.username || '',
       password: this.registerForm.value.password || '',
       confirmPassword: this.registerForm.value.repeatPassword || '',
+      userType: (this.registerForm.value.userType == 'PERSONAL_USER') ? TypeUser.PERSONAL_USER : TypeUser.BUSSINESS_USER
     };
 
     this.authService.register(registration).subscribe({

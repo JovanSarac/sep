@@ -4,5 +4,12 @@ export interface Registration {
     email: string,
     username: string,
     password: string,
-    confirmPassword: string
+    confirmPassword: string,
+    userType: TypeUser
+}
+
+export enum TypeUser{
+    PERSONAL_USER,
+    BUSSINESS_USER,
+    ADMIN
 }

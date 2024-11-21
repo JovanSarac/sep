@@ -121,3 +121,17 @@
     cursor: pointer;
     color: var(--secondary-hover-color);
 }
+
+.checkboxes{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
+
+.checkbox-item{
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+    flex: 1;
+    justify-content: center;
+}

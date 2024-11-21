@@ -31,9 +31,17 @@ export class TelevisionComponent {
 
     this.activatedRoute.queryParams.subscribe(params => {
       if (params['type'] === 'business') {
-        this.televisionServices = this.service.getTelevisionServices();
+        this.service.getTelevisionServicesBusiness().subscribe({
+          next: (result)=>{
+            this.televisionServices = result
+          }
+        });
       }else{
-        this.televisionServices = this.service.getTelevisionServices();
+        this.service.getTelevisionServicesPersonal().subscribe({
+          next: (result)=>{
+            this.televisionServices = result
+          }
+        });
       }
     });
   }
@@ -54,5 +62,9 @@ export class TelevisionComponent {
       this.cartService.addItem(cartItem);
       this.toastr.success('Successfully added the ' + cartItem.name + ' service to the cart.', 'Success');
     }
+  }
+
+  getTypeUserLabel(typeUser: TypeUser | string | undefined): string {
+    return typeUser === 'PERSONAL' ? 'Personal' : 'Business';
   }
 }

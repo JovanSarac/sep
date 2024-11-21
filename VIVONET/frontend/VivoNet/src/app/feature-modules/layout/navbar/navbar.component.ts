@@ -1,6 +1,8 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CartService } from '../cart.service';
+import { AuthService } from 'src/app/infrastructure/auth/auth.service';
+import { User } from 'src/app/infrastructure/auth/model/user.model';
 
 @Component({
   selector: 'xp-navbar',
@@ -13,14 +15,21 @@ export class NavbarComponent implements OnInit, OnDestroy {
   startUrl: string = 'http://localhost:4200/';
   cartItems: any[] = [];
   cartCount: number = 0;
+  user!: User;
+  dropdownOpen: boolean = false;
 
   constructor(
     private router: Router,
     private activatedRoute: ActivatedRoute,
-    private cartService: CartService
+    private cartService: CartService,
+    private authService: AuthService
   ) { }
 
   ngOnInit(): void {
+
+    this.authService.user$.subscribe((user) => {
+      this.user = user;
+    });
     
     this.activatedRoute.queryParams.subscribe(params => {
       if (params['type'] === 'business') {
@@ -53,16 +62,27 @@ export class NavbarComponent implements OnInit, OnDestroy {
   }
 
   goToLogin() {
+    this.dropdownOpen = false;
     this.router.navigate(['/login']);
   }
 
   goToHome() {
+    this.dropdownOpen = false;
     this.router.navigate(['']);
   }
 
   goToCart(){
+    this.dropdownOpen = false;
     this.router.navigate(['cart']);
   }
 
+  showMenu(){
+    this.dropdownOpen = !this.dropdownOpen;
+  }
+
+  onLogout(): void {
+    this.dropdownOpen = false;
+    this.authService.logout();
+  }
 
 }

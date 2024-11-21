@@ -26,19 +26,21 @@ public class User {
     public String email;
     public String username;
     public String password;
-    public boolean isAdmin;
+
+    @Enumerated(EnumType.STRING)
+    private UserType userType;
 
     public User(){
         super();
     }
 
-    public User(String firstName, String lastName, String email, String username, String password, boolean isAdmin) {
+    public User(String firstName, String lastName, String email, String username, String password, UserType userType) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.username = username;
         this.password = password;
-        this.isAdmin = isAdmin;
+        this.userType = userType;
     }
 
     public Long getId() {
@@ -89,11 +91,5 @@ public class User {
         this.password = password;
     }
 
-    public boolean isAdmin() {
-        return isAdmin;
-    }
 
-    public void isAdmin(boolean isAdmin) {
-        isAdmin = isAdmin;
-    }
 }

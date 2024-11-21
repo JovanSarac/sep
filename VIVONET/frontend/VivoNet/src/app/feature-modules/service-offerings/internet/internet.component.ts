@@ -31,9 +31,17 @@ export class InternetComponent implements OnInit{
 
     this.activatedRoute.queryParams.subscribe(params => {
       if (params['type'] === 'business') {
-        this.internetServices = this.service.getInternetServices();
+        this.service.getInternetServicesBusiness().subscribe({
+          next: (result)=>{
+            this.internetServices = result
+          }
+        });
       }else{
-        this.internetServices = this.service.getInternetServices();
+        this.service.getInternetServicesPersonal().subscribe({
+          next: (result)=>{
+            this.internetServices = result
+          }
+        });
       }
     });
   }
@@ -54,5 +62,9 @@ export class InternetComponent implements OnInit{
       this.cartService.addItem(cartItem);
       this.toastr.success('Successfully added the ' + cartItem.name + ' service to the cart.', 'Success');
     }
+  }
+
+  getTypeUserLabel(typeUser: TypeUser | string | undefined): string {
+    return typeUser === 'PERSONAL' ? 'Personal' : 'Business';
   }
 }

@@ -10,13 +10,13 @@ export interface Service{
 }
 
 export enum TypeUser{
-    Personal,
-    Business
+    PERSONAL,
+    BUSINESS
 }
 
 export enum TypeService{
-    Mobile,
-    Landline,
-    Internet,
+    MOBILE,
+    LANDLINE,
+    INTERNET,
     TV
 }

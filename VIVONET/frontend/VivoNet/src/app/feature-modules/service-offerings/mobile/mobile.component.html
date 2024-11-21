@@ -2,7 +2,7 @@
     <div class="mobile-services-container" *ngFor="let mobileservice of mobileServices">
         <div class="one-service">
             <div class="user-type-badge">
-                {{ mobileservice.typeUser === 0 ? 'Personal' : 'Business' }}
+                {{ getTypeUserLabel(mobileservice.typeUser) }}
             </div>
             <h2 class="service-name">{{mobileservice.name}}</h2>
             <p class="service-description">{{mobileservice.description}}</p>

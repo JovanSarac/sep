@@ -1,6 +1,7 @@
 package com.example.VIVONET.security.services;
 
 import com.example.VIVONET.models.User;
+import com.example.VIVONET.models.UserType;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -30,10 +31,12 @@ public class UserDetailsImpl implements UserDetails {
     public static UserDetailsImpl build(User user) {
         List<GrantedAuthority> authorities = new ArrayList<>();
 
-        if (user.isAdmin()) {
+        if (user.getUserType() == UserType.ADMIN) {
             authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
-        } else {
-            authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
+        } else if(user.getUserType() == UserType.BUSINESS_USER) {
+            authorities.add(new SimpleGrantedAuthority("ROLE_BUSINESS_USER"));
+        }else{
+            authorities.add(new SimpleGrantedAuthority("ROLE_PERSONAL_USER"));
         }
 
         return new UserDetailsImpl(

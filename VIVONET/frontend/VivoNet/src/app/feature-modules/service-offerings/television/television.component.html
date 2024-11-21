@@ -2,7 +2,7 @@
     <div class="television-services-container" *ngFor="let televisionservice of televisionServices">
         <div class="one-service">
             <div class="user-type-badge">
-                {{ televisionservice.typeUser === 0 ? 'Personal' : 'Business' }}
+                {{ getTypeUserLabel(televisionservice.typeUser) }}
             </div>
             <h2 class="service-name">{{televisionservice.name}}</h2>
             <p class="service-description">{{televisionservice.description}}</p>

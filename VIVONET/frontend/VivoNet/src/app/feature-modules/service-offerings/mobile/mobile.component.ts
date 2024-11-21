@@ -31,9 +31,17 @@ export class MobileComponent implements OnInit {
 
     this.activatedRoute.queryParams.subscribe(params => {
       if (params['type'] === 'business') {
-        this.mobileServices = this.service.getMobileServices();
+        this.service.getMobileServicesBusiness().subscribe({
+          next: (result)=>{
+            this.mobileServices = result
+          }
+        });
       } else {
-        this.mobileServices = this.service.getMobileServices();
+        this.service.getMobileServicesPersonal().subscribe({
+          next: (result)=>{
+            this.mobileServices = result
+          }
+        });
       }
     });
   }
@@ -55,5 +63,9 @@ export class MobileComponent implements OnInit {
       this.cartService.addItem(cartItem);
       this.toastr.success('Successfully added the ' + cartItem.name + ' service to the cart.', 'Success');
     }
+  }
+
+  getTypeUserLabel(typeUser: TypeUser | string | undefined): string {
+    return typeUser === 'PERSONAL' ? 'Personal' : 'Business';
   }
 }

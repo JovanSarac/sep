@@ -3,6 +3,7 @@ package com.example.VIVONET.services;
 import com.example.VIVONET.dtos.RegistrationDto;
 import com.example.VIVONET.dtos.UserInfoDto;
 import com.example.VIVONET.models.User;
+import com.example.VIVONET.models.UserType;
 import com.example.VIVONET.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -48,7 +49,7 @@ public class UserService {
                 registrationDto.getEmail(),
                 registrationDto.getUsername(),
                 encoder.encode(registrationDto.getPassword()),
-                false
+                registrationDto.getUserType()
         );
 
         userRepository.save(newUser);

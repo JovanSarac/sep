@@ -2,7 +2,7 @@
     <div class="internet-services-container" *ngFor="let internetservice of internetServices">
         <div class="one-service">
             <div class="user-type-badge">
-                {{ internetservice.typeUser === 0 ? 'Personal' : 'Business' }}
+                {{ getTypeUserLabel(internetservice.typeUser) }}
             </div>
             <h2 class="service-name">{{internetservice.name}}</h2>
             <p class="service-description">{{internetservice.description}}</p>

@@ -85,6 +85,29 @@
               {{ errorMessage }}
             </p>
 
+            <div class="checkboxes">
+              <div class="checkbox-item">
+                <input
+                    type="checkbox"
+                    id="personal"
+                    [checked]="registerForm.controls.userType.value === 'PERSONAL_USER'"
+                    (change)="onCheckboxChange('PERSONAL_USER')"
+                  />
+                <label for="personal">Personal</label>
+
+              </div>
+              <div class="checkbox-item">
+                <input
+                    type="checkbox"
+                    id="business"
+                    [checked]="registerForm.controls.userType.value === 'BUSINESS_USER'"
+                    (change)="onCheckboxChange('BUSINESS_USER')"
+                  />
+                <label for="business">Business</label>
+
+              </div>
+            </div>
+
             <xp-primary-button
               style="width: 100%; margin-top: 5%"
               buttonId="register-button"

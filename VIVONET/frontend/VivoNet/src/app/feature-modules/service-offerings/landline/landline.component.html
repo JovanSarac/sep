@@ -2,7 +2,7 @@
     <div class="landline-services-container" *ngFor="let landlineservice of landlineServices">
         <div class="one-service">
             <div class="user-type-badge">
-                {{ landlineservice.typeUser === 0 ? 'Personal' : 'Business' }}
+                {{ getTypeUserLabel(landlineservice.typeUser) }}
             </div>
             <h2 class="service-name">{{landlineservice.name}}</h2>
             <p class="service-description">{{landlineservice.description}}</p>

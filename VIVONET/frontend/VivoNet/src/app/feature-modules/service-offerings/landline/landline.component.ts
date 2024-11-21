@@ -31,9 +31,17 @@ export class LandlineComponent implements OnInit{
 
     this.activatedRoute.queryParams.subscribe(params => {
       if (params['type'] === 'business') {
-        this.landlineServices = this.service.getLandlineServices();
+        this.service.getLandlineServicesBusiness().subscribe({
+          next: (result)=>{
+            this.landlineServices = result
+          }
+        });
       }else{
-        this.landlineServices = this.service.getLandlineServices();
+        this.service.getLandlineServicesPersonal().subscribe({
+          next: (result)=>{
+            this.landlineServices = result
+          }
+        });
       }
     });
   }
@@ -54,6 +62,10 @@ export class LandlineComponent implements OnInit{
       this.cartService.addItem(cartItem);
       this.toastr.success('Successfully added the ' + cartItem.name + ' service to the cart.', 'Success');
     }
+  }
+
+  getTypeUserLabel(typeUser: TypeUser | string | undefined): string {
+    return typeUser === 'PERSONAL' ? 'Personal' : 'Business';
   }
 
 }
