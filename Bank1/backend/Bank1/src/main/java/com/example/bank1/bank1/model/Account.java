@@ -15,18 +15,18 @@ public class Account {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String accountNumber;
-    private Long cardNumber;
     private Double balance;
     private Long PAN;
     private Date cardExpirationDate;
+    private Integer securityCode;
 
-    public Account(Long id, String accountNumber, Long cardNumber, Double balance, Long PAN, Date cardExpirationDate) {
+    public Account(Long id, String accountNumber, Double balance, Long PAN, Date cardExpirationDate, Integer securityCode) {
         this.id = id;
         this.accountNumber = accountNumber;
-        this.cardNumber = cardNumber;
         this.balance = balance;
         this.PAN = PAN;
         this.cardExpirationDate = cardExpirationDate;
+        this.securityCode = securityCode;
     }
 
     public Account() {
@@ -41,10 +41,6 @@ public class Account {
         return accountNumber;
     }
 
-    public Long getCardNumber() {
-        return cardNumber;
-    }
-
     public Double getBalance() {
         return balance;
     }
@@ -57,16 +53,16 @@ public class Account {
         return cardExpirationDate;
     }
 
+    public Integer getSecurityCode() {
+        return securityCode;
+    }
+
     public void setId(Long id) {
         this.id = id;
     }
 
     public void setAccountNumber(String accountNumber) {
         this.accountNumber = accountNumber;
-    }
-
-    public void setCardNumber(Long cardNumber) {
-        this.cardNumber = cardNumber;
     }
 
     public void setBalance(Double balance) {
@@ -79,5 +75,9 @@ public class Account {
 
     public void setCardExpirationDate(Date cardExpirationDate) {
         this.cardExpirationDate = cardExpirationDate;
+    }
+
+    public void setSecurityCode(Integer securityCode) {
+        this.securityCode = securityCode;
     }
 }
