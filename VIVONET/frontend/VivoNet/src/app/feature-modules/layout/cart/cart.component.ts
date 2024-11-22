@@ -5,6 +5,7 @@ import { User } from 'src/app/infrastructure/auth/model/user.model';
 import { Route, Router } from '@angular/router';
 import { LayoutService } from '../layout.service';
 import { UserInfo } from '../model/userinfo';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-cart',
@@ -22,7 +23,8 @@ export class CartComponent implements OnInit{
     private cartService: CartService,
     private authService: AuthService,
     private router: Router,
-    private layoutService: LayoutService
+    private layoutService: LayoutService,
+    private toastr: ToastrService
   ) {}
 
   ngOnInit(): void {
@@ -53,10 +55,39 @@ export class CartComponent implements OnInit{
   }
 
   OnCheckout(){
+    if(this.totalItems == 0){
+      return;
+    }
     if(this.user.id == 0){
       this.router.navigate(['/login']);
       return;
     }else{
+      
+      if(this.user.role === 'ROLE_BUSINESS_USER'){
+        const hasBusinessOnlyService = this.cartItems.some(
+          (item) => item.typeUser === 'PERSONAL'
+        );
+
+        if(hasBusinessOnlyService){
+          this.toastr.warning("Your cart contains items available only for BUSINESS users. Please remove PERSONAL items them to proceed.","Warning");
+          return;
+        }
+
+      }else if(this.user.role === 'ROLE_PERSONAL_USER'){
+        const hasPersonalOnlyService = this.cartItems.some(
+          (item) => item.typeUser === 'BUSINESS'
+        );
+
+        if(hasPersonalOnlyService){
+          this.toastr.warning("Your cart contains items available only for PERSONAL users. Please remove BUSINESS items them to proceed.","Warning");
+          return;
+        }
+
+      }
+     
+  
+      
+
       const checkoutData = {
         userId: this.user.id,
         userFirstName: this.userInfo.firstName,
@@ -75,8 +106,8 @@ export class CartComponent implements OnInit{
         webShopUrl: window.location.origin,
         
       };
+
     
-      console.log('Checkout Data:', checkoutData);
       this.cartService.checkingWebShopServices(checkoutData).subscribe({
         next: (redirectUrl) => {
           console.log('Redirect URL:', redirectUrl);
@@ -84,7 +115,7 @@ export class CartComponent implements OnInit{
         },
         error: (error) => {
           console.error('Error:', error);
-          alert('No active subscriptions found for this webshop.');
+          alert('No active subscriptions found for this webshop:' + checkoutData.webShopName);
         },
       });
     }

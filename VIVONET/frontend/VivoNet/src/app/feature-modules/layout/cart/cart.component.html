@@ -84,6 +84,7 @@
             iconClass="bi bi-bag-check-fill"
             textValue="Checkout"
             (click)="OnCheckout()"
+            [isDisabled]="totalItems === 0"
         >
         </xp-primary-button>
         
