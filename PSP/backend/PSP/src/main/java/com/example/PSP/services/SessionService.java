@@ -14,7 +14,6 @@ public class SessionService {
     private SessionRepository sessionRepository;
 
 
-
     public Session createSession(Long requestorId, String firstName, String lastName, String email, CartDto cart, User webshop) {
         Session session = new Session();
         session.setRequestorId(requestorId);
@@ -24,6 +23,10 @@ public class SessionService {
         session.setCart(cart);
         session.setUser(webshop);
         return sessionRepository.save(session);
+    }
+
+    public Session getSessionById(Long id) {
+        return sessionRepository.findById(id).orElse(null);
     }
 
 }
