@@ -7,6 +7,7 @@ import { SharedModule } from 'src/app/shared/shared.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MaterialModule } from 'src/app/infrastructure/material/material.module';
 import { MyProfileComponent } from './my-profile/my-profile.component';
+import { AvailableServicesComponent } from './available-services/available-services.component';
 
 
 
@@ -15,7 +16,8 @@ import { MyProfileComponent } from './my-profile/my-profile.component';
     NavbarComponent,
     HomeComponent,
     FooterComponent,
-    MyProfileComponent
+    MyProfileComponent,
+    AvailableServicesComponent
   ],
   imports: [
     CommonModule,

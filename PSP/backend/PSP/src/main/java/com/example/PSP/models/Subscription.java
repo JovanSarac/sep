@@ -1,6 +1,7 @@
 package com.example.PSP.models;
 
-import com.example.PSP.dtos.UserInfoDto;
+
+
 import jakarta.persistence.*;
 
 import java.time.LocalDate;

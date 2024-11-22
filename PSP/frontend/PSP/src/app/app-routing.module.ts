@@ -7,6 +7,7 @@ import { MyProfileComponent } from './feature-modules/layout/my-profile/my-profi
 import { AuthGuard } from './infrastructure/auth/auth.guard';
 import { ServicesComponent } from './feature-modules/payments/services/services.component';
 import { AdminDashboardComponent } from './feature-modules/payments/admin-dashboard/admin-dashboard.component';
+import { AvailableServicesComponent } from './feature-modules/layout/available-services/available-services.component';
 
 const routes: Routes = [
   {path: '', component:  HomeComponent},
@@ -15,6 +16,7 @@ const routes: Routes = [
   {path: 'my-profile', component: MyProfileComponent, canActivate:[AuthGuard]},
   {path: 'services', component: ServicesComponent, canActivate:[AuthGuard]},
   {path: 'admin-dashboard', component: AdminDashboardComponent, canActivate:[AuthGuard]},
+  {path: 'available-service/:sessionId', component: AvailableServicesComponent}
 ];
 
 @NgModule({

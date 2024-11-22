@@ -1,5 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { CartService } from '../cart.service';
+import { AuthService } from 'src/app/infrastructure/auth/auth.service';
+import { User } from 'src/app/infrastructure/auth/model/user.model';
+import { Route, Router } from '@angular/router';
+import { LayoutService } from '../layout.service';
+import { UserInfo } from '../model/userinfo';
 
 @Component({
   selector: 'app-cart',
@@ -10,10 +15,27 @@ export class CartComponent implements OnInit{
   cartItems: any[] = [];
   totalItems: number = 0;
   totalPrice: number = 0;
+  user!: User;
+  userInfo!: UserInfo;
 
-  constructor(private cartService: CartService) {}
+  constructor(
+    private cartService: CartService,
+    private authService: AuthService,
+    private router: Router,
+    private layoutService: LayoutService
+  ) {}
 
   ngOnInit(): void {
+    this.authService.user$.subscribe((user) => {
+      this.user = user;
+      if(this.user.id != 0){
+        this.layoutService.getUserInfoById(this.user.id).subscribe({
+          next:(result)=>{
+            this.userInfo = result;
+          }
+        });
+      }
+    });
     this.cartService.cartItems$.subscribe(items => {
       this.cartItems = items;
       this.calculateTotals();
@@ -31,7 +53,41 @@ export class CartComponent implements OnInit{
   }
 
   OnCheckout(){
-    window.open('http://localhost:4201/', '_blank');
+    if(this.user.id == 0){
+      this.router.navigate(['/login']);
+      return;
+    }else{
+      const checkoutData = {
+        userId: this.user.id,
+        userFirstName: this.userInfo.firstName,
+        userLastName: this.userInfo.lastName,
+        userEmail: this.userInfo.email,
+        cart: {
+          items: this.cartItems.map(item => ({
+            name: item.name,
+            price: item.price,
+          })),
+          totalItems: this.totalItems,
+          totalPrice: this.totalPrice,
+        },
+        webShopId: '5',
+        webShopName: 'VivoNet',
+        webShopUrl: window.location.origin,
+        
+      };
+    
+      console.log('Checkout Data:', checkoutData);
+      this.cartService.checkingWebShopServices(checkoutData).subscribe({
+        next: (redirectUrl) => {
+          console.log('Redirect URL:', redirectUrl);
+          window.open(redirectUrl, '_blank');
+        },
+        error: (error) => {
+          console.error('Error:', error);
+          alert('No active subscriptions found for this webshop.');
+        },
+      });
+    }
   }
 }
 

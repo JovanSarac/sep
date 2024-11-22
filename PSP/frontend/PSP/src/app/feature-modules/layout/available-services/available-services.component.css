@@ -1,0 +1,16 @@
+.full-page{
+    display: flex;
+    flex-direction: column;
+    width: 70%;
+    height: 80dvh;
+    margin: auto;
+    overflow-y: auto;
+    color: white;
+    justify-content: center;
+    align-items: center;
+}
+
+.full-page h1{
+    font-size: 30px;
+    font-weight: 600;
+}

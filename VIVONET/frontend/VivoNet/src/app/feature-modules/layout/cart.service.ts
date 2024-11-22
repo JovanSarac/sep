@@ -1,5 +1,6 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -9,7 +10,9 @@ export class CartService {
 
   cartItems$ = this.cartItemsSubject.asObservable();
 
-  constructor() {
+  constructor(
+    private http: HttpClient
+  ) {
     this.loadCartFromLocalStorage();
   }
 
@@ -37,5 +40,11 @@ export class CartService {
   private updateCartState(updatedCart: any[]): void {
     this.cartItemsSubject.next(updatedCart);
     localStorage.setItem('cart', JSON.stringify(updatedCart));
+  }
+
+  checkingWebShopServices(checkoutData: any): Observable<string> {
+    return this.http.post<string>('http://localhost:8090/api/checking_webshop_services', checkoutData, {
+      responseType: 'text' as 'json', // Angular očekuje JSON, ali specificiramo tekst
+    });
   }
 }

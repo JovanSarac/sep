@@ -1,13 +1,15 @@
 <xp-navbar 
     *ngIf="
     this.router.url !== '/login' &&
-    this.router.url !== '/registration'
+    this.router.url !== '/registration' &&
+    !this.router.url.startsWith('/available-service')
     "
 ></xp-navbar>
 <router-outlet></router-outlet>
 <xp-footer
     *ngIf="
     this.router.url !== '/login' &&
-    this.router.url !== '/registration'
+    this.router.url !== '/registration' &&
+    !this.router.url.startsWith('/available-service')
     "
 ></xp-footer>
