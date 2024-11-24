@@ -1,7 +1,7 @@
 <div class="full-page">
     <h1>Available service for this webshop:</h1>
 
-    <div class="psp-service" *ngFor="let ps of activePspServices">
+    <div class="psp-service" *ngFor="let ps of activePspServices" (click)="choosePaymentMethod(ps)">
         <p>{{ps.name}}</p>
 
     </div>

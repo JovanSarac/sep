@@ -111,7 +111,8 @@ export class CartComponent implements OnInit{
       this.cartService.checkingWebShopServices(checkoutData).subscribe({
         next: (redirectUrl) => {
           console.log('Redirect URL:', redirectUrl);
-          window.open(redirectUrl, '_blank');
+          window.location.href = redirectUrl;
+          //window.open(redirectUrl, '_blank');
         },
         error: (error) => {
           console.error('Error:', error);

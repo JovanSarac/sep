@@ -28,4 +28,12 @@ export class AvailableServicesComponent implements OnInit {
     }
   
   }
+
+  choosePaymentMethod(ps: any) {
+    this.layoutServiceL.sendRequestToBank1(Number(this.sessionId)).subscribe({
+      next: (result) => {
+        console.log("zahtev za banku uspesno prosledjen")
+      }
+    })
+  }
 }

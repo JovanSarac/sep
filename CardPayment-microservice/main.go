@@ -1,7 +1,9 @@
 package main
 
 import (
+	"bytes"
 	"fmt"
+	"io"
 	"net/http"
 	"os/exec"
 	"runtime"
@@ -16,7 +18,15 @@ func main() {
 }
 
 func goToBank1(w http.ResponseWriter, r *http.Request) {
-	resp, err := http.Get(fmt.Sprintf("http://localhost:8091/api/bank1/requests/validateRequest"))
+	body, err := io.ReadAll(r.Body)
+	if err != nil {
+		http.Error(w, "Failed to read request body", http.StatusBadRequest)
+		return
+	}
+
+	fmt.Println("Received body:", string(body))
+
+	resp, err := http.Post(fmt.Sprintf("http://localhost:8091/api/bank1/requests/validateRequest"), "application/json", bytes.NewBuffer(body))
 
 	if err != nil {
 		fmt.Println("Error making HTTP request:", err)

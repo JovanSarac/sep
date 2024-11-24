@@ -21,4 +21,8 @@ export class LayoutService {
   getSesstionById(id:number): Observable<PaymentService[]>{
     return this.http.get<PaymentService[]>(environment.apiHost + 'active_pspservices_bysession/' + id);
   }
+
+  sendRequestToBank1(sessionId: number): Observable<String>{
+    return this.http.get<String>(environment.apiHost + 'psp/requests/sendRequest/' + sessionId);
+  }
 }

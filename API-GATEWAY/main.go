@@ -1,6 +1,8 @@
 package main
 
 import (
+	"bytes"
+	"encoding/json"
 	"io"
 	"log"
 	"net/http"
@@ -8,21 +10,45 @@ import (
 	"github.com/gorilla/mux"
 )
 
+type RequestDto struct {
+	MerchantId       int64   `json:"merchantId"`
+	MerchantPassword string  `json:"merchantPassword"`
+	Amount           float64 `json:"amount"`
+	MerchantOrderId  int64   `json:"merchantOrderId"`
+	Timestamp        int64   `json:"timestamp"`
+	SuccessUrl       string  `json:"successUrl"`
+	FailedUrl        string  `json:"failedUrl"`
+	ErrorUrl         string  `json:"errorUrl"`
+}
+
 func main() {
 
 	// register the handler function with the server
 
 	router := mux.NewRouter()
 	router.HandleFunc("/card", proxy("/card", "http://localhost:8082")).Methods("GET")
-	router.HandleFunc("/bank1", proxy("/bank1", "http://localhost:8082")).Methods("GET")
+	router.HandleFunc("/bank1", proxy("/bank1", "http://localhost:8082")).Methods("POST")
 
 	log.Fatal(http.ListenAndServe(":8080", router))
 }
 
 func proxy(path, target string) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
+		var requestDto RequestDto
+		if err := json.NewDecoder(r.Body).Decode(&requestDto); err != nil {
+			http.Error(w, "Invalid request body", http.StatusBadRequest)
+			return
+		}
+		log.Printf("Parsed RequestDto: %+v\n", requestDto)
+
+		requestBody, err := json.Marshal(requestDto)
+		if err != nil {
+			http.Error(w, "Failed to marshal request body", http.StatusInternalServerError)
+			return
+		}
+
 		targetURL := target + r.URL.Path
-		req, err := http.NewRequest(r.Method, targetURL, r.Body)
+		req, err := http.NewRequest(r.Method, targetURL, bytes.NewReader(requestBody))
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadGateway)
 			return
