@@ -2,12 +2,18 @@ package main
 
 import (
 	"bytes"
+	"encoding/json"
 	"fmt"
 	"io"
 	"net/http"
 	"os/exec"
 	"runtime"
 )
+
+type PaymentData struct {
+	PaymentId  int64  `json:"paymentId"`
+	PaymentUrl string `json:"paymentUrl"`
+}
 
 func main() {
 	http.HandleFunc("/card", getCard)
@@ -40,23 +46,33 @@ func goToBank1(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("Unexpected status code:", resp.StatusCode)
 		fmt.Println(resp)
 		return
-	} else {
-
-		go func() {
-			err := openBrowser("http://localhost:4202")
-			if err != nil {
-				fmt.Println("Greška pri otvaranju pretraživača:", err)
-			}
-		}()
-
-		port := ":4202"
-		println("Serving frontend at http://localhost" + port)
-		if err := http.ListenAndServe(port, nil); err != nil {
-			fmt.Println(err)
-			//panic(err)
-		}
-		fmt.Println("Ispis")
 	}
+
+	var paymentData PaymentData
+
+	err = json.NewDecoder(resp.Body).Decode(&paymentData)
+	if err != nil {
+		http.Error(w, "Failed to parse response", http.StatusInternalServerError)
+		return
+	}
+
+	fmt.Println("Payment URL:", paymentData.PaymentUrl)
+
+	go func() {
+		err := openBrowser(paymentData.PaymentUrl)
+		if err != nil {
+			fmt.Println("Greška pri otvaranju pretraživača:", err)
+		}
+	}()
+
+	port := ":4202"
+	println("Serving frontend at http://localhost" + port)
+	if err := http.ListenAndServe(port, nil); err != nil {
+		fmt.Println(err)
+		//panic(err)
+	}
+	fmt.Println("Ispis")
+
 }
 
 func openBrowser(url string) error {
