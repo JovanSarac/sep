@@ -36,6 +36,11 @@ export class CartService {
     const updatedCart = this.cartItemsSubject.getValue().filter(item => item.id !== itemId);
     this.updateCartState(updatedCart);
   }
+
+  clearCart(): void {
+    const emptyCart: any[] = [];
+    this.updateCartState(emptyCart);
+  }
   
   private updateCartState(updatedCart: any[]): void {
     this.cartItemsSubject.next(updatedCart);
