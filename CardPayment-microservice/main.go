@@ -15,6 +15,8 @@ func main() {
 	http.HandleFunc("/bank1", goToBank1)
 	http.ListenAndServe(":8082", nil)
 
+	fs := http.FileServer(http.Dir("../Bank1/frontend/Bank1/dist/bank1"))
+	http.Handle("/", fs)
 }
 
 func goToBank1(w http.ResponseWriter, r *http.Request) {
@@ -39,8 +41,6 @@ func goToBank1(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(resp)
 		return
 	} else {
-		fs := http.FileServer(http.Dir("../Bank1/frontend/Bank1/dist/bank1"))
-		http.Handle("/", fs)
 
 		go func() {
 			err := openBrowser("http://localhost:4202")
@@ -53,7 +53,7 @@ func goToBank1(w http.ResponseWriter, r *http.Request) {
 		println("Serving frontend at http://localhost" + port)
 		if err := http.ListenAndServe(port, nil); err != nil {
 			fmt.Println(err)
-			panic(err)
+			//panic(err)
 		}
 		fmt.Println("Ispis")
 	}
