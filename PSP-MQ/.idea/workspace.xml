@@ -4,7 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0336444d-e3e4-4354-8bff-5b708487f1e8" name="Changes" comment="" />
+    <list default="true" id="0336444d-e3e4-4354-8bff-5b708487f1e8" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/../API-GATEWAY/go.mod" beforeDir="false" afterPath="$PROJECT_DIR$/../API-GATEWAY/go.mod" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../API-GATEWAY/go.sum" beforeDir="false" afterPath="$PROJECT_DIR$/../API-GATEWAY/go.sum" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../API-GATEWAY/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/../API-GATEWAY/main.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Bank1/backend/Bank1/src/main/java/com/example/bank1/bank1/dto/RequestDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Bank1/backend/Bank1/src/main/java/com/example/bank1/bank1/dto/RequestDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -23,13 +29,14 @@
   <component name="MavenImportPreferences">
     <option name="generalSettings">
       <MavenGeneralSettings>
-        <option name="mavenHomeTypeForPersistence" value="WRAPPER" />
+        <option name="mavenHome" value="Use Maven wrapper" />
+        <option name="useMavenConfig" value="true" />
       </MavenGeneralSettings>
     </option>
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 8
-}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 8
+}</component>
   <component name="ProjectId" id="2pLT71sZbVlOo5qTCJe2jW4Jwhu" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
@@ -38,13 +45,29 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "Application.PspMqApplication.executor": "Debug",
+    "RequestMappingsPanelOrder0": "0",
+    "RequestMappingsPanelOrder1": "1",
+    "RequestMappingsPanelWidth0": "75",
+    "RequestMappingsPanelWidth1": "75",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
+    "WebServerToolWindowFactoryState": "false",
     "git-widget-placeholder": "<unknown>",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "D:/master/SEP/projekat/sep/PSP-MQ"
+    "last_opened_file_path": "D:/master/SEP/projekat/sep/PSP-MQ",
+    "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
+  <component name="RunManager">
+    <configuration name="PspMqApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <module name="PSP-MQ" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.vivo_psp.PSP_MQ.PspMqApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+  </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -53,7 +76,11 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1732544184333</updated>
+      <workItem from="1732570417625" duration="216000" />
     </task>
     <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
   </component>
 </project>

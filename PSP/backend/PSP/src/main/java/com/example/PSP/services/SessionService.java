@@ -34,7 +34,7 @@ public class SessionService {
     }
 
     public Session getSessionById(Long id) {
-        return sessionRepository.findById(id).orElse(null);
+        return sessionRepository.findById(id).get();
     }
 
     public RequestDto createRequestBySession(Long id) {

@@ -7,18 +7,19 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/google/uuid"
 	"github.com/gorilla/mux"
 )
 
 type RequestDto struct {
-	MerchantId       int64   `json:"merchantId"`
-	MerchantPassword string  `json:"merchantPassword"`
-	Amount           float64 `json:"amount"`
-	MerchantOrderId  int64   `json:"merchantOrderId"`
-	Timestamp        int64   `json:"timestamp"`
-	SuccessUrl       string  `json:"successUrl"`
-	FailedUrl        string  `json:"failedUrl"`
-	ErrorUrl         string  `json:"errorUrl"`
+	MerchantId       uuid.UUID `json:"merchantId"`
+	MerchantPassword string    `json:"merchantPassword"`
+	Amount           float64   `json:"amount"`
+	MerchantOrderId  int64     `json:"merchantOrderId"`
+	Timestamp        int64     `json:"timestamp"`
+	SuccessUrl       string    `json:"successUrl"`
+	FailedUrl        string    `json:"failedUrl"`
+	ErrorUrl         string    `json:"errorUrl"`
 }
 
 func main() {

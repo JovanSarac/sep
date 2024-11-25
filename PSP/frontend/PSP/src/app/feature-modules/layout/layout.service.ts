@@ -23,6 +23,7 @@ export class LayoutService {
   }
 
   sendRequestToBank1(sessionId: number): Observable<String>{
-    return this.http.get<String>(environment.rabbitMQ + 'publishSendRequest/' + sessionId);
+    //return this.http.get<String>(environment.rabbitMQ + 'publishSendRequest/' + sessionId);
+    return this.http.get<String>(environment.apiHost+ 'psp/requests/sendRequest/' + sessionId);
   }
 }
