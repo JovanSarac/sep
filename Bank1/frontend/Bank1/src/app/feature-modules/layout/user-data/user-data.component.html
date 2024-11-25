@@ -1,0 +1,60 @@
+<div class="form-container">
+    <form [formGroup]="cardForm" (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <label for="PAN">PAN</label>
+        <input
+          id="PAN"
+          type="text"
+          formControlName="PAN"
+          maxlength="16"
+          placeholder="Enter 16-digit PAN"
+        />
+        <small *ngIf="cardForm.get('PAN')?.invalid && cardForm.get('PAN')?.touched">
+          PAN must be a 16-digit number.
+        </small>
+      </div>
+  
+      <div class="form-group">
+        <label for="securityCode">Security Code</label>
+        <input
+          id="securityCode"
+          type="text"
+          formControlName="securityCode"
+          maxlength="3"
+          placeholder="Enter 3-digit security code"
+        />
+        <small *ngIf="cardForm.get('securityCode')?.invalid && cardForm.get('securityCode')?.touched">
+          Security Code must be a 3-digit number.
+        </small>
+      </div>
+  
+      <div class="form-group">
+        <label for="cardHolderName">Card Holder Name</label>
+        <input
+          id="cardHolderName"
+          type="text"
+          formControlName="cardHolderName"
+          placeholder="Enter card holder's name"
+        />
+        <small *ngIf="cardForm.get('cardHolderName')?.invalid && cardForm.get('cardHolderName')?.touched">
+          Name is required and must be at least 3 characters.
+        </small>
+      </div>
+  
+      <div class="form-group">
+        <label for="cardExpirationDate">Card Expiration Date</label>
+        <input
+          id="cardExpirationDate"
+          type="date"
+          formControlName="cardExpirationDate"
+        />
+        <small *ngIf="cardForm.get('cardExpirationDate')?.invalid && cardForm.get('cardExpirationDate')?.touched">
+          Expiration date is required.
+        </small>
+      </div>
+  
+      <button type="submit" [disabled]="cardForm.invalid">Submit</button>
+    </form>
+  </div>
+
+
