@@ -9,4 +9,7 @@ export interface SubscriptionDto{
     totalCost: number;
     isActive: boolean;
     subscriptionDuration: number;
+    merchantId?: string;
+    merchantPassword?: string;
+    paymenterviceId?: number;
 }

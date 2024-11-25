@@ -3,6 +3,7 @@ package com.example.PSP.dtos;
 import com.example.PSP.models.PSPService;
 
 import java.time.LocalDate;
+import java.util.UUID;
 
 public class SubscriptionDto {
     private Long id;
@@ -13,6 +14,9 @@ public class SubscriptionDto {
     private Double totalCost;
     private Boolean isActive;
     private Integer subscriptionDuration;
+    private UUID merchantId;
+    private String merchantPassword;
+    private Long paymentServiceId;
 
     // Getters and Setters
     public Long getId() {
@@ -77,5 +81,29 @@ public class SubscriptionDto {
 
     public void setSubscriptionDuration(Integer subscriptionDuration) {
         this.subscriptionDuration = subscriptionDuration;
+    }
+
+    public UUID getMerchantId() {
+        return merchantId;
+    }
+
+    public void setMerchantId(UUID merchantId) {
+        this.merchantId = merchantId;
+    }
+
+    public String getMerchantPassword() {
+        return merchantPassword;
+    }
+
+    public void setMerchantPassword(String merchantPassword) {
+        this.merchantPassword = merchantPassword;
+    }
+
+    public Long getPaymentServiceId() {
+        return paymentServiceId;
+    }
+
+    public void setPaymentServiceId(Long paymentServiceId) {
+        this.paymentServiceId = paymentServiceId;
     }
 }
