@@ -45,4 +45,20 @@ public class MessageListener {
             System.out.println("Error calling endpoint: " + e.getMessage());
         }
     }
+
+    @RabbitListener(queues = MQConfig.QUEUE_REQUEST)
+    public void subscriptionListener(RequestMessage message){
+        String url = "http://localhost:8090/api/psp/requests/sendRequest/" + message.getSessionId();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", message.getJWTToken());
+
+        var requestEntity = new HttpEntity<>(null, headers);
+        var method = HttpMethod.GET;
+        try {
+            String response = restTemplate.exchange(url, method, requestEntity, String.class).getBody();
+        } catch (HttpClientErrorException e) {
+            System.out.println("Error calling endpoint: " + e.getMessage());
+        }
+    }
 }

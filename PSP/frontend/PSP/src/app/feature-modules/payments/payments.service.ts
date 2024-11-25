@@ -35,5 +35,4 @@ export class PaymentsService {
   getAllUsersForAdmin():Observable<UserInfo[]>{
     return this.http.get<UserInfo[]>(environment.apiHost + 'admin/users');
   }
-  
 }
