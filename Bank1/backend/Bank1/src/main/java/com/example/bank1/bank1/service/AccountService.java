@@ -24,11 +24,12 @@ public class AccountService {
         //check pan
         //check security code
         //check if bank is the same
-        if (userIdentificationDto.PAN != account.getPAN()) {
+        Long accountPan = account.getPAN();
+        if (!userIdentificationDto.PAN.equals(accountPan)) {
             return false;
         }
 
-        if (userIdentificationDto.cardExpirationDate != account.getCardExpirationDate()) {
+        if (userIdentificationDto.cardExpirationDate.getDate() != account.getCardExpirationDate().getDate()) {
             return false;
         }
 
@@ -125,5 +126,9 @@ public class AccountService {
         }
 
         return null;
+    }
+
+    public Account getAccountByPAN(Long PAN) {
+        return accountRepository.getAccountByPAN(PAN);
     }
 }

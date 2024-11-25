@@ -16,6 +16,7 @@ public class Account {
     private Long id;
     private String accountNumber;
     private Double balance;
+    @Column(name = "PAN")
     private Long PAN;
     private Date cardExpirationDate;
     private Integer securityCode;

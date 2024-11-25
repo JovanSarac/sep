@@ -12,7 +12,6 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserIdentificationDto {
-    public Long userId;
     public Long PAN;
     public Integer securityCode;
     public String cardHolderName;

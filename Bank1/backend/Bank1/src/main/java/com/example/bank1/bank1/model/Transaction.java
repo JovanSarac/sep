@@ -41,6 +41,10 @@ public class Transaction {
         this.user = user;
     }
 
+    public Transaction() {
+
+    }
+
     public Long getId() {
         return id;
     }
