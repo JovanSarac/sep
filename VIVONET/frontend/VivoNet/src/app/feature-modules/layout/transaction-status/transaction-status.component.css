@@ -1,0 +1,32 @@
+.full-page{
+    display: flex;
+    flex-direction: column;
+    width: 70%;
+    min-height: 70dvh;
+    margin: auto;
+    padding-bottom: 30px;
+    padding-top: 30px;
+}
+
+.transaction{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+.transaction img{
+    max-width: 300px;
+    max-height: 300px;
+}
+
+.transaction h1{
+    font-weight: 600;
+    font-size: 20px;
+}
+
+.transaction p{
+    color: #797979;
+    font-size: 14px;
+}

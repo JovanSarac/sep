@@ -1,0 +1,20 @@
+<div class="full-page">
+    <div class="transaction" *ngIf="status == 'success'">
+        <img src="../../../../assets/images/success.gif" alt="">
+        <h1>Payment successful!</h1>
+        <p>Your payment has been processed.</p>
+    </div>
+
+    <div class="transaction" *ngIf="status == 'failed'">
+        <img src="../../../../assets/images/failed.jpg" alt="">
+        <h1>Payment failed.</h1>
+        <p>Please try again.</p>
+    </div>
+
+    <div class="transaction" *ngIf="status == 'error'">
+        <img src="../../../../assets/images/error.png" alt="">
+        <h1>Transaction error.</h1>
+
+    </div>
+
+</div>

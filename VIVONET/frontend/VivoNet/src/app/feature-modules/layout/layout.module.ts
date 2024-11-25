@@ -7,6 +7,7 @@ import { CartComponent } from './cart/cart.component';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MaterialModule } from 'src/app/infrastructure/material/material.module';
+import { TransactionStatusComponent } from './transaction-status/transaction-status.component';
 
 
 
@@ -15,7 +16,8 @@ import { MaterialModule } from 'src/app/infrastructure/material/material.module'
     NavbarComponent,
     HomeComponent,
     FooterComponent,
-    CartComponent
+    CartComponent,
+    TransactionStatusComponent
   ],
   imports: [
     CommonModule,

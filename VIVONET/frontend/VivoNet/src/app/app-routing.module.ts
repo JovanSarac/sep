@@ -8,6 +8,7 @@ import { LandlineComponent } from './feature-modules/service-offerings/landline/
 import { InternetComponent } from './feature-modules/service-offerings/internet/internet.component';
 import { TelevisionComponent } from './feature-modules/service-offerings/television/television.component';
 import { CartComponent } from './feature-modules/layout/cart/cart.component';
+import { TransactionStatusComponent } from './feature-modules/layout/transaction-status/transaction-status.component';
 
 const routes: Routes = [
   {path: '', component:  HomeComponent},
@@ -17,7 +18,8 @@ const routes: Routes = [
   {path: 'landline-services', component: LandlineComponent},
   {path: 'internet-services', component: InternetComponent},
   {path: 'television-services', component: TelevisionComponent},
-  {path: 'cart', component: CartComponent}
+  {path: 'cart', component: CartComponent},
+  {path: 'transaction-status/:status', component: TransactionStatusComponent}
 ];
 
 @NgModule({
