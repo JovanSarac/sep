@@ -59,7 +59,7 @@ public class SubscriptionController {
         }
 
         SubscriptionDto subscription = subscriptionService.createSubscription(user, service, request.getSubscriptionDuration());
-        ApiKey apiKey = apiKeyService.create();
+        ApiKey apiKey = apiKeyService.create(request.getUserId());
 
         subscription.setMerchantId(apiKey.getMerchantId());
         subscription.setMerchantPassword(apiKey.getMerchantPassword());

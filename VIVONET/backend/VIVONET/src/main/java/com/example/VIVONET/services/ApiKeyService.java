@@ -19,7 +19,7 @@ public class ApiKeyService {
         this.apiKeyRepository = apiKeyRepository;
     }
 
-    public ApiKey create(ApiKeyDto apiKeyDto){
+    public ApiKey create(ApiKeyDto apiKeyDto) {
         ApiKey apiKey = new ApiKey(0L, apiKeyDto.merchantId, apiKeyDto.merchantPassword, apiKeyDto.paymentType);
         return apiKeyRepository.save(apiKey);
     }

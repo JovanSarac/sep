@@ -48,7 +48,7 @@ public class MessageController {
     }
 
     @GetMapping("/publishSendRequest/{sessionId}")
-    public String publishSeendRequest(@RequestHeader Map<String, String> headers,
+    public String publishSendRequest(@RequestHeader Map<String, String> headers,
                                       @PathVariable Long sessionId){
         RequestMessage message = new RequestMessage(UUID.randomUUID().toString(),
                 headers.get("authorization"),

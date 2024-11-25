@@ -23,14 +23,16 @@ public class ApiKey {
     private Long id;
     private UUID merchantId;
     private String merchantPassword;
+    private Long webShopId;
 
     public ApiKey() {
     }
 
-    public ApiKey(Long id, UUID merchantId, String merchantPassword) {
+    public ApiKey(Long id, UUID merchantId, String merchantPassword, Long webShopId) {
         this.id = id;
         this.merchantId = merchantId;
         this.merchantPassword = merchantPassword;
+        this.webShopId = webShopId;
     }
 
     public Long getId() {
@@ -55,5 +57,13 @@ public class ApiKey {
 
     public void setMerchantPassword(String merchantPassword) {
         this.merchantPassword = merchantPassword;
+    }
+
+    public Long getWebShopId() {
+        return webShopId;
+    }
+
+    public void setWebShopId(Long webShopId) {
+        this.webShopId = webShopId;
     }
 }
