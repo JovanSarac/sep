@@ -15,6 +15,10 @@ public class MQConfig {
     public static final String EXCHANGE_SUBSCRIPTION = "exchange_subscription";
     public static final String ROUTING_KEY_SUBSCRIPTION = "routing_key_subscription";
 
+    public static final String QUEUE_REQUEST = "queue_request";
+    public static final String EXCHANGE_REQUEST = "exchange_request";
+    public static final String ROUTING_KEY_REQUEST = "routing_key_request";
+
     @Bean
     public Queue queue(){
         return new Queue(QUEUE_SUBSCRIPTION);
@@ -31,6 +35,24 @@ public class MQConfig {
                 .bind(queue)
                 .to(exchange)
                 .with(ROUTING_KEY_SUBSCRIPTION);
+    }
+
+    @Bean
+    public Queue queueRequest(){
+        return new Queue(QUEUE_REQUEST);
+    }
+
+    @Bean
+    public TopicExchange exchangeRequest(){
+        return new TopicExchange(EXCHANGE_REQUEST);
+    }
+
+    @Bean
+    public Binding bindingRequest(Queue queueRequest, TopicExchange exchangeRequest){
+        return BindingBuilder
+                .bind(queueRequest)
+                .to(exchangeRequest)
+                .with(ROUTING_KEY_REQUEST);
     }
 
     @Bean

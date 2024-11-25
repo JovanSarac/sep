@@ -1,6 +1,7 @@
 package com.example.PSP.controllers;
 
 import com.example.PSP.dtos.SubscriptionRequest;
+import com.example.PSP.models.ApiKey;
 import com.example.PSP.models.PSPService;
 import com.example.PSP.models.Subscription;
 import com.example.PSP.models.User;
@@ -9,6 +10,7 @@ import com.example.PSP.repositories.SubscriptionRepository;
 import com.example.PSP.repositories.UserRepository;
 import com.example.PSP.exceptions.ResourceNotFoundException;
 import com.example.PSP.exceptions.BadRequestException;
+import com.example.PSP.services.ApiKeyService;
 import com.example.PSP.services.SubscriptionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -34,6 +36,8 @@ public class SubscriptionController {
 
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private ApiKeyService apiKeyService;
 
     @Autowired
     private SubscriptionRepository subscriptionRepository;
@@ -55,6 +59,11 @@ public class SubscriptionController {
         }
 
         SubscriptionDto subscription = subscriptionService.createSubscription(user, service, request.getSubscriptionDuration());
+        ApiKey apiKey = apiKeyService.create(request.getUserId());
+
+        subscription.setMerchantId(apiKey.getMerchantId());
+        subscription.setMerchantPassword(apiKey.getMerchantPassword());
+        subscription.setPaymentServiceId(request.getServiceId());
 
         return ResponseEntity.status(HttpStatus.CREATED).body(subscription);
     }

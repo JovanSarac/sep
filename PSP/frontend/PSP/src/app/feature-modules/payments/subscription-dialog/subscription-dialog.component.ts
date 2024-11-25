@@ -8,6 +8,7 @@ import { User } from 'src/app/infrastructure/auth/model/user.model';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { SubscriptionDto } from '../model/subscription.model';
 import { SubscriptionRequest } from '../model/subscription-request.model';
+import { ApiKeyDto } from '../model/api-key.model';
 
 @Component({
   selector: 'app-subscription-dialog',
@@ -66,8 +67,17 @@ export class SubscriptionDialogComponent implements OnInit {
     }
 
     this.service.createSubscription(subscriptionDto).subscribe({
-      next: () => {
+      next: (result) => {
         this.toastr.success('Subscription created successfully!', 'Success');
+
+        var apiKey : ApiKeyDto = {
+          merchantId: result.merchantId!,
+          merchantPassword: result.merchantPassword!,
+          paymentType: -1
+        }
+
+        this.service.saveApiKey(apiKey).subscribe({});
+
         this.dialogRef.close(true);
       },
       error: (err) => {

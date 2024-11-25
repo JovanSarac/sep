@@ -2,6 +2,7 @@ package com.vivo_psp.PSP_MQ.controllers;
 
 import com.vivo_psp.PSP_MQ.dtos.SubscriptionDto;
 import com.vivo_psp.PSP_MQ.dtos.SubscriptionRequest;
+import com.vivo_psp.PSP_MQ.models.RequestMessage;
 import com.vivo_psp.PSP_MQ.models.SubscriptionMessage;
 import com.vivo_psp.PSP_MQ.configs.MQConfig;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -42,6 +43,20 @@ public class MessageController {
                 new Date());
         template.convertAndSend(MQConfig.EXCHANGE_SUBSCRIPTION,
                 MQConfig.ROUTING_KEY_SUBSCRIPTION, message);
+
+        return "Message published";
+    }
+
+    @GetMapping("/publishSendRequest/{sessionId}")
+    public String publishSendRequest(@RequestHeader Map<String, String> headers,
+                                      @PathVariable Long sessionId){
+        RequestMessage message = new RequestMessage(UUID.randomUUID().toString(),
+                headers.get("authorization"),
+                sessionId,
+                new Date());
+
+        template.convertAndSend(MQConfig.EXCHANGE_REQUEST,
+                MQConfig.ROUTING_KEY_REQUEST, message);
 
         return "Message published";
     }

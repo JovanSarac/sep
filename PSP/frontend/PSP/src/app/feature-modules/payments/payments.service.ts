@@ -6,6 +6,7 @@ import { environment } from 'src/env/environment';
 import { SubscriptionRequest } from './model/subscription-request.model';
 import { SubscriptionDto } from './model/subscription.model';
 import { UserInfo } from '../layout/model/userinfo';
+import { ApiKeyDto } from './model/api-key.model';
 
 @Injectable({
   providedIn: 'root'
@@ -21,7 +22,7 @@ export class PaymentsService {
   }
 
   createSubscription(subscriptionDuration: SubscriptionRequest) : Observable<SubscriptionDto>{
-    return this.http.post<SubscriptionDto>(environment.rabbitMQ + 'publishCreateSubscription', subscriptionDuration)
+    return this.http.post<SubscriptionDto>(environment.apiHost + 'user/create_subscription', subscriptionDuration)
   }
 
   getSubscriptionsForUser(userId: number): Observable<SubscriptionDto[]> {
@@ -35,5 +36,9 @@ export class PaymentsService {
   getAllUsersForAdmin():Observable<UserInfo[]>{
     return this.http.get<UserInfo[]>(environment.apiHost + 'admin/users');
   }
-  
+
+  saveApiKey(apiKey: ApiKeyDto):Observable<String>{
+    return this.http.post<String>('http://localhost:8093/api/apiKey', apiKey, {
+      responseType: 'text' as 'json'})
+  }
 }

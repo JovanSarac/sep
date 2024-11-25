@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c555334f-6d46-4574-bcc1-211d66571719" name="Changes" comment="" />
+    <list default="true" id="0336444d-e3e4-4354-8bff-5b708487f1e8" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -27,10 +27,10 @@
       </MavenGeneralSettings>
     </option>
   </component>
-  <component name="ProjectColorInfo">{
-  &quot;associatedIndex&quot;: 8
-}</component>
-  <component name="ProjectId" id="2p5QPF9qu4tyHwnfETZHCvDZKXc" />
+  <component name="ProjectColorInfo"><![CDATA[{
+  "associatedIndex": 8
+}]]></component>
+  <component name="ProjectId" id="2pLT71sZbVlOo5qTCJe2jW4Jwhu" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -42,26 +42,17 @@
     "RunOnceActivity.git.unshallow": "true",
     "git-widget-placeholder": "<unknown>",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "D:/master/SEP/projekat/sep/PSP/backend/PSP"
+    "last_opened_file_path": "D:/master/SEP/projekat/sep/PSP-MQ"
   }
 }]]></component>
-  <component name="RecentsManager">
-    <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
-      <recent name="com.vivo_psp.PSP_MQ" />
-    </key>
-    <key name="CopyClassDialog.RECENTS_KEY">
-      <recent name="com.vivo_psp.PSP_MQ.models" />
-      <recent name="com.vivo_psp.PSP_MQ.dtos" />
-    </key>
-  </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="c555334f-6d46-4574-bcc1-211d66571719" name="Changes" comment="" />
-      <created>1732053431014</created>
+      <changelist id="0336444d-e3e4-4354-8bff-5b708487f1e8" name="Changes" comment="" />
+      <created>1732544184333</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1732053431014</updated>
+      <updated>1732544184333</updated>
     </task>
     <servers />
   </component>
