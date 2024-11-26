@@ -23,7 +23,7 @@ public class AccountController {
     @CrossOrigin(origins = "http://localhost:4202")
     @PostMapping("/validateData")
     public ResponseEntity<?> validateData(@org.jetbrains.annotations.NotNull @RequestBody UserIdentificationDto userIdentificationDto) {
-        Account account = accountService.getAccountByPAN(userIdentificationDto.getPAN());
+        Account account = accountService.getAccountByPAN(userIdentificationDto.PAN);
         User user = userRepository.findUserByAccount_Id(account.getId());
         if (!accountService.validateData(userIdentificationDto, account)) {
             return ResponseEntity.ok("Invalidate card data");

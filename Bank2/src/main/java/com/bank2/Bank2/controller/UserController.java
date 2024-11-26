@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/bank1/users")
+@RequestMapping("/api/bank2/users")
 public class UserController {
     private final UserService userService;
 

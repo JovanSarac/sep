@@ -23,17 +23,19 @@ public class Request {
     private Integer securityCode;
     private String cardHolderName;
     private Date cardExpirationDate;
+    private Double amount;
     private UUID acquirerOrderId;
     private Long acquirerTimestamp;
 
     public Request() {
     }
 
-    public Request(Long PAN, Integer securityCode, String cardHolderName, Date cardExpirationDate, UUID acquirerOrderId, Long acquirerTimestamp) {
+    public Request(Long PAN, Integer securityCode, String cardHolderName, Date cardExpirationDate, Double amount, UUID acquirerOrderId, Long acquirerTimestamp) {
         this.PAN = PAN;
         this.securityCode = securityCode;
         this.cardHolderName = cardHolderName;
         this.cardExpirationDate = cardExpirationDate;
+        this.amount = amount;
         this.acquirerOrderId = acquirerOrderId;
         this.acquirerTimestamp = acquirerTimestamp;
     }
@@ -76,6 +78,14 @@ public class Request {
 
     public void setCardExpirationDate(Date cardExpirationDate) {
         this.cardExpirationDate = cardExpirationDate;
+    }
+
+    public Double getAmount() {
+        return amount;
+    }
+
+    public void setAmount(Double amount) {
+        this.amount = amount;
     }
 
     public UUID getAcquirerOrderId() {

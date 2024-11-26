@@ -17,6 +17,7 @@ public class RequestDto {
     public Integer securityCode;
     public String cardHolderName;
     public Date cardExpirationDate;
+    public Double amount;
     public UUID acquirerOrderId;
     public Long acquirerTimestamp;
 }

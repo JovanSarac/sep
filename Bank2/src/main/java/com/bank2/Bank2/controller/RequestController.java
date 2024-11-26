@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/bank1/requests")
+@RequestMapping("/api/bank2/requests")
 public class RequestController {
     private final RequestService requestService;
     @PostMapping("/validateRequest")
@@ -20,13 +20,19 @@ public class RequestController {
         //treba da se vrati payment_url i payment_id, ne url ce mozda da bude na koju se banku odnosi nmp jos
         //ovde proveri podatke u requestDto
         //i ako je sve dobro vrati ok
-        Boolean validData = requestService.checkRequestData(requestDto);
+
+        /*Boolean validData = requestService.checkRequestData(requestDto);
         PaymentDataDto paymentDataDto = new PaymentDataDto();
         if (validData) {
             paymentDataDto.paymentId = -1L;
             paymentDataDto.paymentUrl = "http://localhost:4202/";
             return ResponseEntity.ok(paymentDataDto);
-        }
+        }*/
         return (ResponseEntity<PaymentDataDto>) ResponseEntity.badRequest();
+    }
+
+    @PostMapping("/transaction")
+    public ResponseEntity<String> transaction(){
+        return ResponseEntity.ok("{\"message\": \"Uspesno\"}");
     }
 }

@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/bank1/transactions")
+@RequestMapping("/api/bank2/transactions")
 public class TransactionController {
     private final TransactionService transactionService;
 

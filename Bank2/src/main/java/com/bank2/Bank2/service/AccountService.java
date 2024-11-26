@@ -6,10 +6,12 @@ import com.bank2.Bank2.model.CardType;
 import com.bank2.Bank2.repository.AccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.ResourceAccessException;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class AccountService {
@@ -130,6 +132,9 @@ public class AccountService {
     }
 
     public Account getAccountByPAN(Long PAN) {
-        return accountRepository.getAccountByPAN(PAN);
+        Optional<Account> account = accountRepository.findByPAN(PAN);
+
+        if(!account.isPresent()) throw new ResourceAccessException("Account with PAN " + PAN + " doesnt exist");
+        return account.get();
     }
 }
