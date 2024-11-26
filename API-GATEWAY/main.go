@@ -29,6 +29,7 @@ func main() {
 	router := mux.NewRouter()
 	router.HandleFunc("/card", proxy("/card", "http://localhost:8082")).Methods("GET")
 	router.HandleFunc("/bank1", proxy("/bank1", "http://localhost:8082")).Methods("POST")
+	router.HandleFunc("/answerPSP", proxy("/answerPSP", "http://localhost:8090/api/psp/requests/answerPSP")).Methods("POST")
 
 	log.Fatal(http.ListenAndServe(":8080", router))
 }

@@ -2,6 +2,7 @@ package com.example.PSP.controllers;
 
 import com.example.PSP.configs.ApiKeyResponseMessage;
 import com.example.PSP.configs.MQConfig;
+import com.example.PSP.dtos.AnswerPSPDto;
 import com.example.PSP.dtos.RequestDto;
 import com.example.PSP.models.ApiKey;
 import com.example.PSP.services.ApiKeyService;
@@ -11,10 +12,7 @@ import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestTemplate;
@@ -74,5 +72,10 @@ public class RequestController {
     @RabbitListener(queues = MQConfig.QUEUE_APIKEY_RESPONSE)
     public void apiKeyListener(ApiKeyResponseMessage message){
         this.responseMessage = message;
+    }
+
+    @PostMapping("/answerPSP")
+    public ResponseEntity<?> getAnswer(@RequestBody AnswerPSPDto answerPSPDto) {
+        return ResponseEntity.ok("{\"message\": \"Dobijen odgovor od banke\"}");
     }
 }

@@ -28,14 +28,47 @@ type RequestDto struct {
 	ErrorUrl         string    `json:"errorUrl"`
 }
 
+type AnswerPSPDto struct {
+	TransactionResult string    `json:"transactionResult"`
+	AcquirerOrderId   uuid.UUID `json:"acquirerOrderId"`
+	AcquirerTimestamp int64     `json:"acquirerTimestamp"`
+	MerchantOrderId   int64     `json:"merchantOrderId"`
+	PaymentId         int64     `json:"paymentId"`
+}
+
 func main() {
 	http.HandleFunc("/card", getCard)
 	fmt.Println("CardService is running on :8082")
 	http.HandleFunc("/bank1", goToBank1)
+	http.HandleFunc("/answerPSP", answerPSP)
 	http.ListenAndServe(":8082", nil)
 
 	fs := http.FileServer(http.Dir("../Bank1/frontend/Bank1/dist/bank1"))
 	http.Handle("/", fs)
+}
+
+func answerPSP(w http.ResponseWriter, r *http.Request) {
+	body, err := io.ReadAll(r.Body)
+	if err != nil {
+		http.Error(w, "Failed to read request body", http.StatusBadRequest)
+		return
+	}
+
+	fmt.Println("Received body:", string(body))
+
+	var answerPSPDto AnswerPSPDto
+	err = json.Unmarshal(body, &answerPSPDto)
+	if err != nil {
+		http.Error(w, "Failed to parse request DTO", http.StatusBadRequest)
+		return
+	}
+
+	resp, err := http.Post(fmt.Sprintf("http://localhost:8080/answerPSP"), "application/json", bytes.NewBuffer(body))
+	if err != nil {
+		fmt.Println("Error making HTTP request:", err)
+		return
+	}
+	defer resp.Body.Close()
 }
 
 func goToBank1(w http.ResponseWriter, r *http.Request) {
