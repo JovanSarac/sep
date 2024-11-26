@@ -24,8 +24,10 @@ public class Transaction {
     private String destinationAccountNumber;
     private String payerName;
     private String recipientName;
+    private UUID issuerOrderId;
+    private UUID acquirerOrderId;
 
-    public Transaction(Long id, UUID transactionNumber, Double amount, TransactionType transactionType, TransactionState transactionState, Date transactionDate, String sourceAccountNumber, String destinationAccountNumber, String payerName, String recipientName) {
+    public Transaction(Long id, UUID transactionNumber, Double amount, TransactionType transactionType, TransactionState transactionState, Date transactionDate, String sourceAccountNumber, String destinationAccountNumber, String payerName, String recipientName, UUID issuerOrderId, UUID acquirerOrderId) {
         this.id = id;
         this.transactionNumber = transactionNumber;
         this.amount = amount;
@@ -36,6 +38,8 @@ public class Transaction {
         this.destinationAccountNumber = destinationAccountNumber;
         this.payerName = payerName;
         this.recipientName = recipientName;
+        this.issuerOrderId = issuerOrderId;
+        this.acquirerOrderId = acquirerOrderId;
     }
 
     public Transaction() {
@@ -82,6 +86,14 @@ public class Transaction {
         return recipientName;
     }
 
+    public UUID getIssuerOrderId() {
+        return issuerOrderId;
+    }
+
+    public UUID getAcquirerOrderId() {
+        return acquirerOrderId;
+    }
+
     public void setId(Long id) {
         this.id = id;
     }
@@ -120,5 +132,13 @@ public class Transaction {
 
     public void setRecipientName(String recipientName) {
         this.recipientName = recipientName;
+    }
+
+    public void setIssuerOrderId(UUID issuerOrderId) {
+        this.issuerOrderId = issuerOrderId;
+    }
+
+    public void setAcquirerOrderId(UUID acquirerOrderId) {
+        this.acquirerOrderId = acquirerOrderId;
     }
 }

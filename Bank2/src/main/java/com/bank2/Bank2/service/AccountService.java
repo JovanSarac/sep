@@ -175,6 +175,8 @@ public class AccountService {
                 reserveTransaction.setDestinationAccountNumber("1234567890123456");
                 reserveTransaction.setPayerName(requestDto.cardHolderName);
                 reserveTransaction.setRecipientName("VivoNet");
+                reserveTransaction.setIssuerOrderId(UUID.randomUUID());
+                reserveTransaction.setAcquirerOrderId(requestDto.acquirerOrderId);
                 transactionRepository.save(reserveTransaction);
                 return "Ima dovoljno sredstava";
             }
@@ -197,6 +199,8 @@ public class AccountService {
             reserveTransaction.setDestinationAccountNumber("1234567890123456");
             reserveTransaction.setPayerName(requestDto.cardHolderName);
             reserveTransaction.setRecipientName("VivoNet");
+            reserveTransaction.setIssuerOrderId(UUID.randomUUID());
+            reserveTransaction.setAcquirerOrderId(requestDto.acquirerOrderId);
             transactionRepository.save(reserveTransaction);
             
             return "Ima dovoljno sredstava";

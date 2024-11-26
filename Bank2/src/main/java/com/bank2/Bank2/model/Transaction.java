@@ -24,8 +24,10 @@ public class Transaction {
     private String destinationAccountNumber;
     private String payerName;
     private String recipientName;
+    private UUID issuerOrderId;
+    private UUID acquirerOrderId;
 
-    public Transaction(Long id, UUID transactionNumber, Double amount, TransactionType transactionType, TransactionState transactionState, Date transactionDate, String sourceAccountNumber, String destinationAccountNumber, String payerName, String recipientName) {
+    public Transaction(Long id, UUID transactionNumber, Double amount, TransactionType transactionType, TransactionState transactionState, Date transactionDate, String sourceAccountNumber, String destinationAccountNumber, String payerName, String recipientName, UUID issuerOrderId, UUID acquirerOrderId) {
         this.id = id;
         this.transactionNumber = transactionNumber;
         this.amount = amount;
@@ -36,6 +38,8 @@ public class Transaction {
         this.destinationAccountNumber = destinationAccountNumber;
         this.payerName = payerName;
         this.recipientName = recipientName;
+        this.issuerOrderId = issuerOrderId;
+        this.acquirerOrderId = acquirerOrderId;
     }
 
     public Transaction() {

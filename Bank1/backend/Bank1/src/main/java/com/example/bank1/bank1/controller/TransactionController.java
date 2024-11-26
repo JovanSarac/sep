@@ -1,5 +1,6 @@
 package com.example.bank1.bank1.controller;
 
+import com.example.bank1.bank1.dto.AnswerPCCDto;
 import com.example.bank1.bank1.dto.PCCRequestDto;
 import com.example.bank1.bank1.dto.RequestDto;
 import com.example.bank1.bank1.service.TransactionService;
@@ -19,8 +20,8 @@ public class TransactionController {
     }
 
     @PostMapping("/PCCRequest")
-    public ResponseEntity<?> PCCRequest(@RequestBody PCCRequestDto pccRequestDto) {
-        transactionService.finishTransaction(pccRequestDto);
+    public ResponseEntity<?> PCCRequest(@RequestBody AnswerPCCDto answerPCCDto) {
+        transactionService.finishTransaction(answerPCCDto);
         return ResponseEntity.ok("Zavrsena transakcija");
     }
 }
