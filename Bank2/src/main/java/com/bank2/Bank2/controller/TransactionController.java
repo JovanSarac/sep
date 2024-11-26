@@ -1,5 +1,6 @@
 package com.bank2.Bank2.controller;
 
+import com.bank2.Bank2.dto.AnswerPCCDto;
 import com.bank2.Bank2.dto.RequestDto;
 import com.bank2.Bank2.model.Account;
 import com.bank2.Bank2.model.User;
@@ -45,7 +46,8 @@ public class TransactionController {
     }
 
     @PostMapping("/PCCResponse")
-    public ResponseEntity<String> PCCResponse(){
+    public ResponseEntity<String> PCCResponse(@RequestBody AnswerPCCDto answerPCCDto){
+        transactionService.finishTransactionIssuer(answerPCCDto);
         return ResponseEntity.ok("");
     }
 

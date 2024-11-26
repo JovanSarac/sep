@@ -31,4 +31,10 @@ public class TransactionController {
         transactionService.finishTransactionIssuer(answerPCCDto);
         return  ResponseEntity.ok("");
     }
+
+    @PostMapping("/PCCBank2ToBank1")
+    public ResponseEntity<?> PCCBank2ToBank1(@RequestBody AnswerPCCDto answerPCCDto) {
+        transactionService.finishTransactionBank2ToBank1(answerPCCDto);
+        return ResponseEntity.ok("Zavrsena transakcija");
+    }
 }

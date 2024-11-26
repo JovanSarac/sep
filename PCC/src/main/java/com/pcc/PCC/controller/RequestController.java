@@ -92,4 +92,36 @@ public class RequestController {
 
         return ResponseEntity.ok("{\"message\": \"Request saved and routed\"}");
     }
+
+    @PostMapping("/bank2ToBank1")
+    public ResponseEntity<String> bank2ToBank1(@RequestBody BankResponse bankResponse){
+        String url = "http://localhost:8091/api/bank1/transactions/PCCBank2ToBank1";
+
+        HttpHeaders headers = new HttpHeaders();
+        var requestEntity = new HttpEntity<>(bankResponse, headers);
+        var method = HttpMethod.POST;
+
+        try {
+            bankResponse.transactionResult = "uspesno";
+            String response = restTemplate().exchange(url, method, requestEntity, String.class).getBody();
+        } catch (HttpClientErrorException e) {
+            bankResponse.transactionResult = "neuspesno";
+            System.out.println("Error calling endpoint: " + e.getMessage());
+        }
+
+
+        String url1 = "http://localhost:8092/api/bank2/transactions/PCCResponse";
+        HttpHeaders headers1 = new HttpHeaders();
+        var requestEntity1 = new HttpEntity<>(bankResponse, headers1);
+        var method1 = HttpMethod.POST;
+
+        try{
+            String response1 = restTemplate().exchange(url1, method1, requestEntity1, String.class).getBody();
+        }
+        catch (HttpClientErrorException e) {
+            System.out.println("Error calling endpoint: " + e.getMessage());
+        }
+
+        return ResponseEntity.ok("{\"message\": \"Request saved and routed\"}");
+    }
 }

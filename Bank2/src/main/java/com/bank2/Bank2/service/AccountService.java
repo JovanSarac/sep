@@ -1,13 +1,20 @@
 package com.bank2.Bank2.service;
 
+import com.bank2.Bank2.dto.AnswerPCCDto;
 import com.bank2.Bank2.dto.RequestDto;
 import com.bank2.Bank2.dto.UserIdentificationDto;
 import com.bank2.Bank2.model.*;
 import com.bank2.Bank2.repository.AccountRepository;
 import com.bank2.Bank2.repository.TransactionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.ResourceAccessException;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -18,6 +25,10 @@ import java.util.stream.Collectors;
 
 @Service
 public class AccountService {
+    @Bean
+    public RestTemplate restTemplate() {
+        return new RestTemplate();
+    }
     @Autowired
     private AccountRepository accountRepository;
     @Autowired
@@ -176,9 +187,29 @@ public class AccountService {
                     reserveTransaction.setDestinationAccountNumber("1234567890123456");
                     reserveTransaction.setPayerName(requestDto.cardHolderName);
                     reserveTransaction.setRecipientName("VivoNet");
-                    reserveTransaction.setIssuerOrderId(UUID.randomUUID());
-                    reserveTransaction.setAcquirerOrderId(requestDto.acquirerOrderId);
+                    UUID issuerOrderId = UUID.randomUUID();
+                    UUID acquirerOrderId = requestDto.acquirerOrderId;
+                    reserveTransaction.setIssuerOrderId(issuerOrderId);
+                    reserveTransaction.setAcquirerOrderId(acquirerOrderId);
                     transactionRepository.save(reserveTransaction);
+
+                    //poziv pcc-a
+                    String url = "http://localhost:8094/api/pcc/requests/bank2ToBank1";
+                    HttpHeaders headers = new HttpHeaders();
+                    var requestEntity = new HttpEntity<>(new AnswerPCCDto(
+                            "uspesno",
+                            acquirerOrderId,
+                            new Date().getTime(),
+                            issuerOrderId,
+                            new Date().getTime()), headers);
+                    var method = HttpMethod.POST;
+
+                    try {
+                        String response = restTemplate().exchange(url, method, requestEntity, String.class).getBody();
+                    } catch (HttpClientErrorException e) {
+                        System.out.println("Error calling endpoint: " + e.getMessage());
+                    }
+
                     return "uspesno";
                 }
                 return "neuspesno";
@@ -200,9 +231,28 @@ public class AccountService {
                 reserveTransaction.setDestinationAccountNumber("1234567890123456");
                 reserveTransaction.setPayerName(requestDto.cardHolderName);
                 reserveTransaction.setRecipientName("VivoNet");
-                reserveTransaction.setIssuerOrderId(UUID.randomUUID());
-                reserveTransaction.setAcquirerOrderId(requestDto.acquirerOrderId);
+                UUID issuerOrderId = UUID.randomUUID();
+                UUID acquirerOrderId = requestDto.acquirerOrderId;
+                reserveTransaction.setIssuerOrderId(issuerOrderId);
+                reserveTransaction.setAcquirerOrderId(acquirerOrderId);
                 transactionRepository.save(reserveTransaction);
+
+                //poziv pcc-a
+                String url = "http://localhost:8094/api/pcc/requests/bank2ToBank1";
+                HttpHeaders headers = new HttpHeaders();
+                var requestEntity = new HttpEntity<>(new AnswerPCCDto(
+                        "uspesno",
+                        acquirerOrderId,
+                        new Date().getTime(),
+                        issuerOrderId,
+                        new Date().getTime()), headers);
+                var method = HttpMethod.POST;
+
+                try {
+                    String response = restTemplate().exchange(url, method, requestEntity, String.class).getBody();
+                } catch (HttpClientErrorException e) {
+                    System.out.println("Error calling endpoint: " + e.getMessage());
+                }
 
                 return "uspesno";
             }

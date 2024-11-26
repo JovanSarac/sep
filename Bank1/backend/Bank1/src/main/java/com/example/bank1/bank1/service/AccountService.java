@@ -115,8 +115,24 @@ public class AccountService {
         pccRequestDto.setSecurityCode(userIdentificationDto.securityCode);
         pccRequestDto.setCardHolderName(userIdentificationDto.cardHolderName);
         pccRequestDto.setCardExpirationDate(userIdentificationDto.cardExpirationDate);
-        pccRequestDto.setAcquirerOrderId(UUID.randomUUID());
+        UUID acquirerOrderId = UUID.randomUUID();
+        pccRequestDto.setAcquirerOrderId(acquirerOrderId);
         pccRequestDto.setAcquirerTimestamp(new Date().getTime());
+
+        Transaction reserveTransaction = new Transaction();
+        reserveTransaction.setTransactionNumber(UUID.randomUUID());
+        reserveTransaction.setAmount(userIdentificationDto.amount);
+        reserveTransaction.setTransactionType(TransactionType.OUT);
+        reserveTransaction.setTransactionState(TransactionState.RECEIVED);
+        reserveTransaction.setTransactionDate(new Date());
+        reserveTransaction.setSourceAccountNumber("123456789");
+        reserveTransaction.setDestinationAccountNumber("1234567890123456");
+        reserveTransaction.setPayerName(userIdentificationDto.cardHolderName);
+        reserveTransaction.setRecipientName("VivoNet");
+        UUID issuerOrderId = UUID.randomUUID();
+        reserveTransaction.setIssuerOrderId(issuerOrderId);
+        reserveTransaction.setAcquirerOrderId(acquirerOrderId);
+        transactionRepository.save(reserveTransaction);
 
         String url = "http://localhost:8094/api/pcc/requests/checkAndRoute";
         HttpHeaders headers = new HttpHeaders();

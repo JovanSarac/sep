@@ -47,4 +47,15 @@ public class TransactionService {
             accountRepository.save(account);
         }
     }
+
+    public void finishTransactionBank2ToBank1(AnswerPCCDto answerPCCDto) {
+        if (answerPCCDto.transactionResult.equals("uspesno")) {
+            Transaction transaction = transactionRepository.findByAcquirerOrderId(answerPCCDto.acquirerOrderId);
+            Account account = accountRepository.findByAccountNumber(transaction.getDestinationAccountNumber()).get();
+            Double balance = account.getBalance();
+            balance = balance + transaction.getAmount();
+            account.setBalance(balance);
+            accountRepository.save(account);
+        }
+    }
 }

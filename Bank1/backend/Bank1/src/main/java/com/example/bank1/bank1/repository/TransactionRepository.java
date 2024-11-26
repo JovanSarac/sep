@@ -15,4 +15,6 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long> 
     @Query("SELECT t FROM Transaction t WHERE t.acquirerOrderId = :acquirerOrderId AND t.issuerOrderId = :issuerOrderId")
     Transaction findByAcquirerOrderIdAAndIssuerOrderId(@Param("acquirerOrderId") UUID acquirerOrderId,
                                                        @Param("issuerOrderId") UUID issuerOrderId);
+    @Query("SELECT t FROM Transaction t WHERE t.acquirerOrderId = :acquirerOrderId")
+    Transaction findByAcquirerOrderId(@Param("acquirerOrderId") UUID acquirerOrderId);
 }

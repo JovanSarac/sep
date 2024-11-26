@@ -1,7 +1,9 @@
 package com.bank2.Bank2.service;
 
+import com.bank2.Bank2.dto.AnswerPCCDto;
 import com.bank2.Bank2.dto.TransactionDto;
 import com.bank2.Bank2.model.Account;
+import com.bank2.Bank2.model.Transaction;
 import com.bank2.Bank2.repository.AccountRepository;
 import com.bank2.Bank2.repository.TransactionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,5 +29,16 @@ public class TransactionService {
             return false;
         }*/
         return true;
+    }
+
+    public void finishTransactionIssuer(AnswerPCCDto answerPCCDto) {
+        if (answerPCCDto.transactionResult.equals("uspesno")) {
+            Transaction transaction = transactionRepository.findByAcquirerOrderId(answerPCCDto.acquirerOrderId);
+            Account account = accountRepository.findByAccountNumber(transaction.getSourceAccountNumber()).get();
+            Double balance = account.getBalance();
+            balance = balance - transaction.getAmount();
+            account.setBalance(balance);
+            accountRepository.save(account);
+        }
     }
 }
