@@ -2,6 +2,7 @@ package com.vivo_psp.PSP_MQ.controllers;
 
 import com.vivo_psp.PSP_MQ.dtos.SubscriptionDto;
 import com.vivo_psp.PSP_MQ.dtos.SubscriptionRequest;
+import com.vivo_psp.PSP_MQ.models.ApiKeyMessage;
 import com.vivo_psp.PSP_MQ.models.RequestMessage;
 import com.vivo_psp.PSP_MQ.models.SubscriptionMessage;
 import com.vivo_psp.PSP_MQ.configs.MQConfig;
@@ -57,6 +58,18 @@ public class MessageController {
 
         template.convertAndSend(MQConfig.EXCHANGE_REQUEST,
                 MQConfig.ROUTING_KEY_REQUEST, message);
+
+        return "Message published";
+    }
+
+    @PostMapping("/publishApiKeyRequest")
+    public String publishApiKeyRequest(@RequestBody Long paymentTypeId){
+        ApiKeyMessage message = new ApiKeyMessage(UUID.randomUUID().toString(),
+                paymentTypeId,
+                new Date());
+
+        template.convertAndSend(MQConfig.EXCHANGE_APIKEY_REQUEST,
+                MQConfig.ROUTING_KEY_APIKEY_REQUEST, message);
 
         return "Message published";
     }

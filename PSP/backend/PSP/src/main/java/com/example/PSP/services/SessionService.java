@@ -45,7 +45,7 @@ public class SessionService {
         requestDto.merchantId = apiKey.getMerchantId();
         requestDto.amount = session.getCart().getTotalPrice();
         //merchantOrderId
-        requestDto.merchantOrderId = new Random().nextLong();
+        requestDto.merchantOrderId = Math.abs((long) new Random().nextInt());
         //merchantPassword
         requestDto.merchantPassword = apiKey.getMerchantPassword();
         //timestamp

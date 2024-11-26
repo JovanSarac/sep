@@ -1,4 +1,4 @@
-package com.example.PSP.configs;
+package com.example.VIVONET.configs;
 
 import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
@@ -10,53 +10,30 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class MQConfig {
-
-    public static final String QUEUE_SUBSCRIPTION = "queue_subscription";
-    public static final String EXCHANGE_SUBSCRIPTION = "exchange_subscription";
-    public static final String ROUTING_KEY_SUBSCRIPTION = "routing_key_subscription";
-
-    public static final String QUEUE_REQUEST = "queue_request";
-    public static final String EXCHANGE_REQUEST = "exchange_request";
-    public static final String ROUTING_KEY_REQUEST = "routing_key_request";
+    public static final String QUEUE_APIKEY_REQUEST = "queue_apiKey_request";
+    public static final String EXCHANGE_APIKEY_REQUEST = "exchange_apiKey_request";
+    public static final String ROUTING_KEY_APIKEY_REQUEST = "routing_key_apiKey_request";
 
     public static final String QUEUE_APIKEY_RESPONSE = "queue_apiKey_response";
     public static final String EXCHANGE_APIKEY_RESPONSE = "exchange_apiKey_response";
     public static final String ROUTING_KEY_APIKEY_RESPONSE = "routing_key_apiKey_response";
 
     @Bean
-    public Queue queue(){
-        return new Queue(QUEUE_SUBSCRIPTION);
+    public Queue queueApiKeyRequest(){
+        return new Queue(QUEUE_APIKEY_REQUEST);
     }
 
     @Bean
-    public TopicExchange exchange(){
-        return new TopicExchange(EXCHANGE_SUBSCRIPTION);
+    public TopicExchange exchangeApiKeyRequest(){
+        return new TopicExchange(EXCHANGE_APIKEY_REQUEST);
     }
 
     @Bean
-    public Binding binding(Queue queue, TopicExchange exchange){
+    public Binding bindingApiKeyRequest(Queue queueApiKeyRequest, TopicExchange exchangeApiKeyRequest){
         return BindingBuilder
-                .bind(queue)
-                .to(exchange)
-                .with(ROUTING_KEY_SUBSCRIPTION);
-    }
-
-    @Bean
-    public Queue queueRequest(){
-        return new Queue(QUEUE_REQUEST);
-    }
-
-    @Bean
-    public TopicExchange exchangeRequest(){
-        return new TopicExchange(EXCHANGE_REQUEST);
-    }
-
-    @Bean
-    public Binding bindingRequest(Queue queueRequest, TopicExchange exchangeRequest){
-        return BindingBuilder
-                .bind(queueRequest)
-                .to(exchangeRequest)
-                .with(ROUTING_KEY_REQUEST);
+                .bind(queueApiKeyRequest)
+                .to(exchangeApiKeyRequest)
+                .with(ROUTING_KEY_APIKEY_REQUEST);
     }
 
     @Bean

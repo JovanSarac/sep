@@ -39,4 +39,13 @@ public class ApiKeyService {
 
         return optionalApiKey.get();
     }
+
+    public ApiKey findByMerchantId(UUID id){
+        Optional<ApiKey> optionalApiKey = apiKeyRepository.findByMerchantId(id);
+
+        if(!optionalApiKey.isPresent())
+            throw new ResourceNotFoundException("There is no api-key with merchantId " + id);
+
+        return optionalApiKey.get();
+    }
 }

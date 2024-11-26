@@ -35,7 +35,7 @@ func goToBank1(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("Received body:", string(body))
 
 	resp, err := http.Post(fmt.Sprintf("http://localhost:8091/api/bank1/requests/validateRequest"), "application/json", bytes.NewBuffer(body))
-
+	fmt.Println("BILO STA")
 	if err != nil {
 		fmt.Println("Error making HTTP request:", err)
 		return
