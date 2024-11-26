@@ -20,18 +20,24 @@ public class Account {
     private Long PAN;
     private Date cardExpirationDate;
     private Integer securityCode;
+    private CardType cardType;
 
-    public Account(Long id, String accountNumber, Double balance, Long PAN, Date cardExpirationDate, Integer securityCode) {
+    public Account(Long id, String accountNumber, Double balance, Long PAN, Date cardExpirationDate, Integer securityCode, CardType cardType) {
         this.id = id;
         this.accountNumber = accountNumber;
         this.balance = balance;
         this.PAN = PAN;
         this.cardExpirationDate = cardExpirationDate;
         this.securityCode = securityCode;
+        this.cardType = cardType;
     }
 
     public Account() {
 
+    }
+
+    public CardType getCardType() {
+        return cardType;
     }
 
     public Long getId() {
@@ -56,6 +62,10 @@ public class Account {
 
     public Integer getSecurityCode() {
         return securityCode;
+    }
+
+    public void setCardType(CardType cardType) {
+        this.cardType = cardType;
     }
 
     public void setId(Long id) {
