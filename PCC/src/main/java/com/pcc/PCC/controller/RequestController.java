@@ -1,5 +1,6 @@
 package com.pcc.PCC.controller;
 
+import com.pcc.PCC.dto.BankResponse;
 import com.pcc.PCC.dto.RequestDto;
 import com.pcc.PCC.dto.SameBankRequestDto;
 import com.pcc.PCC.service.RequestService;
@@ -47,11 +48,7 @@ public class RequestController {
 
         HttpHeaders headers = new HttpHeaders();
         var requestEntity = new HttpEntity<>(requestService.isBank1(requestDto.PAN) ?
-                new SameBankRequestDto(requestDto.PAN,
-                        requestDto.securityCode,
-                        requestDto.cardHolderName,
-                        requestDto.cardExpirationDate,
-                        requestDto.amount) : requestDto, headers);
+                new BankResponse() : requestDto, headers);
         var method = HttpMethod.POST;
 
         try {
@@ -59,6 +56,39 @@ public class RequestController {
         } catch (HttpClientErrorException e) {
             System.out.println("Error calling endpoint: " + e.getMessage());
         }
+
+        return ResponseEntity.ok("{\"message\": \"Request saved and routed\"}");
+    }
+
+    @PostMapping("/checkAndRouteBank1")
+    public ResponseEntity<String> checkAndRouteBank1(@RequestBody BankResponse bankResponse){
+        String url = "http://localhost:8091/api/bank1/transactions/PCCRequest";
+
+        HttpHeaders headers = new HttpHeaders();
+        var requestEntity = new HttpEntity<>(bankResponse, headers);
+        var method = HttpMethod.POST;
+
+        try {
+            String response = restTemplate().exchange(url, method, requestEntity, String.class).getBody();
+
+            bankResponse.transactionResult = "uspesno";
+            String url1 = "http://localhost:8091/api/bank1/transactions/PCCIssuer";
+            HttpHeaders headers1 = new HttpHeaders();
+            var requestEntity1 = new HttpEntity<>(bankResponse, headers1);
+            var method1 = HttpMethod.POST;
+
+            try{
+                String response1 = restTemplate().exchange(url1, method1, requestEntity1, String.class).getBody();
+            }
+            catch (HttpClientErrorException e) {
+                System.out.println("Error calling endpoint: " + e.getMessage());
+            }
+
+        } catch (HttpClientErrorException e) {
+            System.out.println("Error calling endpoint: " + e.getMessage());
+        }
+
+
 
         return ResponseEntity.ok("{\"message\": \"Request saved and routed\"}");
     }

@@ -19,7 +19,7 @@ public class TransactionService {
     private AccountRepository accountRepository;
 
     private Boolean checkAccountBalance(TransactionDto transactionDto) {
-        Account account = accountRepository.getAccountByAccountNumber(transactionDto.getSourceAccountNumber());
+        Account account = accountRepository.findByAccountNumber(transactionDto.getSourceAccountNumber()).get();
         if (account.getBalance() - transactionDto.getAmount() < 0) {
             return false;
         }
@@ -29,9 +29,20 @@ public class TransactionService {
     public void finishTransaction(AnswerPCCDto answerPCCDto) {
         if (answerPCCDto.transactionResult.equals("uspesno")) {
             Transaction transaction = transactionRepository.findByAcquirerOrderIdAAndIssuerOrderId(answerPCCDto.acquirerOrderId, answerPCCDto.issuerOrderId);
-            Account account = accountRepository.getAccountByAccountNumber(transaction.getDestinationAccountNumber());
+            Account account = accountRepository.findByAccountNumber(transaction.getDestinationAccountNumber()).get();
             Double balance = account.getBalance();
             balance = balance + transaction.getAmount();
+            account.setBalance(balance);
+            accountRepository.save(account);
+        }
+    }
+
+    public void finishTransactionIssuer(AnswerPCCDto answerPCCDto) {
+        if (answerPCCDto.transactionResult.equals("uspesno")) {
+            Transaction transaction = transactionRepository.findByAcquirerOrderIdAAndIssuerOrderId(answerPCCDto.acquirerOrderId, answerPCCDto.issuerOrderId);
+            Account account = accountRepository.findByAccountNumber(transaction.getSourceAccountNumber()).get();
+            Double balance = account.getBalance();
+            balance = balance - transaction.getAmount();
             account.setBalance(balance);
             accountRepository.save(account);
         }

@@ -1,13 +1,11 @@
 package com.example.bank1.bank1.service;
 
+import com.example.bank1.bank1.dto.AnswerPCCDto;
 import com.example.bank1.bank1.dto.PCCRequestDto;
-import com.example.bank1.bank1.dto.TransactionDto;
 import com.example.bank1.bank1.dto.UserIdentificationDto;
 import com.example.bank1.bank1.model.*;
 import com.example.bank1.bank1.repository.AccountRepository;
 import com.example.bank1.bank1.repository.TransactionRepository;
-import com.example.bank1.bank1.repository.UserRepository;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpEntity;
@@ -138,7 +136,7 @@ public class AccountService {
 
     public String sameBanks(UserIdentificationDto userIdentificationDto) {
         try {
-            Account account = accountRepository.getAccountByPAN(userIdentificationDto.getPAN());
+            Account account = accountRepository.findByPAN(userIdentificationDto.getPAN()).get();
             if (account.getBalance() - userIdentificationDto.amount > 0) {
                 List<Transaction> transactions = transactionRepository.findAllBySourceAccountNumber(account.getAccountNumber());
                 List<Transaction> receivedTransactions = transactions.stream()
@@ -162,14 +160,21 @@ public class AccountService {
                         reserveTransaction.setDestinationAccountNumber("1234567890123456");
                         reserveTransaction.setPayerName(userIdentificationDto.cardHolderName);
                         reserveTransaction.setRecipientName("VivoNet");
-                        reserveTransaction.setIssuerOrderId(UUID.randomUUID());
-                        reserveTransaction.setAcquirerOrderId(UUID.randomUUID());
+                        UUID issuerOrderId = UUID.randomUUID();
+                        UUID acquirerOrderId = UUID.randomUUID();
+                        reserveTransaction.setIssuerOrderId(issuerOrderId);
+                        reserveTransaction.setAcquirerOrderId(acquirerOrderId);
                         transactionRepository.save(reserveTransaction);
 
                         //poziv pcc-a
-                        String url = "http://localhost:8094/api/pcc/requests/checkAndRoute";
+                        String url = "http://localhost:8094/api/pcc/requests/checkAndRouteBank1";
                         HttpHeaders headers = new HttpHeaders();
-                        var requestEntity = new HttpEntity<>(userIdentificationDto, headers);
+                        var requestEntity = new HttpEntity<>(new AnswerPCCDto(
+                                "uspesno",
+                                acquirerOrderId,
+                                new Date().getTime(),
+                                issuerOrderId,
+                                new Date().getTime()), headers);
                         var method = HttpMethod.POST;
 
                         try {
@@ -199,14 +204,21 @@ public class AccountService {
                     reserveTransaction.setDestinationAccountNumber("1234567890123456");
                     reserveTransaction.setPayerName(userIdentificationDto.cardHolderName);
                     reserveTransaction.setRecipientName("VivoNet");
-                    reserveTransaction.setIssuerOrderId(UUID.randomUUID());
-                    reserveTransaction.setAcquirerOrderId(UUID.randomUUID());
+                    UUID issuerOrderId = UUID.randomUUID();
+                    UUID acquirerOrderId = UUID.randomUUID();
+                    reserveTransaction.setIssuerOrderId(issuerOrderId);
+                    reserveTransaction.setAcquirerOrderId(acquirerOrderId);
                     transactionRepository.save(reserveTransaction);
 
                     //poziv pcc-a
-                    String url = "http://localhost:8094/api/pcc/requests/checkAndRoute";
+                    String url = "http://localhost:8094/api/pcc/requests/checkAndRouteBank1";
                     HttpHeaders headers = new HttpHeaders();
-                    var requestEntity = new HttpEntity<>(userIdentificationDto, headers);
+                    var requestEntity = new HttpEntity<>(new AnswerPCCDto(
+                            "uspesno",
+                            acquirerOrderId,
+                            new Date().getTime(),
+                            issuerOrderId,
+                            new Date().getTime()), headers);
                     var method = HttpMethod.POST;
 
                     try {
@@ -214,6 +226,7 @@ public class AccountService {
                     } catch (HttpClientErrorException e) {
                         System.out.println("Error calling endpoint: " + e.getMessage());
                     }
+
                     return "Ima dovoljno sredstava";
                 }
             }
@@ -273,6 +286,6 @@ public class AccountService {
     }
 
     public Account getAccountByPAN(Long PAN) {
-        return accountRepository.getAccountByPAN(PAN);
+        return accountRepository.findByPAN(PAN).get();
     }
 }

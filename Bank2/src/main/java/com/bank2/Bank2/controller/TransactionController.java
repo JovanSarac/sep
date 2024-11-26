@@ -44,4 +44,9 @@ public class TransactionController {
         return ResponseEntity.ok("");
     }
 
+    @PostMapping("/PCCResponse")
+    public ResponseEntity<String> PCCResponse(){
+        return ResponseEntity.ok("");
+    }
+
 }

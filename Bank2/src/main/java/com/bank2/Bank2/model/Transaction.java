@@ -46,6 +46,8 @@ public class Transaction {
 
     }
 
+
+
     public Long getId() {
         return id;
     }
@@ -125,4 +127,5 @@ public class Transaction {
     public void setRecipientName(String recipientName) {
         this.recipientName = recipientName;
     }
+
 }

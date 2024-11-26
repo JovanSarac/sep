@@ -5,10 +5,9 @@ import com.pcc.PCC.model.Request;
 import com.pcc.PCC.repository.RequestRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.ResourceAccessException;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class RequestService {
@@ -26,6 +25,13 @@ public class RequestService {
 
         requestRepository.save(request);
         return requestDto;
+    }
+
+    public Request findByAcquirerOrderId(UUID id){
+        Optional<Request> optionalRequest = requestRepository.findByAcquirerOrderId(id);
+        if(!optionalRequest.isPresent()) throw new ResourceAccessException("No request in PCC for " + id + " acquirerOrderId");
+
+        return optionalRequest.get();
     }
 
     public Boolean isDataValid(RequestDto requestDto) {
