@@ -29,8 +29,7 @@
   <component name="MavenImportPreferences">
     <option name="generalSettings">
       <MavenGeneralSettings>
-        <option name="mavenHome" value="Use Maven wrapper" />
-        <option name="useMavenConfig" value="true" />
+        <option name="mavenHomeTypeForPersistence" value="WRAPPER" />
       </MavenGeneralSettings>
     </option>
   </component>
@@ -55,7 +54,7 @@
     "WebServerToolWindowFactoryState": "false",
     "git-widget-placeholder": "<unknown>",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "D:/master/SEP/projekat/sep/PSP-MQ",
+    "last_opened_file_path": "D:/master/SEP/projekat/sep/Bank1/backend/Bank1",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
