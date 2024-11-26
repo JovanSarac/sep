@@ -17,4 +17,5 @@ public class UserIdentificationDto {
     public Integer securityCode;
     public String cardHolderName;
     public Date cardExpirationDate;
+    public Double amount;
 }

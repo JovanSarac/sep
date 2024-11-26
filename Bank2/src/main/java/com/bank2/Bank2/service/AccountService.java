@@ -1,9 +1,9 @@
 package com.bank2.Bank2.service;
 
 import com.bank2.Bank2.dto.UserIdentificationDto;
-import com.bank2.Bank2.model.Account;
-import com.bank2.Bank2.model.CardType;
+import com.bank2.Bank2.model.*;
 import com.bank2.Bank2.repository.AccountRepository;
+import com.bank2.Bank2.repository.TransactionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.ResourceAccessException;
@@ -12,11 +12,15 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class AccountService {
     @Autowired
     private AccountRepository accountRepository;
+    @Autowired
+    private TransactionRepository transactionRepository;
 
     public Boolean validateData(UserIdentificationDto userIdentificationDto, Account account) {
         //check pan
@@ -136,5 +140,59 @@ public class AccountService {
 
         if(!account.isPresent()) throw new ResourceAccessException("Account with PAN " + PAN + " doesnt exist");
         return account.get();
+    }
+
+    public String reserveFunds(UserIdentificationDto userIdentificationDto) {
+        Account account = accountRepository.getAccountByPAN(userIdentificationDto.getPAN());
+
+        List<Transaction> transactions = transactionRepository.findAllBySourceAccountNumber(account.getAccountNumber());
+        List<Transaction> receivedTransactions = transactions.stream()
+                .filter(transaction -> TransactionState.RECEIVED.equals(transaction.getTransactionState()))
+                .collect(Collectors.toList());
+
+        Double lowerLimit = 0.0;
+        if (account.getCardType().equals(CardType.CREDIT)) {
+            lowerLimit = -2000.0;
+        }
+
+        if (transactions.isEmpty()) {
+            if (account.getBalance() - userIdentificationDto.amount > lowerLimit) {
+                Transaction reserveTransaction = new Transaction();
+                reserveTransaction.setTransactionNumber(UUID.randomUUID());
+                reserveTransaction.setAmount(userIdentificationDto.amount);
+                reserveTransaction.setTransactionType(TransactionType.OUT);
+                reserveTransaction.setTransactionState(TransactionState.RECEIVED);
+                reserveTransaction.setTransactionDate(new Date());
+                reserveTransaction.setSourceAccountNumber(account.getAccountNumber());
+                reserveTransaction.setDestinationAccountNumber("1234567890123456");
+                reserveTransaction.setPayerName(userIdentificationDto.cardHolderName);
+                reserveTransaction.setRecipientName("VivoNet");
+                transactionRepository.save(reserveTransaction);
+                return "Ima dovoljno sredstava";
+            }
+            return "Nema dovoljno sredstava";
+        }
+        Double allReservedMoney = 0.0;
+
+        for (Transaction transaction : receivedTransactions) {
+            allReservedMoney += transaction.getAmount();
+        }
+
+        if (account.getBalance() - userIdentificationDto.amount - allReservedMoney > lowerLimit) {
+            Transaction reserveTransaction = new Transaction();
+            reserveTransaction.setTransactionNumber(UUID.randomUUID());
+            reserveTransaction.setAmount(userIdentificationDto.amount);
+            reserveTransaction.setTransactionType(TransactionType.OUT);
+            reserveTransaction.setTransactionState(TransactionState.RECEIVED);
+            reserveTransaction.setTransactionDate(new Date());
+            reserveTransaction.setSourceAccountNumber(account.getAccountNumber());
+            reserveTransaction.setDestinationAccountNumber("1234567890123456");
+            reserveTransaction.setPayerName(userIdentificationDto.cardHolderName);
+            reserveTransaction.setRecipientName("VivoNet");
+            transactionRepository.save(reserveTransaction);
+            return "Ima dovoljno sredstava";
+        }
+
+        return "Nema dovoljno sredstava";
     }
 }

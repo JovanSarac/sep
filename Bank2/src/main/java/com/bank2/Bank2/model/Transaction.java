@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.Date;
+import java.util.UUID;
 
 @Getter
 @Setter
@@ -14,7 +15,7 @@ public class Transaction {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String transactionNumber;
+    private UUID transactionNumber;
     private Double amount;
     private TransactionType transactionType;
     private TransactionState transactionState;
@@ -27,7 +28,7 @@ public class Transaction {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    public Transaction(Long id, String transactionNumber, Double amount, TransactionType transactionType, TransactionState transactionState, Date transactionDate, String sourceAccountNumber, String destinationAccountNumber, String payerName, String recipientName, User user) {
+    public Transaction(Long id, UUID transactionNumber, Double amount, TransactionType transactionType, TransactionState transactionState, Date transactionDate, String sourceAccountNumber, String destinationAccountNumber, String payerName, String recipientName, User user) {
         this.id = id;
         this.transactionNumber = transactionNumber;
         this.amount = amount;
@@ -49,7 +50,7 @@ public class Transaction {
         return id;
     }
 
-    public String getTransactionNumber() {
+    public UUID getTransactionNumber() {
         return transactionNumber;
     }
 
@@ -93,7 +94,7 @@ public class Transaction {
         this.id = id;
     }
 
-    public void setTransactionNumber(String transactionNumber) {
+    public void setTransactionNumber(UUID transactionNumber) {
         this.transactionNumber = transactionNumber;
     }
 
