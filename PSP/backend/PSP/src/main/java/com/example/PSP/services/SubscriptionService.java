@@ -67,6 +67,22 @@ public class SubscriptionService {
         }).collect(Collectors.toList());
     }
 
+    public List<SubscriptionDto> getSubscriptionsByUserId(Long userId) {
+        List<Subscription> subscriptions = subscriptionRepository.findSubscriptionsByUserId(userId);
+        return subscriptions.stream().map(sub -> {
+            SubscriptionDto dto = new SubscriptionDto();
+            dto.setId(sub.getId());
+            dto.setService(sub.getService());
+            dto.setUserId(sub.getUser().getId());
+            dto.setStartDate(sub.getStartDate());
+            dto.setEndDate(sub.getEndDate());
+            dto.setTotalCost(sub.getTotalCost());
+            dto.setIsActive(sub.getIsActive());
+            dto.setSubscriptionDuration(sub.getSubscriptionDuration());
+            return dto;
+        }).collect(Collectors.toList());
+    }
+
     @Scheduled(cron = "0 0 0 * * ?")
     public void updateSubscriptionStatus() {
         List<Subscription> subscriptions = subscriptionRepository.findAll();
@@ -87,7 +103,7 @@ public class SubscriptionService {
         Subscription subscription = subscriptionRepository.findById(subscriptionDTO.getId())
                 .orElseThrow(() -> new IllegalArgumentException("Subscription with ID " + subscriptionDTO.getId() + " does not exist."));
 
-
+        subscription.setIsActive(subscriptionDTO.getIsActive());
         subscription.setEndDate(subscriptionDTO.getEndDate());
         subscription.setTotalCost(subscriptionDTO.getTotalCost());
         subscription.setSubscriptionDuration(subscriptionDTO.getSubscriptionDuration());

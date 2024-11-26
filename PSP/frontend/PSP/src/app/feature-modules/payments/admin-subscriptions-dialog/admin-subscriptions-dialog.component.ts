@@ -27,7 +27,7 @@ export class AdminSubscriptionsDialogComponent implements OnInit {
 
   ngOnInit(): void {
     this.userInfo = this.data;
-    this.service.getSubscriptionsForUser(this.userInfo.id).subscribe({
+    this.service.getSubscriptionsForUserAdmin(this.userInfo.id).subscribe({
       next:(result)=>{
         this.activeSubscriptions = result;
       }
@@ -39,9 +39,22 @@ export class AdminSubscriptionsDialogComponent implements OnInit {
     this.dialogRef.close();
   }
 
-  extend(){
+  deactivatePspService(subscription : SubscriptionDto){
+    subscription.isActive = false;
+    this.service.updateSubscription(subscription).subscribe({
+      next: ()=>{
+        this.ngOnInit()
+      }
+    })
+  }
 
-
+  activatePspService(subscription : SubscriptionDto){
+    subscription.isActive = true;
+    this.service.updateSubscription(subscription).subscribe({
+      next: ()=>{
+        this.ngOnInit()
+      }
+    })
   }
 
 

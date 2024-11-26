@@ -5,11 +5,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0336444d-e3e4-4354-8bff-5b708487f1e8" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/../API-GATEWAY/go.mod" beforeDir="false" afterPath="$PROJECT_DIR$/../API-GATEWAY/go.mod" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../API-GATEWAY/go.sum" beforeDir="false" afterPath="$PROJECT_DIR$/../API-GATEWAY/go.sum" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../API-GATEWAY/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/../API-GATEWAY/main.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Bank1/backend/Bank1/src/main/java/com/example/bank1/bank1/dto/RequestDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Bank1/backend/Bank1/src/main/java/com/example/bank1/bank1/dto/RequestDto.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../PSP/backend/PSP/src/main/java/com/example/PSP/controllers/SubscriptionController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../PSP/backend/PSP/src/main/java/com/example/PSP/controllers/SubscriptionController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../PSP/backend/PSP/src/main/java/com/example/PSP/repositories/SubscriptionRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/../PSP/backend/PSP/src/main/java/com/example/PSP/repositories/SubscriptionRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../PSP/backend/PSP/src/main/java/com/example/PSP/services/SubscriptionService.java" beforeDir="false" afterPath="$PROJECT_DIR$/../PSP/backend/PSP/src/main/java/com/example/PSP/services/SubscriptionService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../PSP/frontend/PSP/src/app/feature-modules/payments/admin-dashboard/admin-dashboard.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../PSP/frontend/PSP/src/app/feature-modules/payments/admin-dashboard/admin-dashboard.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../PSP/frontend/PSP/src/app/feature-modules/payments/admin-subscriptions-dialog/admin-subscriptions-dialog.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/../PSP/frontend/PSP/src/app/feature-modules/payments/admin-subscriptions-dialog/admin-subscriptions-dialog.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../PSP/frontend/PSP/src/app/feature-modules/payments/admin-subscriptions-dialog/admin-subscriptions-dialog.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../PSP/frontend/PSP/src/app/feature-modules/payments/admin-subscriptions-dialog/admin-subscriptions-dialog.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../PSP/frontend/PSP/src/app/feature-modules/payments/payments.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../PSP/frontend/PSP/src/app/feature-modules/payments/payments.service.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -43,7 +46,7 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
-    "Application.PspMqApplication.executor": "Debug",
+    "Application.PspMqApplication.executor": "Run",
     "RequestMappingsPanelOrder0": "0",
     "RequestMappingsPanelOrder1": "1",
     "RequestMappingsPanelWidth0": "75",
@@ -52,9 +55,9 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
     "WebServerToolWindowFactoryState": "false",
-    "git-widget-placeholder": "<unknown>",
+    "git-widget-placeholder": "develop",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "D:/master/SEP/projekat/sep/Bank1/backend/Bank1",
+    "last_opened_file_path": "C:/Users/Korisnik/Desktop/SEP/sep/PSP-MQ",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
@@ -66,6 +69,14 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="jdk-1.8.0_402-corretto-1.8.0_402-4caba194b151-ae57be32" />
+        <option value="jdk-21.0.2-openjdk-21.0.2-4caba194b151-4f524021" />
+      </set>
+    </attachedChunks>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
