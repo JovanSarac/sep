@@ -3,10 +3,9 @@ package com.example.bank1.bank1.service;
 import com.example.bank1.bank1.dto.PCCRequestDto;
 import com.example.bank1.bank1.dto.TransactionDto;
 import com.example.bank1.bank1.dto.UserIdentificationDto;
-import com.example.bank1.bank1.model.Account;
-import com.example.bank1.bank1.model.CardType;
-import com.example.bank1.bank1.model.User;
+import com.example.bank1.bank1.model.*;
 import com.example.bank1.bank1.repository.AccountRepository;
+import com.example.bank1.bank1.repository.TransactionRepository;
 import com.example.bank1.bank1.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,11 +15,14 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class AccountService {
     @Autowired
     private AccountRepository accountRepository;
+    @Autowired
+    private TransactionRepository transactionRepository;
 
     public Boolean validateData(UserIdentificationDto userIdentificationDto, Account account) {
         //check pan
@@ -110,12 +112,60 @@ public class AccountService {
         return pccRequestDto;
     }
 
+
+
     public String sameBanks(UserIdentificationDto userIdentificationDto) {
         Account account = accountRepository.getAccountByPAN(userIdentificationDto.getPAN());
-        if (account.getBalance() - userIdentificationDto.amount > 0) {
+        List<Transaction> transactions = transactionRepository.findAllBySourceAccountNumber(account.getAccountNumber());
+        List<Transaction> receivedTransactions = transactions.stream()
+                .filter(transaction -> TransactionState.RECEIVED.equals(transaction.getTransactionState()))
+                .collect(Collectors.toList());
+
+        Double lowerLimit = 0.0;
+        if (account.getCardType().equals(CardType.CREDIT)) {
+            lowerLimit = -2000.0;
+        }
+
+        if (transactions.isEmpty()) {
+            if (account.getBalance() - userIdentificationDto.amount > lowerLimit) {
+                Transaction reserveTransaction = new Transaction();
+                reserveTransaction.setTransactionNumber(UUID.randomUUID());
+                reserveTransaction.setAmount(userIdentificationDto.amount);
+                reserveTransaction.setTransactionType(TransactionType.OUT);
+                reserveTransaction.setTransactionState(TransactionState.RECEIVED);
+                reserveTransaction.setTransactionDate(new Date());
+                reserveTransaction.setSourceAccountNumber(account.getAccountNumber());
+                reserveTransaction.setDestinationAccountNumber("1234567890123456");
+                reserveTransaction.setPayerName(userIdentificationDto.cardHolderName);
+                reserveTransaction.setRecipientName("VivoNet");
+                transactionRepository.save(reserveTransaction);
+                return "Ima dovoljno sredstava";
+            }
+            return "Nema dovoljno sredstava";
+        }
+        Double allReservedMoney = 0.0;
+
+        for (Transaction transaction : receivedTransactions) {
+            allReservedMoney += transaction.getAmount();
+        }
+
+        if (account.getBalance() - userIdentificationDto.amount - allReservedMoney > lowerLimit) {
+            Transaction reserveTransaction = new Transaction();
+            reserveTransaction.setTransactionNumber(UUID.randomUUID());
+            reserveTransaction.setAmount(userIdentificationDto.amount);
+            reserveTransaction.setTransactionType(TransactionType.OUT);
+            reserveTransaction.setTransactionState(TransactionState.RECEIVED);
+            reserveTransaction.setTransactionDate(new Date());
+            reserveTransaction.setSourceAccountNumber(account.getAccountNumber());
+            reserveTransaction.setDestinationAccountNumber("1234567890123456");
+            reserveTransaction.setPayerName(userIdentificationDto.cardHolderName);
+            reserveTransaction.setRecipientName("VivoNet");
+            transactionRepository.save(reserveTransaction);
             return "Ima dovoljno sredstava";
         }
+
         return "Nema dovoljno sredstava";
+
     }
 
     public Boolean isTheBankSame(Long PAN) {
