@@ -1,5 +1,6 @@
 package com.bank2.Bank2.service;
 
+import com.bank2.Bank2.dto.RequestDto;
 import com.bank2.Bank2.dto.UserIdentificationDto;
 import com.bank2.Bank2.model.*;
 import com.bank2.Bank2.repository.AccountRepository;
@@ -22,12 +23,12 @@ public class AccountService {
     @Autowired
     private TransactionRepository transactionRepository;
 
-    public Boolean validateData(UserIdentificationDto userIdentificationDto, Account account) {
+    public Boolean validateData(RequestDto requestDto, Account account) {
         //check pan
         //check security code
         //check if bank is the same
         Long accountPan = account.getPAN();
-        if (!userIdentificationDto.PAN.equals(accountPan)) {
+        if (!requestDto.PAN.equals(accountPan)) {
             return false;
         }
 
@@ -37,7 +38,7 @@ public class AccountService {
             return false;
         }
 
-        if (userIdentificationDto.cardExpirationDate.getDate() != account.getCardExpirationDate().getDate()) {
+        if (requestDto.cardExpirationDate.getDate() != account.getCardExpirationDate().getDate()) {
             return false;
         }
 
@@ -46,7 +47,11 @@ public class AccountService {
             return false;
         }
 
-        if (validatePAN(userIdentificationDto.PAN) % 10 != 0) {
+        if (validatePAN(requestDto.PAN) % 10 != 0) {
+            return false;
+        }
+
+        if(requestDto.acquirerOrderId == null || requestDto.acquirerTimestamp == null){
             return false;
         }
 
@@ -142,8 +147,11 @@ public class AccountService {
         return account.get();
     }
 
-    public String reserveFunds(UserIdentificationDto userIdentificationDto) {
-        Account account = accountRepository.getAccountByPAN(userIdentificationDto.getPAN());
+    public String reserveFunds(RequestDto requestDto) {
+        Optional<Account> optionalAccount = accountRepository.findByPAN(requestDto.PAN);
+        if(!optionalAccount.isPresent()) throw new ResourceAccessException("There is no account in bank2 with " + requestDto.PAN + " PAN");
+
+        Account account = optionalAccount.get();
 
         List<Transaction> transactions = transactionRepository.findAllBySourceAccountNumber(account.getAccountNumber());
         List<Transaction> receivedTransactions = transactions.stream()
@@ -156,16 +164,16 @@ public class AccountService {
         }
 
         if (transactions.isEmpty()) {
-            if (account.getBalance() - userIdentificationDto.amount > lowerLimit) {
+            if (account.getBalance() - requestDto.amount > lowerLimit) {
                 Transaction reserveTransaction = new Transaction();
                 reserveTransaction.setTransactionNumber(UUID.randomUUID());
-                reserveTransaction.setAmount(userIdentificationDto.amount);
+                reserveTransaction.setAmount(requestDto.amount);
                 reserveTransaction.setTransactionType(TransactionType.OUT);
                 reserveTransaction.setTransactionState(TransactionState.RECEIVED);
                 reserveTransaction.setTransactionDate(new Date());
                 reserveTransaction.setSourceAccountNumber(account.getAccountNumber());
                 reserveTransaction.setDestinationAccountNumber("1234567890123456");
-                reserveTransaction.setPayerName(userIdentificationDto.cardHolderName);
+                reserveTransaction.setPayerName(requestDto.cardHolderName);
                 reserveTransaction.setRecipientName("VivoNet");
                 transactionRepository.save(reserveTransaction);
                 return "Ima dovoljno sredstava";
@@ -178,18 +186,19 @@ public class AccountService {
             allReservedMoney += transaction.getAmount();
         }
 
-        if (account.getBalance() - userIdentificationDto.amount - allReservedMoney > lowerLimit) {
+        if (account.getBalance() - requestDto.amount - allReservedMoney > lowerLimit) {
             Transaction reserveTransaction = new Transaction();
             reserveTransaction.setTransactionNumber(UUID.randomUUID());
-            reserveTransaction.setAmount(userIdentificationDto.amount);
+            reserveTransaction.setAmount(requestDto.amount);
             reserveTransaction.setTransactionType(TransactionType.OUT);
             reserveTransaction.setTransactionState(TransactionState.RECEIVED);
             reserveTransaction.setTransactionDate(new Date());
             reserveTransaction.setSourceAccountNumber(account.getAccountNumber());
             reserveTransaction.setDestinationAccountNumber("1234567890123456");
-            reserveTransaction.setPayerName(userIdentificationDto.cardHolderName);
+            reserveTransaction.setPayerName(requestDto.cardHolderName);
             reserveTransaction.setRecipientName("VivoNet");
             transactionRepository.save(reserveTransaction);
+            
             return "Ima dovoljno sredstava";
         }
 

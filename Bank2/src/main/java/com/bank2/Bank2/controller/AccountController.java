@@ -1,5 +1,6 @@
 package com.bank2.Bank2.controller;
 
+import com.bank2.Bank2.dto.RequestDto;
 import com.bank2.Bank2.dto.UserIdentificationDto;
 import com.bank2.Bank2.model.Account;
 import com.bank2.Bank2.model.CardType;
@@ -22,13 +23,13 @@ public class AccountController {
 
     @CrossOrigin(origins = "http://localhost:4202")
     @PostMapping("/validateData")
-    public ResponseEntity<?> validateData(@org.jetbrains.annotations.NotNull @RequestBody UserIdentificationDto userIdentificationDto) {
-        Account account = accountService.getAccountByPAN(userIdentificationDto.PAN);
+    public ResponseEntity<?> validateData(@org.jetbrains.annotations.NotNull @RequestBody RequestDto requestDto) {
+        Account account = accountService.getAccountByPAN(requestDto.PAN);
         User user = userRepository.findUserByAccount_Id(account.getId());
-        if (!accountService.validateData(userIdentificationDto, account)) {
+        if (!accountService.validateData(requestDto, account)) {
             return ResponseEntity.ok("Invalidate card data");
         }
-        if (!accountService.validateName(user.getName(), userIdentificationDto.cardHolderName)) {
+        if (!accountService.validateName(user.getName(), requestDto.cardHolderName)) {
             return ResponseEntity.ok("Invalidate name");
         }
         //ovde ako su iste banke dalje treba pcc

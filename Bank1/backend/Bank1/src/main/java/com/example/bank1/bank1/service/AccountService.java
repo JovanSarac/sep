@@ -139,18 +139,53 @@ public class AccountService {
     public String sameBanks(UserIdentificationDto userIdentificationDto) {
         Account account = accountRepository.getAccountByPAN(userIdentificationDto.getPAN());
         if (account.getBalance() - userIdentificationDto.amount > 0) {
-        List<Transaction> transactions = transactionRepository.findAllBySourceAccountNumber(account.getAccountNumber());
-        List<Transaction> receivedTransactions = transactions.stream()
-                .filter(transaction -> TransactionState.RECEIVED.equals(transaction.getTransactionState()))
-                .collect(Collectors.toList());
+            List<Transaction> transactions = transactionRepository.findAllBySourceAccountNumber(account.getAccountNumber());
+            List<Transaction> receivedTransactions = transactions.stream()
+                    .filter(transaction -> TransactionState.RECEIVED.equals(transaction.getTransactionState()))
+                    .collect(Collectors.toList());
 
-        Double lowerLimit = 0.0;
-        if (account.getCardType().equals(CardType.CREDIT)) {
-            lowerLimit = -2000.0;
-        }
+            Double lowerLimit = 0.0;
+            if (account.getCardType().equals(CardType.CREDIT)) {
+                lowerLimit = -2000.0;
+            }
 
-        if (transactions.isEmpty()) {
-            if (account.getBalance() - userIdentificationDto.amount > lowerLimit) {
+            if (transactions.isEmpty()) {
+                if (account.getBalance() - userIdentificationDto.amount > lowerLimit) {
+                    Transaction reserveTransaction = new Transaction();
+                    reserveTransaction.setTransactionNumber(UUID.randomUUID());
+                    reserveTransaction.setAmount(userIdentificationDto.amount);
+                    reserveTransaction.setTransactionType(TransactionType.OUT);
+                    reserveTransaction.setTransactionState(TransactionState.RECEIVED);
+                    reserveTransaction.setTransactionDate(new Date());
+                    reserveTransaction.setSourceAccountNumber(account.getAccountNumber());
+                    reserveTransaction.setDestinationAccountNumber("1234567890123456");
+                    reserveTransaction.setPayerName(userIdentificationDto.cardHolderName);
+                    reserveTransaction.setRecipientName("VivoNet");
+                    transactionRepository.save(reserveTransaction);
+
+                    //poziv pcc-a
+                    String url = "http://localhost:8094/api/pcc/requests/checkAndRoute";
+                    HttpHeaders headers = new HttpHeaders();
+                    var requestEntity = new HttpEntity<>(userIdentificationDto, headers);
+                    var method = HttpMethod.POST;
+
+                    try {
+                        String response = restTemplate().exchange(url, method, requestEntity, String.class).getBody();
+                    } catch (HttpClientErrorException e) {
+                        System.out.println("Error calling endpoint: " + e.getMessage());
+                    }
+
+                    return "Ima dovoljno sredstava";
+                }
+                return "Nema dovoljno sredstava";
+            }
+            Double allReservedMoney = 0.0;
+
+            for (Transaction transaction : receivedTransactions) {
+                allReservedMoney += transaction.getAmount();
+            }
+
+            if (account.getBalance() - userIdentificationDto.amount - allReservedMoney > lowerLimit) {
                 Transaction reserveTransaction = new Transaction();
                 reserveTransaction.setTransactionNumber(UUID.randomUUID());
                 reserveTransaction.setAmount(userIdentificationDto.amount);
@@ -174,47 +209,13 @@ public class AccountService {
                 } catch (HttpClientErrorException e) {
                     System.out.println("Error calling endpoint: " + e.getMessage());
                 }
-
                 return "Ima dovoljno sredstava";
             }
-            return "Nema dovoljno sredstava";
         }
-        Double allReservedMoney = 0.0;
-
-        for (Transaction transaction : receivedTransactions) {
-            allReservedMoney += transaction.getAmount();
-        }
-
-        if (account.getBalance() - userIdentificationDto.amount - allReservedMoney > lowerLimit) {
-            Transaction reserveTransaction = new Transaction();
-            reserveTransaction.setTransactionNumber(UUID.randomUUID());
-            reserveTransaction.setAmount(userIdentificationDto.amount);
-            reserveTransaction.setTransactionType(TransactionType.OUT);
-            reserveTransaction.setTransactionState(TransactionState.RECEIVED);
-            reserveTransaction.setTransactionDate(new Date());
-            reserveTransaction.setSourceAccountNumber(account.getAccountNumber());
-            reserveTransaction.setDestinationAccountNumber("1234567890123456");
-            reserveTransaction.setPayerName(userIdentificationDto.cardHolderName);
-            reserveTransaction.setRecipientName("VivoNet");
-            transactionRepository.save(reserveTransaction);
-
-            //poziv pcc-a
-            String url = "http://localhost:8094/api/pcc/requests/checkAndRoute";
-            HttpHeaders headers = new HttpHeaders();
-            var requestEntity = new HttpEntity<>(userIdentificationDto, headers);
-            var method = HttpMethod.POST;
-
-            try {
-                String response = restTemplate().exchange(url, method, requestEntity, String.class).getBody();
-            } catch (HttpClientErrorException e) {
-                System.out.println("Error calling endpoint: " + e.getMessage());
-            }
-            return "Ima dovoljno sredstava";
-        }
-
         return "Nema dovoljno sredstava";
 
     }
+
 
     public Boolean isTheBankSame(Long PAN) {
         List<Long> numbers = new ArrayList<>();

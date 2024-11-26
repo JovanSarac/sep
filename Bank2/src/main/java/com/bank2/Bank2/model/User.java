@@ -26,17 +26,15 @@ public class User {
 
     private Long id;
     private String name;
-    private String surname;
 
     @OneToOne
     @JoinColumn(name = "accountNumber", nullable = false)
     private Account account;
     private String email;
 
-    public User(Long id, String name, String surname, Account account, String email) {
+    public User(Long id, String name, Account account, String email) {
         this.id = id;
         this.name = name;
-        this.surname = surname;
         this.account = account;
         this.email = email;
     }
