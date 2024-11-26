@@ -1,8 +1,10 @@
 package com.example.bank1.bank1.service;
 
+import com.example.bank1.bank1.dto.AnswerPCCDto;
 import com.example.bank1.bank1.dto.PCCRequestDto;
 import com.example.bank1.bank1.dto.TransactionDto;
 import com.example.bank1.bank1.model.Account;
+import com.example.bank1.bank1.model.Transaction;
 import com.example.bank1.bank1.repository.AccountRepository;
 import com.example.bank1.bank1.repository.TransactionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,11 +26,14 @@ public class TransactionService {
         return true;
     }
 
-    public void finishTransaction(PCCRequestDto pccRequestDto) {
-        Account account = accountRepository.getAccountByPAN(pccRequestDto.getPAN());
-        Double balance = account.getBalance();
-        balance = balance - pccRequestDto.amount;
-        account.setBalance(balance);
-        accountRepository.save(account);
+    public void finishTransaction(AnswerPCCDto answerPCCDto) {
+        if (answerPCCDto.transactionResult.equals("uspesno")) {
+            Transaction transaction = transactionRepository.findByAcquirerOrderIdAAndIssuerOrderId(answerPCCDto.acquirerOrderId, answerPCCDto.issuerOrderId);
+            Account account = accountRepository.getAccountByAccountNumber(transaction.getDestinationAccountNumber());
+            Double balance = account.getBalance();
+            balance = balance + transaction.getAmount();
+            account.setBalance(balance);
+            accountRepository.save(account);
+        }
     }
 }
