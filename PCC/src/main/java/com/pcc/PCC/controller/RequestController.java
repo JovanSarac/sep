@@ -1,9 +1,11 @@
 package com.pcc.PCC.controller;
 
 import com.pcc.PCC.dto.RequestDto;
+import com.pcc.PCC.dto.SameBankRequestDto;
 import com.pcc.PCC.service.RequestService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -19,8 +21,10 @@ import org.springframework.web.client.RestTemplate;
 @RequiredArgsConstructor
 @RequestMapping("/api/pcc/requests")
 public class RequestController {
-    @Autowired
-    private RestTemplate restTemplate;
+    @Bean
+    public RestTemplate restTemplate() {
+        return new RestTemplate();
+    }
     @Autowired
     private RequestService requestService;
 
@@ -38,15 +42,20 @@ public class RequestController {
         RequestDto request = requestService.create(requestDto);
 
         String url = requestService.isBank1(requestDto.PAN) ?
-                "http://localhost:8091/api/bank1/transaction"
+                "http://localhost:8091/api/bank1/transactions/PCCRequest"
                 :"http://localhost:8092/api/bank2/transaction";
 
         HttpHeaders headers = new HttpHeaders();
-        var requestEntity = new HttpEntity<>(requestDto, headers);
+        var requestEntity = new HttpEntity<>(requestService.isBank1(requestDto.PAN) ?
+                new SameBankRequestDto(requestDto.PAN,
+                        requestDto.securityCode,
+                        requestDto.cardHolderName,
+                        requestDto.cardExpirationDate,
+                        requestDto.amount) : requestDto, headers);
         var method = HttpMethod.POST;
 
         try {
-            String response = restTemplate.exchange(url, method, requestEntity, String.class).getBody();
+            String response = restTemplate().exchange(url, method, requestEntity, String.class).getBody();
         } catch (HttpClientErrorException e) {
             System.out.println("Error calling endpoint: " + e.getMessage());
         }

@@ -10,7 +10,13 @@ import com.example.bank1.bank1.repository.AccountRepository;
 import com.example.bank1.bank1.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -19,6 +25,10 @@ import java.util.UUID;
 
 @Service
 public class AccountService {
+    @Bean
+    public RestTemplate restTemplate() {
+        return new RestTemplate();
+    }
     @Autowired
     private AccountRepository accountRepository;
 
@@ -113,6 +123,19 @@ public class AccountService {
     public String sameBanks(UserIdentificationDto userIdentificationDto) {
         Account account = accountRepository.getAccountByPAN(userIdentificationDto.getPAN());
         if (account.getBalance() - userIdentificationDto.amount > 0) {
+            //poziv pcc-a
+            String url = "http://localhost:8094/api/pcc/requests/checkAndRoute";
+            HttpHeaders headers = new HttpHeaders();
+            var requestEntity = new HttpEntity<>(userIdentificationDto, headers);
+            var method = HttpMethod.POST;
+
+            try {
+                String response = restTemplate().exchange(url, method, requestEntity, String.class).getBody();
+            } catch (HttpClientErrorException e) {
+                System.out.println("Error calling endpoint: " + e.getMessage());
+            }
+
+
             return "Ima dovoljno sredstava";
         }
         return "Nema dovoljno sredstava";
