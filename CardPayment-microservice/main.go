@@ -8,11 +8,24 @@ import (
 	"net/http"
 	"os/exec"
 	"runtime"
+
+	"github.com/google/uuid"
 )
 
 type PaymentData struct {
 	PaymentId  int64  `json:"paymentId"`
 	PaymentUrl string `json:"paymentUrl"`
+}
+
+type RequestDto struct {
+	MerchantId       uuid.UUID `json:"merchantId"`
+	MerchantPassword string    `json:"merchantPassword"`
+	Amount           float64   `json:"amount"`
+	MerchantOrderId  int64     `json:"merchantOrderId"`
+	Timestamp        int64     `json:"timestamp"`
+	SuccessUrl       string    `json:"successUrl"`
+	FailedUrl        string    `json:"failedUrl"`
+	ErrorUrl         string    `json:"errorUrl"`
 }
 
 func main() {
@@ -33,6 +46,13 @@ func goToBank1(w http.ResponseWriter, r *http.Request) {
 	}
 
 	fmt.Println("Received body:", string(body))
+
+	var requestDto RequestDto
+	err = json.Unmarshal(body, &requestDto)
+	if err != nil {
+		http.Error(w, "Failed to parse request DTO", http.StatusBadRequest)
+		return
+	}
 
 	resp, err := http.Post(fmt.Sprintf("http://localhost:8091/api/bank1/requests/validateRequest"), "application/json", bytes.NewBuffer(body))
 
@@ -58,8 +78,11 @@ func goToBank1(w http.ResponseWriter, r *http.Request) {
 
 	fmt.Println("Payment URL:", paymentData.PaymentUrl)
 
+	fullUrl := fmt.Sprintf("%s?amount=%.2f", paymentData.PaymentUrl, requestDto.Amount)
+	fmt.Println("%s?data=%s&amount=%.2f", paymentData.PaymentUrl, requestDto.Amount)
+
 	go func() {
-		err := openBrowser(paymentData.PaymentUrl)
+		err := openBrowser(fullUrl)
 		if err != nil {
 			fmt.Println("Greška pri otvaranju pretraživača:", err)
 		}

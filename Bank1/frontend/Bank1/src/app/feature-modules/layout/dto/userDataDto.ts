@@ -3,4 +3,5 @@ export interface userDataDto {
     securityCode: number;
     cardHolderName: string;
     cardExpirationDate: Date;
+    amount: number;
 }
