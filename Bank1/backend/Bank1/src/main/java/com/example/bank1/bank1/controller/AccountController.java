@@ -24,16 +24,17 @@ public class AccountController {
     @CrossOrigin(origins = "http://localhost:4202")
     @PostMapping("/validateData")
     public ResponseEntity<?> validateData(@org.jetbrains.annotations.NotNull @RequestBody UserIdentificationDto userIdentificationDto) {
-        Account account = accountService.getAccountByPAN(userIdentificationDto.getPAN());
-        User user = userRepository.findUserByAccount_Id(account.getId());
-        if (!accountService.validateData(userIdentificationDto, account)) {
-            return ResponseEntity.ok("Invalidate card data");
-        }
-        if (!accountService.validateName(user.getName(), userIdentificationDto.cardHolderName)) {
-            return ResponseEntity.ok("Invalidate name");
-        }
         //ovde ako su iste banke dalje treba pcc
         if (accountService.checkBanks(userIdentificationDto)) {
+            Account account = accountService.getAccountByPAN(userIdentificationDto.getPAN());
+            User user = userRepository.findUserByAccount_Id(account.getId());
+            if (!accountService.validateData(userIdentificationDto, account)) {
+                return ResponseEntity.ok("Invalidate card data");
+            }
+            if (!accountService.validateName(user.getName(), userIdentificationDto.cardHolderName)) {
+                return ResponseEntity.ok("Invalidate name");
+            }
+
             accountService.sameBanks(userIdentificationDto);
         } else {
             //vrv treba da se returna negde ne znam

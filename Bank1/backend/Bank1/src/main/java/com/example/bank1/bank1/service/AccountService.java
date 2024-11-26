@@ -116,7 +116,19 @@ public class AccountService {
         pccRequestDto.setCardHolderName(userIdentificationDto.cardHolderName);
         pccRequestDto.setCardExpirationDate(userIdentificationDto.cardExpirationDate);
         pccRequestDto.setAcquirerOrderId(UUID.randomUUID());
-        pccRequestDto.setAcqueirerTimestamp(new Date().getTime());
+        pccRequestDto.setAcquirerTimestamp(new Date().getTime());
+
+        String url = "http://localhost:8094/api/pcc/requests/checkAndRoute";
+        HttpHeaders headers = new HttpHeaders();
+        var requestEntity = new HttpEntity<>(pccRequestDto, headers);
+        var method = HttpMethod.POST;
+
+        try {
+            String response = restTemplate().exchange(url, method, requestEntity, String.class).getBody();
+        } catch (HttpClientErrorException e) {
+            System.out.println("Error calling endpoint: " + e.getMessage());
+        }
+
         return pccRequestDto;
     }
 
@@ -134,7 +146,6 @@ public class AccountService {
             } catch (HttpClientErrorException e) {
                 System.out.println("Error calling endpoint: " + e.getMessage());
             }
-
 
             return "Ima dovoljno sredstava";
         }

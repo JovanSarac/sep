@@ -43,7 +43,7 @@ public class RequestController {
 
         String url = requestService.isBank1(requestDto.PAN) ?
                 "http://localhost:8091/api/bank1/transactions/PCCRequest"
-                :"http://localhost:8092/api/bank2/transaction";
+                :"http://localhost:8092/api/bank2/transactions/PCCRequest";
 
         HttpHeaders headers = new HttpHeaders();
         var requestEntity = new HttpEntity<>(requestService.isBank1(requestDto.PAN) ?

@@ -19,5 +19,5 @@ public class PCCRequestDto {
     public Date cardExpirationDate;
     public Double amount;
     public UUID acquirerOrderId;
-    public Long acqueirerTimestamp;
+    public Long acquirerTimestamp;
 }
