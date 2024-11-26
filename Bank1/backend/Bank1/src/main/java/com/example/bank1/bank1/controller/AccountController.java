@@ -32,6 +32,8 @@ public class AccountController {
         if (!accountService.validateName(user.getName(), userIdentificationDto.cardHolderName)) {
             return ResponseEntity.ok("Invalidate name");
         }
+        //ovde ako su iste banke dalje treba pcc
+
         return ResponseEntity.ok("{\"message\": \"Uspesno\"}");
     }
 

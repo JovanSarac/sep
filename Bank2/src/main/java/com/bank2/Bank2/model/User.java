@@ -24,7 +24,7 @@ public class User {
             generator = "user_sequence"
     )
 
-    private UUID id;
+    private Long id;
     private String name;
     private String surname;
 
@@ -33,7 +33,7 @@ public class User {
     private Account account;
     private String email;
 
-    public User(UUID id, String name, String surname, Account account, String email) {
+    public User(Long id, String name, String surname, Account account, String email) {
         this.id = id;
         this.name = name;
         this.surname = surname;
@@ -45,7 +45,7 @@ public class User {
 
     }
 
-    public UUID getId() {
+    public Long getId() {
         return id;
     }
 
@@ -61,7 +61,7 @@ public class User {
         return email;
     }
 
-    public void setId(UUID id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

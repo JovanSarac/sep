@@ -13,14 +13,14 @@ import java.util.UUID;
 @Table(name="Accounts")
 public class Account {
     @Id
-    //@GeneratedValue(strategy = GenerationType.IDENTITY)
-    private UUID id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     private Double balance;
     private Long PAN;
     private Date cardExpirationDate;
     private Integer securityCode;
 
-    public Account(UUID id, Double balance, Long PAN, Date cardExpirationDate, Integer securityCode) {
+    public Account(Long id, Double balance, Long PAN, Date cardExpirationDate, Integer securityCode) {
         this.id = id;
         this.balance = balance;
         this.PAN = PAN;
@@ -32,7 +32,7 @@ public class Account {
 
     }
 
-    public UUID getId() {
+    public Long getId() {
         return id;
     }
 
@@ -52,7 +52,7 @@ public class Account {
         return securityCode;
     }
 
-    public void setId(UUID id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
