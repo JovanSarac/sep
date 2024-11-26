@@ -74,6 +74,12 @@ public class SubscriptionController {
         return subscriptionService.getActiveSubscriptionsByUserId(userId);
     }
 
+    @GetMapping("/user_subscription/{userId}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public List<SubscriptionDto> getSubscriptionsByUserId(@PathVariable Long userId) {
+        return subscriptionService.getSubscriptionsByUserId(userId);
+    }
+
     @PutMapping("/user/update_subscription")
     @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
     public ResponseEntity<Map<String, String>> updateSubscription(@RequestBody SubscriptionDto subscriptionDTO) {
