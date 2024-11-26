@@ -29,6 +29,12 @@ public class AccountService {
             return false;
         }
 
+        Integer digitNumOfPAN = String.valueOf(Math.abs(accountPan)).length();
+
+        if (digitNumOfPAN < 13 || digitNumOfPAN > 16) {
+            return false;
+        }
+
         if (userIdentificationDto.cardExpirationDate.getDate() != account.getCardExpirationDate().getDate()) {
             return false;
         }
@@ -82,9 +88,9 @@ public class AccountService {
         return sum;
     }
 
-    public Boolean checkBanks(TransactionDto transactionDto) {
+    public Boolean isTheBankSame(Long PAN) {
         List<Long> numbers = new ArrayList<>();
-        Long panTemp = transactionDto.PAN;
+        Long panTemp = PAN;
 
         while (panTemp > 0) {
             Long digit = panTemp % 10;
@@ -103,7 +109,6 @@ public class AccountService {
 
         return true;
     }
-
 
     public CardType checkCardType(Long PAN) {
         List<Long> numbers = new ArrayList<>();

@@ -10,4 +10,6 @@ import java.util.UUID;
 public interface AccountRepository extends JpaRepository<Account, UUID> {
 
     //Account getByPAN(Long PAN);
+    Account getAccountByAccountNumber(String accountNumber);
+    Account getAccountByPAN(Long PAN);
 }
