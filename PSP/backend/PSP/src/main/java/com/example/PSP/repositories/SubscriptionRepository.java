@@ -16,4 +16,7 @@ public interface SubscriptionRepository extends JpaRepository<Subscription, Long
 
     boolean existsByServiceAndUserAndIsActive(PSPService service, User user, Boolean isActive);
 
+    @Query("SELECT s FROM Subscription s WHERE s.user.id = :userId")
+    List<Subscription> findSubscriptionsByUserId(@Param("userId") Long userId);
+
 }

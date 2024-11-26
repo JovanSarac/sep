@@ -51,11 +51,11 @@ public class SessionService {
         //timestamp
         requestDto.timestamp = new Date().getTime();
         //successUrl vrv ce sve biti url fronta
-        requestDto.successUrl = "nesto";
+        requestDto.successUrl = "http://localhost:4200/transaction-status/success";
         //failedUrl
-        requestDto.failedUrl = "nesto";
+        requestDto.failedUrl = "http://localhost:4200/transaction-status/failed";
         //errorUrl
-        requestDto.errorUrl = "nesto";
+        requestDto.errorUrl = "http://localhost:4200/transaction-status/error";
         return requestDto;
     }
 }

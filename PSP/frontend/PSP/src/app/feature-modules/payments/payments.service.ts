@@ -29,9 +29,17 @@ export class PaymentsService {
     return this.http.get<SubscriptionDto[]>(environment.apiHost + 'user_active_subscription/' + userId);
   }
 
+  getSubscriptionsForUserAdmin(userId: number): Observable<SubscriptionDto[]> {
+    return this.http.get<SubscriptionDto[]>(environment.apiHost + 'user_subscription/' + userId);
+  }
+
   updateSubscription(subscriptionDTO: SubscriptionDto): Observable<any> {
     return this.http.put<any>(environment.rabbitMQ + 'publishUpdateSubscription', subscriptionDTO);
   }
+
+  /*updateSubscriptionByAdmin(subscriptionDTO: SubscriptionDto): Observable<any> {
+    return this.http.put<any>(environment.apiHost + 'user/update_subscription', subscriptionDTO);
+  }*/
 
   getAllUsersForAdmin():Observable<UserInfo[]>{
     return this.http.get<UserInfo[]>(environment.apiHost + 'admin/users');

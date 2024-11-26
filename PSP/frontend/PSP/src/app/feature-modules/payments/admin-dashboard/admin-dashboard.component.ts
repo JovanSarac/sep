@@ -30,7 +30,7 @@ export class AdminDashboardComponent implements OnInit{
 
   openSubscriptions(userInfo: UserInfo){
     let dialogRef = this.dialog.open(AdminSubscriptionsDialogComponent, {
-      width: '800px',
+      width: '1000px',
       height: '800px',
       data: userInfo,
       panelClass: 'custom-modalbox',

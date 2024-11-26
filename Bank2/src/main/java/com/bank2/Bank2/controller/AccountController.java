@@ -27,14 +27,14 @@ public class AccountController {
         Account account = accountService.getAccountByPAN(requestDto.PAN);
         User user = userRepository.findUserByAccount_Id(account.getId());
         if (!accountService.validateData(requestDto, account)) {
-            return ResponseEntity.ok("Invalidate card data");
+            return ResponseEntity.ok("pogresno");
         }
         if (!accountService.validateName(user.getName(), requestDto.cardHolderName)) {
-            return ResponseEntity.ok("Invalidate name");
+            return ResponseEntity.ok("pogresno");
         }
         //ovde ako su iste banke dalje treba pcc
 
-        return ResponseEntity.ok("{\"message\": \"Uspesno\"}");
+        return ResponseEntity.ok("uspesno");
     }
 
     @GetMapping("/validatePAN/{PAN}")

@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"net/url"
 	"os/exec"
 	"runtime"
 
@@ -78,8 +79,12 @@ func goToBank1(w http.ResponseWriter, r *http.Request) {
 
 	fmt.Println("Payment URL:", paymentData.PaymentUrl)
 
-	fullUrl := fmt.Sprintf("%s?amount=%.2f", paymentData.PaymentUrl, requestDto.Amount)
-	fmt.Println("%s?data=%s&amount=%.2f", paymentData.PaymentUrl, requestDto.Amount)
+	successUrl := url.QueryEscape(requestDto.SuccessUrl)
+	failedUrl := url.QueryEscape(requestDto.FailedUrl)
+	errorUrl := url.QueryEscape(requestDto.ErrorUrl)
+
+	fullUrl := fmt.Sprintf("%s?amount=%.2f&successUrl=%s&failedUrl=%s&errorUrl=%s", paymentData.PaymentUrl, requestDto.Amount, successUrl, failedUrl, errorUrl)
+	fmt.Println("%s?data=%s&amount=%.2f&successUrl=%s&failedUrl=%s&errorUrl=%s", paymentData.PaymentUrl, requestDto.Amount, successUrl, failedUrl, errorUrl)
 
 	go func() {
 		err := openBrowser(fullUrl)

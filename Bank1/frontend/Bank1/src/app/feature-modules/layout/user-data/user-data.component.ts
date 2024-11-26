@@ -22,12 +22,21 @@ export class UserDataComponent implements OnInit {
 
   receivedData: string | null = null;
   amount: number = 0;
+  successUrl: string = '';
+  failedUrl: string = '';
+  errorUrl: string = '';
 
   ngOnInit(): void {
     this.route.queryParamMap.subscribe(params => {
       const amount = params.get('amount');
+      const successUrl = params.get('successUrl');
+      const failedUrl = params.get('failedUrl');
+      const errorUrl = params.get('errorUrl');
 
       this.amount = amount ? Number(amount) : 0;
+      this.successUrl = successUrl || '';
+      this.failedUrl = failedUrl || '';
+      this.errorUrl = errorUrl || '';
 
       console.log('Amount:', amount);
     });
@@ -44,6 +53,15 @@ export class UserDataComponent implements OnInit {
       };
       this.layoutService.validateData(userData).subscribe({
         next: (result) => {
+          if (result === "uspesno") {
+            window.location.href = this.successUrl;
+          }
+          if (result === "pogresno") {
+            window.location.href = this.errorUrl;
+          }
+          if (result === "neuspesno") {
+            window.location.href = this.failedUrl;
+          }
           console.log('Form data:', this.cardForm.value);
           console.log(result);
         }
