@@ -12,16 +12,12 @@ public class RequestService {
     private RequestRepository requestRepository;
 
     public RequestDto create(RequestDto requestDto){
-        Request request = new Request(requestDto.merchantId,
-                requestDto.merchantPassword,
+        Request request = new Request(requestDto.PAN,
+                requestDto.securityCode,
+                requestDto.cardHolderName,
+                requestDto.cardExpirationDate,
                 requestDto.acquirerOrderId,
-                requestDto.acquirerTimestamp,
-                requestDto.amount,
-                requestDto.merchantOrderId,
-                requestDto.timestamp,
-                requestDto.successUrl,
-                requestDto.failedUrl,
-                requestDto.errorUrl);
+                requestDto.acquirerTimestamp);
 
         requestRepository.save(request);
         return requestDto;

@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Date;
 import java.util.UUID;
 
 @Data
@@ -12,14 +13,10 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 public class RequestDto {
-    public UUID merchantId;
-    public String merchantPassword;
+    public Long PAN;
+    public Integer securityCode;
+    public String cardHolderName;
+    public Date cardExpirationDate;
     public UUID acquirerOrderId;
     public Long acquirerTimestamp;
-    public Double amount;
-    public Long merchantOrderId;
-    public Long timestamp;
-    public String successUrl;
-    public String failedUrl;
-    public String errorUrl;
 }
