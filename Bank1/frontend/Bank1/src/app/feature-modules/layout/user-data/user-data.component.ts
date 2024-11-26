@@ -39,6 +39,9 @@ export class UserDataComponent implements OnInit {
       this.errorUrl = errorUrl || '';
 
       console.log('Amount:', amount);
+      console.log('successUrl:', successUrl);
+      console.log('failedUrl:', failedUrl);
+      console.log('errorUrl:', errorUrl);
     });
   }
 
@@ -53,7 +56,7 @@ export class UserDataComponent implements OnInit {
       };
       this.layoutService.validateData(userData).subscribe({
         next: (result) => {
-          if (result === "uspesno") {
+          if (result.valueOf() === "uspesno") {
             window.location.href = this.successUrl;
           }
           if (result === "pogresno") {
@@ -62,6 +65,7 @@ export class UserDataComponent implements OnInit {
           if (result === "neuspesno") {
             window.location.href = this.failedUrl;
           }
+          window.location.href = this.errorUrl
           console.log('Form data:', this.cardForm.value);
           console.log(result);
         }
