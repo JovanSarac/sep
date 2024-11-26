@@ -33,7 +33,12 @@ public class AccountController {
             return ResponseEntity.ok("Invalidate name");
         }
         //ovde ako su iste banke dalje treba pcc
-
+        if (accountService.checkBanks(userIdentificationDto)) {
+            accountService.sameBanks(userIdentificationDto);
+        } else {
+            //vrv treba da se returna negde ne znam
+            accountService.differentBanks(userIdentificationDto);
+        }
         return ResponseEntity.ok("{\"message\": \"Uspesno\"}");
     }
 

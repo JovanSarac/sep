@@ -1,5 +1,6 @@
 package com.example.bank1.bank1.service;
 
+import com.example.bank1.bank1.dto.PCCRequestDto;
 import com.example.bank1.bank1.dto.TransactionDto;
 import com.example.bank1.bank1.dto.UserIdentificationDto;
 import com.example.bank1.bank1.model.Account;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class AccountService {
@@ -86,6 +88,34 @@ public class AccountService {
         }
 
         return sum;
+    }
+
+    public Boolean checkBanks(UserIdentificationDto userIdentificationDto) {
+        if (isTheBankSame(userIdentificationDto.getPAN())) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public PCCRequestDto differentBanks(UserIdentificationDto userIdentificationDto) {
+        PCCRequestDto pccRequestDto = new PCCRequestDto();
+        pccRequestDto.setPAN(userIdentificationDto.PAN);
+        pccRequestDto.setAmount(userIdentificationDto.amount);
+        pccRequestDto.setSecurityCode(userIdentificationDto.securityCode);
+        pccRequestDto.setCardHolderName(userIdentificationDto.cardHolderName);
+        pccRequestDto.setCardExpirationDate(userIdentificationDto.cardExpirationDate);
+        pccRequestDto.setAcquirerOrderId(UUID.randomUUID());
+        pccRequestDto.setAcqueirerTimestamp(new Date().getTime());
+        return pccRequestDto;
+    }
+
+    public String sameBanks(UserIdentificationDto userIdentificationDto) {
+        Account account = accountRepository.getAccountByPAN(userIdentificationDto.getPAN());
+        if (account.getBalance() - userIdentificationDto.amount > 0) {
+            return "Ima dovoljno sredstava";
+        }
+        return "Nema dovoljno sredstava";
     }
 
     public Boolean isTheBankSame(Long PAN) {
