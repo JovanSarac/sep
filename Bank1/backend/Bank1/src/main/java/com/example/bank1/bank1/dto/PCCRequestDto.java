@@ -6,15 +6,18 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
+import java.util.UUID;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserIdentificationDto {
+public class PCCRequestDto {
     public Long PAN;
     public Integer securityCode;
     public String cardHolderName;
     public Date cardExpirationDate;
     public Double amount;
+    public UUID acquirerOrderId;
+    public Long acqueirerTimestamp;
 }

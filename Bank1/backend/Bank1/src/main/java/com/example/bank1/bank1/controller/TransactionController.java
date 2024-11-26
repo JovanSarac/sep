@@ -1,6 +1,11 @@
 package com.example.bank1.bank1.controller;
 
+import com.example.bank1.bank1.dto.PCCRequestDto;
+import com.example.bank1.bank1.dto.RequestDto;
 import com.example.bank1.bank1.service.TransactionService;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -11,5 +16,11 @@ public class TransactionController {
 
     public TransactionController(TransactionService transactionService) {
         this.transactionService = transactionService;
+    }
+
+    @PostMapping("/PCCRequest")
+    public ResponseEntity<?> PCCRequest(@RequestBody PCCRequestDto pccRequestDto) {
+        transactionService.finishTransaction(pccRequestDto);
+        return ResponseEntity.ok("Zavrsena transakcija");
     }
 }

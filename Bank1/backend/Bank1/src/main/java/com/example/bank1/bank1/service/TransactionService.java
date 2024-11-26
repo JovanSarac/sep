@@ -1,5 +1,6 @@
 package com.example.bank1.bank1.service;
 
+import com.example.bank1.bank1.dto.PCCRequestDto;
 import com.example.bank1.bank1.dto.TransactionDto;
 import com.example.bank1.bank1.model.Account;
 import com.example.bank1.bank1.repository.AccountRepository;
@@ -21,5 +22,13 @@ public class TransactionService {
             return false;
         }
         return true;
+    }
+
+    public void finishTransaction(PCCRequestDto pccRequestDto) {
+        Account account = accountRepository.getAccountByPAN(pccRequestDto.getPAN());
+        Double balance = account.getBalance();
+        balance = balance - pccRequestDto.amount;
+        account.setBalance(balance);
+        accountRepository.save(account);
     }
 }
