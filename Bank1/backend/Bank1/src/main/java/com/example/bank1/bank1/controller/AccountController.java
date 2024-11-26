@@ -29,18 +29,20 @@ public class AccountController {
             Account account = accountService.getAccountByPAN(userIdentificationDto.getPAN());
             User user = userRepository.findUserByAccount_Id(account.getId());
             if (!accountService.validateData(userIdentificationDto, account)) {
-                return ResponseEntity.ok("Invalidate card data");
+                return ResponseEntity.ok("pogresno");
             }
             if (!accountService.validateName(user.getName(), userIdentificationDto.cardHolderName)) {
-                return ResponseEntity.ok("Invalidate name");
+                return ResponseEntity.ok("pogresno");
             }
 
-            accountService.sameBanks(userIdentificationDto);
+            String result = accountService.sameBanks(userIdentificationDto);
+            return ResponseEntity.ok(result);
         } else {
             //vrv treba da se returna negde ne znam
             accountService.differentBanks(userIdentificationDto);
         }
-        return ResponseEntity.ok("{\"message\": \"Uspesno\"}");
+        //return ResponseEntity.ok("{\"message\": \"uspesno\"}");
+        return ResponseEntity.ok("uspesno");
     }
 
     @GetMapping("/validatePAN/{PAN}")

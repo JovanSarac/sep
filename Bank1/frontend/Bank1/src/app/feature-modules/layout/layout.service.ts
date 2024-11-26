@@ -12,6 +12,7 @@ export class LayoutService {
   constructor(private http: HttpClient) { }
 
   validateData(userDataDto: userDataDto): Observable<String> {
-    return this.http.post<String>(environment.apiHost + 'bank1/accounts/validateData', userDataDto)
+    return this.http.post<String>(environment.apiHost + 'bank1/accounts/validateData', userDataDto, {
+      responseType: 'text' as 'json',});
   }
 }

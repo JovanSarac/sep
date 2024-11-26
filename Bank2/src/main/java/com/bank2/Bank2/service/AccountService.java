@@ -148,23 +148,48 @@ public class AccountService {
     }
 
     public String reserveFunds(RequestDto requestDto) {
-        Optional<Account> optionalAccount = accountRepository.findByPAN(requestDto.PAN);
-        if(!optionalAccount.isPresent()) throw new ResourceAccessException("There is no account in bank2 with " + requestDto.PAN + " PAN");
+        try {
+            Optional<Account> optionalAccount = accountRepository.findByPAN(requestDto.PAN);
+            if(!optionalAccount.isPresent()) throw new ResourceAccessException("There is no account in bank2 with " + requestDto.PAN + " PAN");
 
-        Account account = optionalAccount.get();
+            Account account = optionalAccount.get();
 
-        List<Transaction> transactions = transactionRepository.findAllBySourceAccountNumber(account.getAccountNumber());
-        List<Transaction> receivedTransactions = transactions.stream()
-                .filter(transaction -> TransactionState.RECEIVED.equals(transaction.getTransactionState()))
-                .collect(Collectors.toList());
+            List<Transaction> transactions = transactionRepository.findAllBySourceAccountNumber(account.getAccountNumber());
+            List<Transaction> receivedTransactions = transactions.stream()
+                    .filter(transaction -> TransactionState.RECEIVED.equals(transaction.getTransactionState()))
+                    .collect(Collectors.toList());
 
-        Double lowerLimit = 0.0;
-        if (account.getCardType().equals(CardType.CREDIT)) {
-            lowerLimit = -2000.0;
-        }
+            Double lowerLimit = 0.0;
+            if (account.getCardType().equals(CardType.CREDIT)) {
+                lowerLimit = -2000.0;
+            }
 
-        if (transactions.isEmpty()) {
-            if (account.getBalance() - requestDto.amount > lowerLimit) {
+            if (transactions.isEmpty()) {
+                if (account.getBalance() - requestDto.amount > lowerLimit) {
+                    Transaction reserveTransaction = new Transaction();
+                    reserveTransaction.setTransactionNumber(UUID.randomUUID());
+                    reserveTransaction.setAmount(requestDto.amount);
+                    reserveTransaction.setTransactionType(TransactionType.OUT);
+                    reserveTransaction.setTransactionState(TransactionState.RECEIVED);
+                    reserveTransaction.setTransactionDate(new Date());
+                    reserveTransaction.setSourceAccountNumber(account.getAccountNumber());
+                    reserveTransaction.setDestinationAccountNumber("1234567890123456");
+                    reserveTransaction.setPayerName(requestDto.cardHolderName);
+                    reserveTransaction.setRecipientName("VivoNet");
+                    reserveTransaction.setIssuerOrderId(UUID.randomUUID());
+                    reserveTransaction.setAcquirerOrderId(requestDto.acquirerOrderId);
+                    transactionRepository.save(reserveTransaction);
+                    return "uspesno";
+                }
+                return "neuspesno";
+            }
+            Double allReservedMoney = 0.0;
+
+            for (Transaction transaction : receivedTransactions) {
+                allReservedMoney += transaction.getAmount();
+            }
+
+            if (account.getBalance() - requestDto.amount - allReservedMoney > lowerLimit) {
                 Transaction reserveTransaction = new Transaction();
                 reserveTransaction.setTransactionNumber(UUID.randomUUID());
                 reserveTransaction.setAmount(requestDto.amount);
@@ -178,34 +203,13 @@ public class AccountService {
                 reserveTransaction.setIssuerOrderId(UUID.randomUUID());
                 reserveTransaction.setAcquirerOrderId(requestDto.acquirerOrderId);
                 transactionRepository.save(reserveTransaction);
-                return "Ima dovoljno sredstava";
+
+                return "uspesno";
             }
-            return "Nema dovoljno sredstava";
+        } catch (Exception e) {
+            return "neuspesno";
         }
-        Double allReservedMoney = 0.0;
-
-        for (Transaction transaction : receivedTransactions) {
-            allReservedMoney += transaction.getAmount();
-        }
-
-        if (account.getBalance() - requestDto.amount - allReservedMoney > lowerLimit) {
-            Transaction reserveTransaction = new Transaction();
-            reserveTransaction.setTransactionNumber(UUID.randomUUID());
-            reserveTransaction.setAmount(requestDto.amount);
-            reserveTransaction.setTransactionType(TransactionType.OUT);
-            reserveTransaction.setTransactionState(TransactionState.RECEIVED);
-            reserveTransaction.setTransactionDate(new Date());
-            reserveTransaction.setSourceAccountNumber(account.getAccountNumber());
-            reserveTransaction.setDestinationAccountNumber("1234567890123456");
-            reserveTransaction.setPayerName(requestDto.cardHolderName);
-            reserveTransaction.setRecipientName("VivoNet");
-            reserveTransaction.setIssuerOrderId(UUID.randomUUID());
-            reserveTransaction.setAcquirerOrderId(requestDto.acquirerOrderId);
-            transactionRepository.save(reserveTransaction);
-            
-            return "Ima dovoljno sredstava";
-        }
-
-        return "Nema dovoljno sredstava";
+        
+        return "neuspesno";
     }
 }

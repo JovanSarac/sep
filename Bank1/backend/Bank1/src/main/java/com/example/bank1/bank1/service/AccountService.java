@@ -178,9 +178,9 @@ public class AccountService {
                             System.out.println("Error calling endpoint: " + e.getMessage());
                         }
 
-                        return "Ima dovoljno sredstava";
+                        return "uspesno";
                     }
-                    return "Nema dovoljno sredstava";
+                    return "neuspesno";
                 }
                 Double allReservedMoney = 0.0;
 
@@ -214,13 +214,12 @@ public class AccountService {
                     } catch (HttpClientErrorException e) {
                         System.out.println("Error calling endpoint: " + e.getMessage());
                     }
-                    return "Ima dovoljno sredstava";
+                    return "uspesno";
                 }
             }
-            return "Nema dovoljno sredstava";
+            return "neuspesno";
         } catch (Exception e) {
-            // Handle generic exceptions
-            return "Neuspesno";
+            return "neuspesno";
         }
 
 
