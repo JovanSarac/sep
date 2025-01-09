@@ -1,4 +1,5 @@
 package com.example.PSP.models;
+//user u smislu web shopa, ne obican user koji se prijavljuje na web shop
 
 import jakarta.persistence.*;
 import lombok.Getter;

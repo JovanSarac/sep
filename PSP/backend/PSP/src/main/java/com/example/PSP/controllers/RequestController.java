@@ -2,7 +2,9 @@ package com.example.PSP.controllers;
 
 import com.example.PSP.configs.ApiKeyResponseMessage;
 import com.example.PSP.configs.MQConfig;
+import com.example.PSP.dtos.PaymentDataDto;
 import com.example.PSP.dtos.RequestDto;
+import com.example.PSP.dtos.RequestPaymentDto;
 import com.example.PSP.models.ApiKey;
 import com.example.PSP.services.ApiKeyService;
 import com.example.PSP.services.SessionService;
@@ -38,7 +40,7 @@ public class RequestController {
 
     @GetMapping("/sendRequest/{sessionId}")
     @PreAuthorize("permitAll()")
-    public ResponseEntity<String> sendRequest(@PathVariable Long sessionId) {
+    public ResponseEntity<RequestPaymentDto> sendRequest(@PathVariable Long sessionId) {
         //formira se objekat request
         //ocekuje se rezultat da bude objekat koji ce imati payment_url i payment_id
         //ili mozda ne mora to da bude odg
@@ -67,8 +69,12 @@ public class RequestController {
         RequestDto requestDto = sessionService.createRequestBySession(sessionId);
         HttpEntity<RequestDto> entity = new HttpEntity<RequestDto>(requestDto, headers);
 
-        restTemplate.exchange("http://localhost:8080/bank1", HttpMethod.POST, entity, String.class).getBody();
-        return ResponseEntity.ok("{\"message\": \"Uspesno\"}");
+        ResponseEntity<RequestPaymentDto> response = restTemplate.exchange("http://localhost:8080/bank1ValidateRequest", HttpMethod.POST, entity, RequestPaymentDto.class);
+        RequestPaymentDto requestPaymentDto = response.getBody();
+
+        //restTemplate.exchange("http://localhost:8080/bank1", HttpMethod.POST, entity, String.class).getBody();
+        //return ResponseEntity.ok("{\"message\": \"Uspesno\"}");
+        return ResponseEntity.ok(requestPaymentDto);
     }
 
     @RabbitListener(queues = MQConfig.QUEUE_APIKEY_RESPONSE)

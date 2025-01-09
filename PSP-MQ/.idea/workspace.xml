@@ -5,14 +5,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0336444d-e3e4-4354-8bff-5b708487f1e8" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/../PSP/backend/PSP/src/main/java/com/example/PSP/dtos/PaymentDataDto.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../PSP/backend/PSP/src/main/java/com/example/PSP/dtos/RequestPaymentDto.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../PSP/frontend/PSP/src/app/feature-modules/layout/dto/paymentDataDto.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../API-GATEWAY/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/../API-GATEWAY/main.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Bank1/frontend/Bank1/src/app/feature-modules/layout/user-data/user-data.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../Bank1/frontend/Bank1/src/app/feature-modules/layout/user-data/user-data.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../CardPayment-microservice/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/../CardPayment-microservice/main.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../PSP/backend/PSP/src/main/java/com/example/PSP/controllers/SubscriptionController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../PSP/backend/PSP/src/main/java/com/example/PSP/controllers/SubscriptionController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../PSP/backend/PSP/src/main/java/com/example/PSP/repositories/SubscriptionRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/../PSP/backend/PSP/src/main/java/com/example/PSP/repositories/SubscriptionRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../PSP/backend/PSP/src/main/java/com/example/PSP/services/SubscriptionService.java" beforeDir="false" afterPath="$PROJECT_DIR$/../PSP/backend/PSP/src/main/java/com/example/PSP/services/SubscriptionService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../PSP/frontend/PSP/src/app/feature-modules/payments/admin-dashboard/admin-dashboard.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../PSP/frontend/PSP/src/app/feature-modules/payments/admin-dashboard/admin-dashboard.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../PSP/frontend/PSP/src/app/feature-modules/payments/admin-subscriptions-dialog/admin-subscriptions-dialog.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/../PSP/frontend/PSP/src/app/feature-modules/payments/admin-subscriptions-dialog/admin-subscriptions-dialog.component.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../PSP/frontend/PSP/src/app/feature-modules/payments/admin-subscriptions-dialog/admin-subscriptions-dialog.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../PSP/frontend/PSP/src/app/feature-modules/payments/admin-subscriptions-dialog/admin-subscriptions-dialog.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../PSP/frontend/PSP/src/app/feature-modules/payments/payments.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../PSP/frontend/PSP/src/app/feature-modules/payments/payments.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../PSP/backend/PSP/src/main/java/com/example/PSP/controllers/RequestController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../PSP/backend/PSP/src/main/java/com/example/PSP/controllers/RequestController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../PSP/backend/PSP/src/main/java/com/example/PSP/models/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/../PSP/backend/PSP/src/main/java/com/example/PSP/models/User.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../PSP/frontend/PSP/src/app/feature-modules/layout/available-services/available-services.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../PSP/frontend/PSP/src/app/feature-modules/layout/available-services/available-services.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../PSP/frontend/PSP/src/app/feature-modules/layout/layout.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../PSP/frontend/PSP/src/app/feature-modules/layout/layout.service.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -29,13 +32,6 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
-  <component name="MavenImportPreferences">
-    <option name="generalSettings">
-      <MavenGeneralSettings>
-        <option name="mavenHomeTypeForPersistence" value="WRAPPER" />
-      </MavenGeneralSettings>
-    </option>
-  </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 8
 }</component>
@@ -44,23 +40,28 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Application.PspMqApplication.executor": "Run",
-    "RequestMappingsPanelOrder0": "0",
-    "RequestMappingsPanelOrder1": "1",
-    "RequestMappingsPanelWidth0": "75",
-    "RequestMappingsPanelWidth1": "75",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "git-widget-placeholder": "<unknown>",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/Korisnik/Desktop/SEP/sep/PSP-MQ",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Application.PspMqApplication.executor&quot;: &quot;Run&quot;,
+    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
+    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
+    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
+    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;&lt;unknown&gt;&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/Korisnik/Desktop/SEP/sep/PSP-MQ&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;spring.configuration.checksum&quot;: &quot;747165b6cc869f2c1874e42985287838&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager">
     <configuration name="PspMqApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
       <module name="PSP-MQ" />
@@ -87,6 +88,10 @@
       <option name="presentableId" value="Default" />
       <updated>1732544184333</updated>
       <workItem from="1732570417625" duration="216000" />
+      <workItem from="1736347261514" duration="2661000" />
+      <workItem from="1736368587231" duration="1555000" />
+      <workItem from="1736424158339" duration="1296000" />
+      <workItem from="1736431677192" duration="1494000" />
     </task>
     <servers />
   </component>

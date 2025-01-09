@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { UserInfo } from './model/userinfo';
 import { environment } from 'src/env/environment';
 import { PaymentService } from '../payments/model/payment_service.model';
+import { paymentDataDto } from './dto/paymentDataDto';
 
 @Injectable({
   providedIn: 'root'
@@ -22,8 +23,8 @@ export class LayoutService {
     return this.http.get<PaymentService[]>(environment.apiHost + 'active_pspservices_bysession/' + id);
   }
 
-  sendRequestToBank1(sessionId: number): Observable<String>{
+  sendRequestToBank1(sessionId: number): Observable<paymentDataDto>{
     //return this.http.get<String>(environment.rabbitMQ + 'publishSendRequest/' + sessionId);
-    return this.http.get<String>(environment.apiHost+ 'psp/requests/sendRequest/' + sessionId);
+    return this.http.get<paymentDataDto>(environment.apiHost+ 'psp/requests/sendRequest/' + sessionId);
   }
 }

@@ -37,11 +37,6 @@ export class UserDataComponent implements OnInit {
       this.successUrl = successUrl || '';
       this.failedUrl = failedUrl || '';
       this.errorUrl = errorUrl || '';
-
-      console.log('Amount:', amount);
-      console.log('successUrl:', successUrl);
-      console.log('failedUrl:', failedUrl);
-      console.log('errorUrl:', errorUrl);
     });
   }
 
@@ -56,18 +51,17 @@ export class UserDataComponent implements OnInit {
       };
       this.layoutService.validateData(userData).subscribe({
         next: (result) => {
-          if (result.valueOf() === "uspesno") {
+          if (result === "uspesno") {
             window.location.href = this.successUrl;
-          }
-          if (result === "pogresno") {
+          } else if (result === "pogresno") {
+            window.location.href = this.errorUrl;
+          } else if (result === "neuspesno") {
+            window.location.href = this.failedUrl;
+          } else {
             window.location.href = this.errorUrl;
           }
-          if (result === "neuspesno") {
-            window.location.href = this.failedUrl;
-          }
-          window.location.href = this.errorUrl
           console.log('Form data:', this.cardForm.value);
-          console.log(result);
+          console.log('Result:', result);
         }
       })
     } else {
