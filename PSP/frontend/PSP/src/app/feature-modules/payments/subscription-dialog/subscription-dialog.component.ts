@@ -70,13 +70,15 @@ export class SubscriptionDialogComponent implements OnInit {
       next: (result) => {
         this.toastr.success('Subscription created successfully!', 'Success');
 
-        var apiKey : ApiKeyDto = {
-          merchantId: result.merchantId!,
-          merchantPassword: result.merchantPassword!,
-          paymentType: -1
-        }
+        if(subscriptionDto.serviceId == -1){
+          var apiKey : ApiKeyDto = {
+            merchantId: result.merchantId!,
+            merchantPassword: result.merchantPassword!,
+            paymentType: -1
+          }
 
-        this.service.saveApiKey(apiKey).subscribe({});
+          this.service.saveApiKey(apiKey).subscribe({});
+        }
 
         this.dialogRef.close(true);
       },
