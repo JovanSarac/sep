@@ -1,0 +1,8 @@
+<div *ngIf="qrData">
+    <h2>QR kod za plaćanje</h2>
+    <qrcode [qrdata]="qrData" [width]="256" [errorCorrectionLevel]="'M'"></qrcode>
+  </div>
+  
+  <div *ngIf="!qrData">
+    <p>Nema QR podataka za prikaz.</p>
+  </div>

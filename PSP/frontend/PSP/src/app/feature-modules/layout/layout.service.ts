@@ -5,6 +5,7 @@ import { UserInfo } from './model/userinfo';
 import { environment } from 'src/env/environment';
 import { PaymentService } from '../payments/model/payment_service.model';
 import { paymentDataDto } from './dto/paymentDataDto';
+import { paymentQRDataDto } from './dto/paymentQRDataDto';
 
 @Injectable({
   providedIn: 'root'
@@ -26,5 +27,10 @@ export class LayoutService {
   sendRequestToBank1(sessionId: number): Observable<paymentDataDto>{
     //return this.http.get<String>(environment.rabbitMQ + 'publishSendRequest/' + sessionId);
     return this.http.get<paymentDataDto>(environment.apiHost+ 'psp/requests/sendRequest/' + sessionId);
+  } //treba dodati da se salje i odabrani nacin placanja
+
+  sendRequestToBank1QRCode(sessionId: number): Observable<paymentQRDataDto>{
+    //return this.http.get<String>(environment.rabbitMQ + 'publishSendRequest/' + sessionId);
+    return this.http.get<paymentQRDataDto>(environment.apiHost+ 'psp/requests/sendRequestQRCode/' + sessionId);
   }
 }

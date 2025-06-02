@@ -28,8 +28,8 @@ func main() {
 
 	router := mux.NewRouter()
 	router.HandleFunc("/card", proxy("/card", "http://localhost:8082")).Methods("GET")
-	router.HandleFunc("/bank1", proxy("/bank1", "http://localhost:8082")).Methods("POST")
 	router.HandleFunc("/bank1ValidateRequest", proxy("/bank1ValidateRequest", "http://localhost:8082")).Methods("POST")
+	router.HandleFunc("/bank1QRCodeValidateRequest", proxy("/bank1QRCodeValidateRequest", "http://localhost:8083")).Methods("POST")
 
 	log.Fatal(http.ListenAndServe(":8080", router))
 }

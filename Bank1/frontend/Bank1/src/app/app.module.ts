@@ -6,6 +6,7 @@ import { AppComponent } from './app.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { LayoutModule } from './feature-modules/layout/layout.module';
 import { HttpClientModule } from '@angular/common/http';
+import { QRCodeModule } from 'angularx-qrcode';
 
 @NgModule({
   declarations: [
@@ -16,7 +17,7 @@ import { HttpClientModule } from '@angular/common/http';
     AppRoutingModule,
     ReactiveFormsModule,
     LayoutModule,
-    
+    QRCodeModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

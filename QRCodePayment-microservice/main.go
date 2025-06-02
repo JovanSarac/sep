@@ -6,24 +6,24 @@ import (
 	"fmt"
 	"io"
 	"net/http"
-	"os/exec"
-	"runtime"
 
 	"github.com/google/uuid"
 )
 
-type PaymentData struct {
+type PaymentDataQR struct {
 	PaymentId  int64  `json:"paymentId"`
 	PaymentUrl string `json:"paymentUrl"`
+	QRData     string `json:"qrData"`
 }
 
-type RequestPaymentDto struct {
+type RequestPaymentQRDto struct {
 	PaymentId  int64   `json:"paymentId"`
 	PaymentUrl string  `json:"paymentUrl"`
 	Amount     float64 `json:"amount"`
 	SuccessUrl string  `json:"successUrl"`
 	FailedUrl  string  `json:"failedUrl"`
 	ErrorUrl   string  `json:"errorUrl"`
+	QRData     string  `json:"qrData"`
 }
 
 type RequestDto struct {
@@ -38,13 +38,9 @@ type RequestDto struct {
 }
 
 func main() {
-	http.HandleFunc("/card", getCard)
-	fmt.Println("CardService is running on :8082")
-	http.HandleFunc("/bank1ValidateRequest", validateRequest)
-	http.ListenAndServe(":8082", nil)
-
-	fs := http.FileServer(http.Dir("../Bank1/frontend/Bank1/dist/bank1"))
-	http.Handle("/", fs)
+	fmt.Println("QRCodePayment microservice is running on :8083")
+	http.HandleFunc("/bank1QRCodeValidateRequest", validateRequest)
+	http.ListenAndServe(":8083", nil)
 }
 
 func validateRequest(w http.ResponseWriter, r *http.Request) {
@@ -65,7 +61,7 @@ func validateRequest(w http.ResponseWriter, r *http.Request) {
 
 	fmt.Println("Request DTO: ", requestDto)
 
-	resp, err := http.Post(fmt.Sprintf("http://localhost:8091/api/bank1/requests/validateRequest"), "application/json", bytes.NewBuffer(body))
+	resp, err := http.Post(fmt.Sprintf("http://localhost:8091/api/bank1/requests/validateRequestQRCode"), "application/json", bytes.NewBuffer(body))
 	fmt.Println("BILO STA")
 	if err != nil {
 		fmt.Println("Error making HTTP request:", err)
@@ -79,49 +75,25 @@ func validateRequest(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var paymentData PaymentData
+	var paymentDataQR PaymentDataQR
 
-	err = json.NewDecoder(resp.Body).Decode(&paymentData)
+	err = json.NewDecoder(resp.Body).Decode(&paymentDataQR)
 	if err != nil {
 		http.Error(w, "Failed to parse response", http.StatusInternalServerError)
 		return
 	}
 
-	var requestPaymentDto RequestPaymentDto
+	var requestPaymentQRDto RequestPaymentQRDto
 
-	requestPaymentDto.Amount = requestDto.Amount
-	requestPaymentDto.ErrorUrl = requestDto.ErrorUrl
-	requestPaymentDto.FailedUrl = requestDto.FailedUrl
-	requestPaymentDto.SuccessUrl = requestDto.SuccessUrl
-	requestPaymentDto.PaymentId = paymentData.PaymentId
-	requestPaymentDto.PaymentUrl = paymentData.PaymentUrl
+	requestPaymentQRDto.Amount = requestDto.Amount
+	requestPaymentQRDto.ErrorUrl = requestDto.ErrorUrl
+	requestPaymentQRDto.FailedUrl = requestDto.FailedUrl
+	requestPaymentQRDto.SuccessUrl = requestDto.SuccessUrl
+	requestPaymentQRDto.PaymentId = paymentDataQR.PaymentId
+	requestPaymentQRDto.PaymentUrl = paymentDataQR.PaymentUrl
+	requestPaymentQRDto.QRData = paymentDataQR.QRData
 
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
-	json.NewEncoder(w).Encode(requestPaymentDto)
-}
-
-func openBrowser(url string) error {
-	var cmd string
-	var args []string
-
-	switch runtime.GOOS {
-	case "windows":
-		cmd = "cmd"
-		args = []string{"/c", "start", url}
-	case "darwin":
-		cmd = "open"
-		args = []string{url}
-	case "linux":
-		cmd = "xdg-open"
-		args = []string{url}
-	default:
-		return fmt.Errorf("Nepodržan operativni sistem")
-	}
-
-	return exec.Command(cmd, args...).Start()
-}
-
-func getCard(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintln(w, "Card data")
+	json.NewEncoder(w).Encode(requestPaymentQRDto)
 }
