@@ -53,7 +53,7 @@ public class RequestController {
                     "R|123456789012345678\n" +
                     "N|Webshop d.o.o.\n" +
                     "I|RSD" + 1500 + "\n" +
-                    "R|Plaćanje narudžbine #" + UUID.randomUUID();
+                    "S|Plaćanje narudžbine #" + UUID.randomUUID();
             return ResponseEntity.ok(paymentDataQRDto);
         }
         return (ResponseEntity<PaymentDataQRDto>) ResponseEntity.badRequest();

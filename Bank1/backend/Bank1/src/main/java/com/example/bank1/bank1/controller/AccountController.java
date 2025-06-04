@@ -21,7 +21,8 @@ public class AccountController {
     @Autowired
     private UserRepository userRepository;
 
-    @CrossOrigin(origins = "http://localhost:4202")
+    //@CrossOrigin(origins = "http://localhost:4202")
+    @CrossOrigin(origins = "*")
     @PostMapping("/validateData")
     public ResponseEntity<?> validateData(@org.jetbrains.annotations.NotNull @RequestBody UserIdentificationDto userIdentificationDto) {
         //ovde ako su iste banke dalje treba pcc

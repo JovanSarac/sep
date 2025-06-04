@@ -5,24 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0336444d-e3e4-4354-8bff-5b708487f1e8" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/../Bank1/backend/Bank1/src/main/java/com/example/bank1/bank1/dto/PaymentDataQRDto.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../PSP/backend/PSP/src/main/java/com/example/PSP/dtos/RequestQRCodePaymentDto.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../API-GATEWAY/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/../API-GATEWAY/main.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Bank1/backend/Bank1/src/main/java/com/example/bank1/bank1/controller/AccountController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Bank1/backend/Bank1/src/main/java/com/example/bank1/bank1/controller/AccountController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Bank1/backend/Bank1/src/main/java/com/example/bank1/bank1/controller/RequestController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Bank1/backend/Bank1/src/main/java/com/example/bank1/bank1/controller/RequestController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Bank1/frontend/Bank1/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/../Bank1/frontend/Bank1/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Bank1/frontend/Bank1/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/../Bank1/frontend/Bank1/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Bank1/frontend/Bank1/src/app/app-routing.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../Bank1/frontend/Bank1/src/app/app-routing.module.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Bank1/frontend/Bank1/src/app/app.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../Bank1/frontend/Bank1/src/app/app.module.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Bank1/frontend/Bank1/src/app/feature-modules/layout/layout.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../Bank1/frontend/Bank1/src/app/feature-modules/layout/layout.module.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Bank1/frontend/Bank1/tsconfig.app.json" beforeDir="false" afterPath="$PROJECT_DIR$/../Bank1/frontend/Bank1/tsconfig.app.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../CardPayment-microservice/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/../CardPayment-microservice/main.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Bank1/backend/Bank1/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/../Bank1/backend/Bank1/src/main/resources/application.properties" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../PSP/backend/PSP/src/main/java/com/example/PSP/controllers/RequestController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../PSP/backend/PSP/src/main/java/com/example/PSP/controllers/RequestController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../PSP/frontend/PSP/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/../PSP/frontend/PSP/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../PSP/frontend/PSP/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/../PSP/frontend/PSP/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../PSP/frontend/PSP/src/app/feature-modules/layout/available-services/available-services.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../PSP/frontend/PSP/src/app/feature-modules/layout/available-services/available-services.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../PSP/frontend/PSP/src/app/feature-modules/layout/layout.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../PSP/frontend/PSP/src/app/feature-modules/layout/layout.service.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -102,7 +88,10 @@
       <workItem from="1737573251217" duration="2391000" />
       <workItem from="1737651903618" duration="1543000" />
       <workItem from="1748811703318" duration="1220000" />
-      <workItem from="1748865318990" duration="3071000" />
+      <workItem from="1748865318990" duration="4081000" />
+      <workItem from="1748895978238" duration="59000" />
+      <workItem from="1748925062219" duration="860000" />
+      <workItem from="1748932633590" duration="1428000" />
     </task>
     <servers />
   </component>
