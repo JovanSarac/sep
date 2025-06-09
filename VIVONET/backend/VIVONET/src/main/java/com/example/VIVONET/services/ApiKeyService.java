@@ -29,7 +29,7 @@ public class ApiKeyService {
     public ApiKey findByPaymentTypeId(Long id){
         Optional<ApiKey> apiKey = apiKeyRepository.findByPaymentType(id);
 
-        if(!apiKey.isPresent()) throw new ResourceNotFoundException("There is no api-key for the webShop for paymetn type " + id);
+        if(!apiKey.isPresent()) throw new ResourceNotFoundException("There is no api-key for the webShop for payment type " + id);
 
         return apiKey.get();
     }

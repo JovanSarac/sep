@@ -17,16 +17,24 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.mobilebank.dto.QRPaymentDto;
 import com.example.mobilebank.dto.UserIdentificationDto;
+import com.example.mobilebank.qrcode.QRCodeValidator;
+import com.example.mobilebank.retrofit.QRCodeApi;
+import com.example.mobilebank.retrofit.RetrofitService;
 import com.example.mobilebank.services.ApiService;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
+import java.util.Locale;
 
 import retrofit2.Retrofit;
 import retrofit2.Call;
@@ -39,6 +47,9 @@ public class MainActivity extends AppCompatActivity {
     Button scan_btn, payBtn;
 
     TextView textView;
+    String sellerName, sellerAccountNumber, buyerAccountNumber, purposeOfPayment;
+    Double paymentAmount;
+    Integer paymentCode;
 
     @SuppressLint("SimpleDateFormat")
     @Override
@@ -61,47 +72,44 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        RetrofitService retrofitService = new RetrofitService();
+        QRCodeApi qrCodeApi = retrofitService.getRetrofit().create(QRCodeApi.class);
+
         payBtn.setOnClickListener(v -> {
+            QRPaymentDto qrPaymentDto = new QRPaymentDto();
+            qrPaymentDto.sellerAccountNumber = sellerAccountNumber;
+            qrPaymentDto.name = sellerName;
+            qrPaymentDto.amount = paymentAmount;
+            qrPaymentDto.paymentCode = paymentCode;
+            qrPaymentDto.purposeOfPayment =
+            qrPaymentDto.buyerAccountNumber = "1231237890123456";
+            qrCodeApi.validateQRData(qrPaymentDto)
+                    .enqueue(new Callback<String>() {
+                        @Override
+                        public void onResponse(Call<String> call, Response<String> response) {
+                            if (response.isSuccessful()) {
+                                Log.d("DEBUG_DTO", new Gson().toJson(qrPaymentDto));
+                                Toast.makeText(MainActivity.this, "Odgovor: " + response.body(), Toast.LENGTH_LONG).show();
+                            } else {
+                                Log.d("DEBUG_DTO", new Gson().toJson(qrPaymentDto));
+                                Log.e("RETROFIT_ERROR", "Error: " + response.code());
+                                Toast.makeText(MainActivity.this, "Greška: " + response.code(), Toast.LENGTH_LONG).show();
+                                String errorBody = null;
+                                try {
+                                    errorBody = response.errorBody() != null ? response.errorBody().string() : "Nema detalja";
+                                } catch (IOException e) {
+                                    throw new RuntimeException(e);
+                                }
+                                Log.e("RETROFIT_ERROR", "Greška: " + response.code() + ", detalji: " + errorBody);
+                            }
+                        }
 
-            int cvc = 123;
-            Date expirationDate;
-            try {
-                expirationDate = new SimpleDateFormat("yyyy-MM-dd").parse("2025-09-25");
-            } catch (ParseException e) {
-                Toast.makeText(this, "Neispravan datum!", Toast.LENGTH_SHORT).show();
-                return;
-            }
-
-            UserIdentificationDto dto = new UserIdentificationDto();
-            dto.setPAN(4111111111111111L);
-            dto.setSecurityCode(cvc);
-            dto.setCardHolderName("Leopoldina Djanic");
-            dto.setCardExpirationDate(expirationDate);
-            dto.setAmount(15000.0);
-            Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
-
-            Retrofit retrofit = new Retrofit.Builder()
-                    .baseUrl("http://192.168.0.156:8091/") // emulator -> localhost
-                    .addConverterFactory(GsonConverterFactory.create(gson))
-                    .build();
-
-            ApiService apiService = retrofit.create(ApiService.class);
-            apiService.validateData(dto).enqueue(new Callback<String>() {
-                @Override
-                public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
-                    if (response.isSuccessful()) {
-                        Toast.makeText(MainActivity.this, "Odgovor: " + response.body(), Toast.LENGTH_LONG).show();
-                    } else {
-                        Toast.makeText(MainActivity.this, "Greška: " + response.code(), Toast.LENGTH_LONG).show();
-                    }
-                }
-
-                @Override
-                public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
-                    Log.e("RETROFIT_ERROR", "Error: " + t.getMessage(), t);
-                    Toast.makeText(MainActivity.this, "Greška: " + t.getMessage(), Toast.LENGTH_LONG).show();
-                }
-            });
+                        @Override
+                        public void onFailure(Call<String> call, Throwable t) {
+                            Log.e("RETROFIT_ERROR", "Error: " + t.getMessage(), t);
+                            Toast.makeText(MainActivity.this, "Greška: " + t.getMessage(), Toast.LENGTH_LONG).show();
+                        }
+                    });
         });
     }
 
@@ -110,22 +118,31 @@ public class MainActivity extends AppCompatActivity {
         IntentResult intentResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
         if (intentResult != null) {
             String contents = intentResult.getContents();
-            if (contents != null){
-                // Parsiranje QR sadržaja
-                String[] lines = contents.split("\n");
-                String account = "", name = "", currency = "", amount = "";
+            //ovde treba dodati api poziv ka backendu da proveri da li je dobar format qr koda ili da se u mobilnoj to samo proveri
+            String isValid = QRCodeValidator.isQRCodeValid(contents);
+            if (!isValid.equals("Ispravan QR kod")) {
+                textView.setText(isValid);
+            } else {
+                String[] lines = contents.split("\\|");
+                String account = "", name = "", currency = "", amount = "", sf = "";
 
                 for (String line : lines) {
-                    if (line.startsWith("R|")) {
+                    if (line.startsWith("R:")) {
                         account = line.substring(2);
-                    } else if (line.startsWith("N|")) {
+                        sellerAccountNumber = account;
+                    } else if (line.startsWith("N:")) {
                         name = line.substring(2);
-                    } else if (line.startsWith("I|")) {
+                        sellerName = name;
+                    } else if (line.startsWith("I:")) {
                         currency = line.substring(2, 5); // "RSD"
                         amount = line.substring(5);      // "1500"
+                        paymentAmount = Double.parseDouble(amount.replace(',', '.'));
+                    } else if (line.startsWith("SF:")) {
+                        paymentCode = Integer.parseInt(line.substring(3));
+                    } else if (line.startsWith("S:")) {
+                        purposeOfPayment = line.substring(2);
                     }
                 }
-
                 // Prikaz u TextView
                 String displayText = "Naziv primaoca: " + name + "\n"
                         + "Broj računa: " + account + "\n"

@@ -2,6 +2,7 @@ package com.example.bank1.bank1.service;
 
 import com.example.bank1.bank1.dto.AnswerPCCDto;
 import com.example.bank1.bank1.dto.PCCRequestDto;
+import com.example.bank1.bank1.dto.QRPaymentDto;
 import com.example.bank1.bank1.dto.UserIdentificationDto;
 import com.example.bank1.bank1.model.*;
 import com.example.bank1.bank1.repository.AccountRepository;
@@ -148,7 +149,101 @@ public class AccountService {
         return pccRequestDto;
     }
 
+    public String sameBanksQRCode (QRPaymentDto qrPaymentDto, User user) {
+        try {
+            Account account = accountRepository.findByAccountNumber(qrPaymentDto.buyerAccountNumber).get();
+            if (account.getBalance() - qrPaymentDto.amount > 0) {
+                List<Transaction> transactions = transactionRepository.findAllBySourceAccountNumber(account.getAccountNumber());
+                List<Transaction> receivedTransactions = transactions.stream()
+                        .filter(transaction -> TransactionState.RECEIVED.equals(transaction.getTransactionState()))
+                        .collect(Collectors.toList());
 
+                Double lowerLimit = 0.0;
+
+                if (transactions.isEmpty()) {
+                    Transaction reserveTransaction = new Transaction();
+                    reserveTransaction.setTransactionNumber(UUID.randomUUID());
+                    reserveTransaction.setAmount(qrPaymentDto.amount);
+                    reserveTransaction.setTransactionType(TransactionType.OUT);
+                    reserveTransaction.setTransactionState(TransactionState.RECEIVED);
+                    reserveTransaction.setTransactionDate(new Date());
+                    reserveTransaction.setSourceAccountNumber(account.getAccountNumber());
+                    //treba promeniti account number da pocinje sa 123
+                    reserveTransaction.setDestinationAccountNumber("1234567890123456");
+                    reserveTransaction.setPayerName(user.getName());
+                    reserveTransaction.setRecipientName("VivoNet");
+                    UUID issuerOrderId = UUID.randomUUID();
+                    UUID acquirerOrderId = UUID.randomUUID();
+                    reserveTransaction.setIssuerOrderId(issuerOrderId);
+                    reserveTransaction.setAcquirerOrderId(acquirerOrderId);
+                    transactionRepository.save(reserveTransaction);
+
+                    //poziv pcc-a
+                    String url = "http://localhost:8094/api/pcc/requests/checkAndRouteBank1";
+                    HttpHeaders headers = new HttpHeaders();
+                    var requestEntity = new HttpEntity<>(new AnswerPCCDto(
+                            "uspesno",
+                            acquirerOrderId,
+                            new Date().getTime(),
+                            issuerOrderId,
+                            new Date().getTime()), headers);
+                    var method = HttpMethod.POST;
+
+                    try {
+                        String response = restTemplate().exchange(url, method, requestEntity, String.class).getBody();
+                    } catch (HttpClientErrorException e) {
+                        System.out.println("Error calling endpoint: " + e.getMessage());
+                    }
+
+                    return "uspesno";
+                }
+
+                //treba deo kada ima reserved transakcija koje nisu zavrsene
+                Double allReservedMoney = 0.0;
+
+                for (Transaction transaction : receivedTransactions) {
+                    allReservedMoney += transaction.getAmount();
+                }
+
+                Transaction reserveTransaction = new Transaction();
+                reserveTransaction.setTransactionNumber(UUID.randomUUID());
+                reserveTransaction.setAmount(qrPaymentDto.amount);
+                reserveTransaction.setTransactionType(TransactionType.OUT);
+                reserveTransaction.setTransactionState(TransactionState.RECEIVED);
+                reserveTransaction.setTransactionDate(new Date());
+                reserveTransaction.setSourceAccountNumber(account.getAccountNumber());
+                reserveTransaction.setDestinationAccountNumber("1234567890123456");
+                reserveTransaction.setPayerName(user.getName());
+                reserveTransaction.setRecipientName("VivoNet");
+                UUID issuerOrderId = UUID.randomUUID();
+                UUID acquirerOrderId = UUID.randomUUID();
+                reserveTransaction.setIssuerOrderId(issuerOrderId);
+                reserveTransaction.setAcquirerOrderId(acquirerOrderId);
+                transactionRepository.save(reserveTransaction);
+
+                //poziv pcc-a
+                String url = "http://localhost:8094/api/pcc/requests/checkAndRouteBank1";
+                HttpHeaders headers = new HttpHeaders();
+                var requestEntity = new HttpEntity<>(new AnswerPCCDto(
+                        "uspesno",
+                        acquirerOrderId,
+                        new Date().getTime(),
+                        issuerOrderId,
+                        new Date().getTime()), headers);
+                var method = HttpMethod.POST;
+
+                try {
+                    String response = restTemplate().exchange(url, method, requestEntity, String.class).getBody();
+                } catch (HttpClientErrorException e) {
+                    System.out.println("Error calling endpoint: " + e.getMessage());
+                }
+                return "uspesno";
+            }
+            return "neuspesno";
+        } catch (Exception e) {
+            return "neuspesno";
+        }
+    }
 
     public String sameBanks(UserIdentificationDto userIdentificationDto) {
         try {
@@ -276,6 +371,16 @@ public class AccountService {
         return true;
     }
 
+    //racun prve banke pocinje sa 123
+    //racun druge banke pocinje sa 223
+    public Boolean checkBanksByAccount(QRPaymentDto qrPaymentDto) {
+        if (qrPaymentDto.buyerAccountNumber.substring(0,3).equals("123")) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     public CardType checkCardType(Long PAN) {
         List<Long> numbers = new ArrayList<>();
         Long panTemp = PAN;
@@ -301,5 +406,9 @@ public class AccountService {
 
     public Account getAccountByPAN(Long PAN) {
         return accountRepository.findByPAN(PAN).get();
+    }
+
+    public Account getAccountByAccountNumber(String accountNumber) {
+        return accountRepository.findByAccountNumber(accountNumber).get();
     }
 }

@@ -35,6 +35,7 @@ public class RequestController {
         return (ResponseEntity<PaymentDataDto>) ResponseEntity.badRequest();
     }
 
+    //promeniti naziv ove metode dole
     @PostMapping("/validateRequestQRCode")
     public ResponseEntity<PaymentDataQRDto> validateRequestQRCode(@RequestBody RequestDto requestDto) {
         //treba da se vrati payment_url i payment_id, ne url ce mozda da bude na koju se banku odnosi nmp jos
@@ -47,13 +48,14 @@ public class RequestController {
             paymentDataQRDto.paymentUrl = "http://localhost:4202/qrCode";
             //za sada su zakucane vrednosti za racun primaoca
             //treba dodati da se vuku podaci iz baze
-            paymentDataQRDto.qrData = "K|PR\n" +
-                    "V|01\n" +
-                    "C|1\n" +
-                    "R|123456789012345678\n" +
-                    "N|Webshop d.o.o.\n" +
-                    "I|RSD" + 1500 + "\n" +
-                    "S|Plaćanje narudžbine #" + UUID.randomUUID();
+            paymentDataQRDto.qrData = "K:PR|" +
+                    "V:01|" +
+                    "C:1|" +
+                    "R:123456789012345678|" +
+                    "N:Webshop d.o.o.|" +
+                    "I:RSD1500,00|" +
+                    "SF:289|" +
+                    "S:Plaćanje narudžbine #" + UUID.randomUUID();
             return ResponseEntity.ok(paymentDataQRDto);
         }
         return (ResponseEntity<PaymentDataQRDto>) ResponseEntity.badRequest();

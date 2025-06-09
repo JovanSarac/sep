@@ -45,7 +45,7 @@ public class RequestController {
     public ResponseEntity<RequestQRCodePaymentDto> sendRequestQRCode(@PathVariable Long sessionId) {
         String url = "http://localhost:9000/publishApiKeyRequest";
         HttpHeaders headersMQ = new HttpHeaders();
-        var requestEntity = new HttpEntity<>(-1, headersMQ);
+        var requestEntity = new HttpEntity<>(-2, headersMQ);
         var method = HttpMethod.POST;
         try {
             String response = restTemplate.exchange(url, method, requestEntity, String.class).getBody();
@@ -132,6 +132,7 @@ public class RequestController {
 
     @RabbitListener(queues = MQConfig.QUEUE_APIKEY_RESPONSE)
     public void apiKeyListener(ApiKeyResponseMessage message){
+
         this.responseMessage = message;
     }
 }

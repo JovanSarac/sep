@@ -1,5 +1,6 @@
 package com.example.bank1.bank1.controller;
 
+import com.example.bank1.bank1.dto.QRPaymentDto;
 import com.example.bank1.bank1.dto.UserIdentificationDto;
 import com.example.bank1.bank1.model.Account;
 import com.example.bank1.bank1.model.CardType;
@@ -22,9 +23,9 @@ public class AccountController {
     private UserRepository userRepository;
 
     //@CrossOrigin(origins = "http://localhost:4202")
-    @CrossOrigin(origins = "*")
+    //@CrossOrigin(origins = "*")
     @PostMapping("/validateData")
-    public ResponseEntity<?> validateData(@org.jetbrains.annotations.NotNull @RequestBody UserIdentificationDto userIdentificationDto) {
+    public ResponseEntity<String> validateData(@org.jetbrains.annotations.NotNull @RequestBody UserIdentificationDto userIdentificationDto) {
         //ovde ako su iste banke dalje treba pcc
         if (accountService.checkBanks(userIdentificationDto)) {
             Account account = accountService.getAccountByPAN(userIdentificationDto.getPAN());
@@ -43,6 +44,20 @@ public class AccountController {
             accountService.differentBanks(userIdentificationDto);
         }
         //return ResponseEntity.ok("{\"message\": \"uspesno\"}");
+        return ResponseEntity.ok("uspesno");
+    }
+
+    @PostMapping("/validateQRData")
+    public ResponseEntity<String> validateQRData(@RequestBody QRPaymentDto qrPaymentDto) {
+        Boolean isSameBank = accountService.checkBanksByAccount(qrPaymentDto);
+        if (isSameBank) {
+            Account account = accountService.getAccountByAccountNumber(qrPaymentDto.buyerAccountNumber);
+            User user = userRepository.findUserByAccount_Id(account.getId());
+            String result = accountService.sameBanksQRCode(qrPaymentDto, user);
+            //mozemo mozda da ubacimmo i proveru pana validatepan
+            return ResponseEntity.ok(result);
+        }
+        //ovde treba else kada su razlicite banke
         return ResponseEntity.ok("uspesno");
     }
 
