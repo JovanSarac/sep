@@ -26,7 +26,7 @@ public class RetrofitService {
                 .writeTimeout(300, TimeUnit.SECONDS)   // vreme za slanje podataka
                 .build();
         retrofit = new Retrofit.Builder()
-                .baseUrl("http://192.168.0.16:8091")
+                .baseUrl("http://192.168.0.159:8091")
                 .client(okHttpClient)
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .build();

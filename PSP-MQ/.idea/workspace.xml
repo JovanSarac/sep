@@ -22,6 +22,7 @@
       <change beforePath="$PROJECT_DIR$/../Bank1/backend/Bank1/src/main/java/com/example/bank1/bank1/dto/PCCRequestDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Bank1/backend/Bank1/src/main/java/com/example/bank1/bank1/dto/PCCRequestDto.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Bank1/backend/Bank1/src/main/java/com/example/bank1/bank1/dto/PaymentDataDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Bank1/backend/Bank1/src/main/java/com/example/bank1/bank1/dto/PaymentDataDto.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Bank1/backend/Bank1/src/main/java/com/example/bank1/bank1/dto/PaymentDataQRDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Bank1/backend/Bank1/src/main/java/com/example/bank1/bank1/dto/PaymentDataQRDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Bank1/backend/Bank1/src/main/java/com/example/bank1/bank1/dto/QRPaymentDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Bank1/backend/Bank1/src/main/java/com/example/bank1/bank1/dto/QRPaymentDto.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Bank1/backend/Bank1/src/main/java/com/example/bank1/bank1/dto/RequestDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Bank1/backend/Bank1/src/main/java/com/example/bank1/bank1/dto/RequestDto.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Bank1/backend/Bank1/src/main/java/com/example/bank1/bank1/dto/TransactionDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Bank1/backend/Bank1/src/main/java/com/example/bank1/bank1/dto/TransactionDto.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Bank1/backend/Bank1/src/main/java/com/example/bank1/bank1/dto/UserIdentificationDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Bank1/backend/Bank1/src/main/java/com/example/bank1/bank1/dto/UserIdentificationDto.java" afterDir="false" />
@@ -110,7 +111,11 @@
       <change beforePath="$PROJECT_DIR$/../MobileBank/app/src/androidTest/java/com/example/mobilebank/ExampleInstrumentedTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/../MobileBank/app/src/androidTest/java/com/example/mobilebank/ExampleInstrumentedTest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../MobileBank/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../MobileBank/app/src/main/AndroidManifest.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../MobileBank/app/src/main/java/com/example/mobilebank/MainActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/../MobileBank/app/src/main/java/com/example/mobilebank/MainActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../MobileBank/app/src/main/java/com/example/mobilebank/dto/QRPaymentDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/../MobileBank/app/src/main/java/com/example/mobilebank/dto/QRPaymentDto.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../MobileBank/app/src/main/java/com/example/mobilebank/dto/UserIdentificationDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/../MobileBank/app/src/main/java/com/example/mobilebank/dto/UserIdentificationDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../MobileBank/app/src/main/java/com/example/mobilebank/qrcode/QRCodeValidator.java" beforeDir="false" afterPath="$PROJECT_DIR$/../MobileBank/app/src/main/java/com/example/mobilebank/qrcode/QRCodeValidator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../MobileBank/app/src/main/java/com/example/mobilebank/retrofit/QRCodeApi.java" beforeDir="false" afterPath="$PROJECT_DIR$/../MobileBank/app/src/main/java/com/example/mobilebank/retrofit/QRCodeApi.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../MobileBank/app/src/main/java/com/example/mobilebank/retrofit/RetrofitService.java" beforeDir="false" afterPath="$PROJECT_DIR$/../MobileBank/app/src/main/java/com/example/mobilebank/retrofit/RetrofitService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../MobileBank/app/src/main/java/com/example/mobilebank/services/ApiService.java" beforeDir="false" afterPath="$PROJECT_DIR$/../MobileBank/app/src/main/java/com/example/mobilebank/services/ApiService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../MobileBank/app/src/main/res/drawable/ic_launcher_background.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../MobileBank/app/src/main/res/drawable/ic_launcher_background.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../MobileBank/app/src/main/res/drawable/ic_launcher_foreground.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../MobileBank/app/src/main/res/drawable/ic_launcher_foreground.xml" afterDir="false" />
@@ -474,28 +479,28 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Application.PspMqApplication.executor": "Debug",
-    "RequestMappingsPanelOrder0": "0",
-    "RequestMappingsPanelOrder1": "1",
-    "RequestMappingsPanelWidth0": "75",
-    "RequestMappingsPanelWidth1": "75",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "git-widget-placeholder": "feat/QRCodePayment",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/Korisnik/Desktop/SEP/sep/PSP-MQ",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "spring.configuration.checksum": "747165b6cc869f2c1874e42985287838",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Application.PspMqApplication.executor&quot;: &quot;Debug&quot;,
+    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
+    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
+    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
+    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;feat/QRCodePayment&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/Korisnik/Desktop/SEP/sep/PSP-MQ&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;spring.configuration.checksum&quot;: &quot;747165b6cc869f2c1874e42985287838&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager">
     <configuration name="PspMqApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
       <module name="PSP-MQ" />

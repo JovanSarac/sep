@@ -93,6 +93,8 @@ func validateRequest(w http.ResponseWriter, r *http.Request) {
 	requestPaymentQRDto.PaymentUrl = paymentDataQR.PaymentUrl
 	requestPaymentQRDto.QRData = paymentDataQR.QRData
 
+	fmt.Print(requestPaymentQRDto)
+
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(requestPaymentQRDto)

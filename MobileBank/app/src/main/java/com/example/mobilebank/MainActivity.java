@@ -17,6 +17,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.mobilebank.activities.PaymentResultActivity;
 import com.example.mobilebank.dto.QRPaymentDto;
 import com.example.mobilebank.dto.UserIdentificationDto;
 import com.example.mobilebank.qrcode.QRCodeValidator;
@@ -87,8 +88,13 @@ public class MainActivity extends AppCompatActivity {
                     .enqueue(new Callback<String>() {
                         @Override
                         public void onResponse(Call<String> call, Response<String> response) {
+                            Intent resultIntent = new Intent(MainActivity.this, PaymentResultActivity.class);
                             if (response.isSuccessful()) {
+
+                                resultIntent.putExtra("success", true);
+                                resultIntent.putExtra("message", response.body());
                                 Log.d("DEBUG_DTO", new Gson().toJson(qrPaymentDto));
+
                                 Toast.makeText(MainActivity.this, "Odgovor: " + response.body(), Toast.LENGTH_LONG).show();
                             } else {
                                 Log.d("DEBUG_DTO", new Gson().toJson(qrPaymentDto));
@@ -101,13 +107,23 @@ public class MainActivity extends AppCompatActivity {
                                     throw new RuntimeException(e);
                                 }
                                 Log.e("RETROFIT_ERROR", "Greška: " + response.code() + ", detalji: " + errorBody);
+
+                                resultIntent.putExtra("success", false);
+                                resultIntent.putExtra("message", errorBody);
                             }
+
+                            startActivity(resultIntent);
                         }
 
                         @Override
                         public void onFailure(Call<String> call, Throwable t) {
                             Log.e("RETROFIT_ERROR", "Error: " + t.getMessage(), t);
                             Toast.makeText(MainActivity.this, "Greška: " + t.getMessage(), Toast.LENGTH_LONG).show();
+                            Intent resultIntent = new Intent(MainActivity.this, PaymentResultActivity.class);
+                            resultIntent.putExtra("success", false);
+                            resultIntent.putExtra("message", "Došlo je do greške: " + t.getMessage());
+
+                            startActivity(resultIntent);
                         }
                     });
         });
