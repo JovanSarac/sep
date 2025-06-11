@@ -1,9 +1,6 @@
 package com.example.bank1.bank1.service;
 
-import com.example.bank1.bank1.dto.AnswerPCCDto;
-import com.example.bank1.bank1.dto.PCCRequestDto;
-import com.example.bank1.bank1.dto.QRPaymentDto;
-import com.example.bank1.bank1.dto.UserIdentificationDto;
+import com.example.bank1.bank1.dto.*;
 import com.example.bank1.bank1.model.*;
 import com.example.bank1.bank1.repository.AccountRepository;
 import com.example.bank1.bank1.repository.TransactionRepository;
@@ -107,6 +104,43 @@ public class AccountService {
         } else {
             return false;
         }
+    }
+
+    public PCCQRCodeRequestDto differentBanksQRCode(QRPaymentDto qrPaymentDto) {
+        PCCQRCodeRequestDto pccqrCodeRequestDto = new PCCQRCodeRequestDto();
+        pccqrCodeRequestDto.buyerAccountNumber = qrPaymentDto.buyerAccountNumber;
+        pccqrCodeRequestDto.amount = qrPaymentDto.amount;
+        UUID acquirerOrderId = UUID.randomUUID();
+        pccqrCodeRequestDto.acquirerOrderId = acquirerOrderId;
+        pccqrCodeRequestDto.acquirerTimestamp = new Date().getTime();
+
+        Transaction reserveTransaction = new Transaction();
+        reserveTransaction.setTransactionNumber(UUID.randomUUID());
+        reserveTransaction.setAmount(qrPaymentDto.amount);
+        reserveTransaction.setTransactionType(TransactionType.OUT);
+        reserveTransaction.setTransactionState(TransactionState.RECEIVED);
+        reserveTransaction.setTransactionDate(new Date());
+        reserveTransaction.setSourceAccountNumber(qrPaymentDto.buyerAccountNumber);
+        reserveTransaction.setDestinationAccountNumber(qrPaymentDto.sellerAccountNumber);
+        reserveTransaction.setRecipientName(qrPaymentDto.name);
+        reserveTransaction.setPayerName(qrPaymentDto.buyerName);
+        UUID issuerOrderId = UUID.randomUUID();
+        reserveTransaction.setIssuerOrderId(issuerOrderId);
+        reserveTransaction.setAcquirerOrderId(acquirerOrderId);
+        transactionRepository.save(reserveTransaction);
+
+        String url = "http://localhost:8094/api/pcc/qrCodeRequests/checkAndRoute";
+        HttpHeaders headers = new HttpHeaders();
+        var requestEntity = new HttpEntity<>(pccqrCodeRequestDto, headers);
+        var method = HttpMethod.POST;
+
+        try {
+            String response = restTemplate().exchange(url, method, requestEntity, String.class).getBody();
+        } catch (HttpClientErrorException e) {
+            System.out.println("Error calling endpoint: " + e.getMessage());
+        }
+
+        return pccqrCodeRequestDto;
     }
 
     public PCCRequestDto differentBanks(UserIdentificationDto userIdentificationDto) {

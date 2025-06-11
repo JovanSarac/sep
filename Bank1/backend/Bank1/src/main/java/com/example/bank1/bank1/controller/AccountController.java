@@ -1,5 +1,6 @@
 package com.example.bank1.bank1.controller;
 
+import com.example.bank1.bank1.dto.PCCQRCodeRequestDto;
 import com.example.bank1.bank1.dto.QRPaymentDto;
 import com.example.bank1.bank1.dto.UserIdentificationDto;
 import com.example.bank1.bank1.model.Account;
@@ -56,6 +57,9 @@ public class AccountController {
             String result = accountService.sameBanksQRCode(qrPaymentDto, user);
             //mozemo mozda da ubacimmo i proveru pana validatepan
             return ResponseEntity.ok(result);
+        } else {
+            //deo kada su razlicite banke
+            PCCQRCodeRequestDto result = accountService.differentBanksQRCode(qrPaymentDto);
         }
         //ovde treba else kada su razlicite banke
         return ResponseEntity.ok("uspesno");

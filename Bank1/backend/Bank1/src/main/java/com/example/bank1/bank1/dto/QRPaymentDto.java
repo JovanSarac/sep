@@ -16,4 +16,5 @@ public class QRPaymentDto {
     public Integer paymentCode;
     public String purposeOfPayment;
     public String buyerAccountNumber;
+    public String buyerName;
 }

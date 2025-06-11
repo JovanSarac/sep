@@ -10,6 +10,8 @@ import com.example.bank1.bank1.repository.TransactionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class TransactionService {
 
@@ -34,6 +36,7 @@ public class TransactionService {
             balance = balance + transaction.getAmount();
             account.setBalance(balance);
             accountRepository.save(account);
+            //treba sacuvati i transakciju da je finished
         }
     }
 
@@ -45,17 +48,25 @@ public class TransactionService {
             balance = balance - transaction.getAmount();
             account.setBalance(balance);
             accountRepository.save(account);
+            //ovde mozda da se doda da transankcija bude finished
         }
     }
 
     public void finishTransactionBank2ToBank1(AnswerPCCDto answerPCCDto) {
         if (answerPCCDto.transactionResult.equals("uspesno")) {
             Transaction transaction = transactionRepository.findByAcquirerOrderId(answerPCCDto.acquirerOrderId);
-            Account account = accountRepository.findByAccountNumber(transaction.getDestinationAccountNumber()).get();
+            //String accountNumber = transaction.getDestinationAccountNumber();
+            Optional<Account> optionalAccount = accountRepository.findByAccountNumber(transaction.getDestinationAccountNumber());
+            if (optionalAccount.isEmpty()) {
+                throw new IllegalStateException("Account not found");
+            }
+
+            Account account = optionalAccount.get();
             Double balance = account.getBalance();
             balance = balance + transaction.getAmount();
             account.setBalance(balance);
             accountRepository.save(account);
+            //mozda da se sacuva i transakcija kao finished
         }
     }
 }

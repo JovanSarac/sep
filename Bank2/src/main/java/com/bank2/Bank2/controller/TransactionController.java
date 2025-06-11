@@ -1,6 +1,7 @@
 package com.bank2.Bank2.controller;
 
 import com.bank2.Bank2.dto.AnswerPCCDto;
+import com.bank2.Bank2.dto.QRCodeRequestDto;
 import com.bank2.Bank2.dto.RequestDto;
 import com.bank2.Bank2.model.Account;
 import com.bank2.Bank2.model.User;
@@ -26,6 +27,23 @@ public class TransactionController {
 
     public TransactionController(TransactionService transactionService) {
         this.transactionService = transactionService;
+    }
+
+    @PostMapping("/PCCRequestQRCode")
+    public ResponseEntity<String> PCCRequestQRCode(@RequestBody QRCodeRequestDto qrCodeRequestDto){
+        Account account = accountService.getAccountByAccountNumber(qrCodeRequestDto.buyerAccountNumber);
+        User user = userRepository.findUserByAccount_Id(account.getId());
+
+//        if (!accountService.validateData(requestDto, account)) {
+//            return ResponseEntity.ok("Invalidate card data");
+//        }
+//        if (!accountService.validateName(user.getName(), requestDto.cardHolderName)) {
+//            return ResponseEntity.ok("Invalidate name");
+//        }
+
+        accountService.reserveFundsQRCode(qrCodeRequestDto);
+
+        return ResponseEntity.ok("");
     }
 
     @PostMapping("/PCCRequest")

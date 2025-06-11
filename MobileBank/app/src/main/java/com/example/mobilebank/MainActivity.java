@@ -82,8 +82,9 @@ public class MainActivity extends AppCompatActivity {
             qrPaymentDto.name = sellerName;
             qrPaymentDto.amount = paymentAmount;
             qrPaymentDto.paymentCode = paymentCode;
-            qrPaymentDto.purposeOfPayment =
+            qrPaymentDto.purposeOfPayment = purposeOfPayment;
             qrPaymentDto.buyerAccountNumber = "1231237890123456";
+            qrPaymentDto.buyerName = "Leopoldina Djanic";
             qrCodeApi.validateQRData(qrPaymentDto)
                     .enqueue(new Callback<String>() {
                         @Override

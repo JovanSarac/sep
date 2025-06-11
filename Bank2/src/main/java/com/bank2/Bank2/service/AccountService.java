@@ -1,6 +1,7 @@
 package com.bank2.Bank2.service;
 
 import com.bank2.Bank2.dto.AnswerPCCDto;
+import com.bank2.Bank2.dto.QRCodeRequestDto;
 import com.bank2.Bank2.dto.RequestDto;
 import com.bank2.Bank2.dto.UserIdentificationDto;
 import com.bank2.Bank2.model.*;
@@ -156,6 +157,117 @@ public class AccountService {
 
         if(!account.isPresent()) throw new ResourceAccessException("Account with PAN " + PAN + " doesnt exist");
         return account.get();
+    }
+
+    public Account getAccountByAccountNumber(String accountNumber) {
+        Optional<Account> account = accountRepository.findByAccountNumber(accountNumber);
+        if(!account.isPresent()) throw new ResourceAccessException("Account with number " + accountNumber + " doesnt exist");
+        return account.get();
+    }
+
+    public String reserveFundsQRCode(QRCodeRequestDto qrCodeRequestDto) {
+        try {
+            Optional<Account> optionalAccount = accountRepository.findByAccountNumber(qrCodeRequestDto.buyerAccountNumber);
+            if(!optionalAccount.isPresent()) throw new ResourceAccessException("There is no account in bank2 with " + qrCodeRequestDto.buyerAccountNumber + " account number");
+
+            Account account = optionalAccount.get();
+
+            List<Transaction> transactions = transactionRepository.findAllBySourceAccountNumber(account.getAccountNumber());
+            List<Transaction> receivedTransactions = transactions.stream()
+                    .filter(transaction -> TransactionState.RECEIVED.equals(transaction.getTransactionState()))
+                    .collect(Collectors.toList());
+
+            Double lowerLimit = 0.0;
+            if (account.getCardType().equals(CardType.CREDIT)) {
+                lowerLimit = -2000.0;
+            }
+
+            if (transactions.isEmpty()) {
+                if (account.getBalance() - qrCodeRequestDto.amount > lowerLimit) {
+                    Transaction reserveTransaction = new Transaction();
+                    reserveTransaction.setTransactionNumber(UUID.randomUUID());
+                    reserveTransaction.setAmount(qrCodeRequestDto.amount);
+                    reserveTransaction.setTransactionType(TransactionType.OUT);
+                    reserveTransaction.setTransactionState(TransactionState.RECEIVED);
+                    reserveTransaction.setTransactionDate(new Date());
+                    reserveTransaction.setSourceAccountNumber(account.getAccountNumber());
+                    reserveTransaction.setDestinationAccountNumber("1234567890123456");
+                    reserveTransaction.setRecipientName("VivoNet");
+                    UUID issuerOrderId = UUID.randomUUID();
+                    UUID acquirerOrderId = qrCodeRequestDto.acquirerOrderId;
+                    reserveTransaction.setIssuerOrderId(issuerOrderId);
+                    reserveTransaction.setAcquirerOrderId(acquirerOrderId);
+                    transactionRepository.save(reserveTransaction);
+
+                    //poziv pcc-a
+                    //mozda staviti da ova metoda bude u qr controlleru
+                    String url = "http://localhost:8094/api/pcc/requests/bank2ToBank1";
+                    HttpHeaders headers = new HttpHeaders();
+                    var requestEntity = new HttpEntity<>(new AnswerPCCDto(
+                            "uspesno",
+                            acquirerOrderId,
+                            new Date().getTime(),
+                            issuerOrderId,
+                            new Date().getTime()), headers);
+                    var method = HttpMethod.POST;
+
+                    try {
+                        String response = restTemplate().exchange(url, method, requestEntity, String.class).getBody();
+                    } catch (HttpClientErrorException e) {
+                        System.out.println("Error calling endpoint: " + e.getMessage());
+                    }
+
+                    return "uspesno";
+                }
+                return "neuspesno";
+            }
+            Double allReservedMoney = 0.0;
+
+            for (Transaction transaction : receivedTransactions) {
+                allReservedMoney += transaction.getAmount();
+            }
+
+            if (account.getBalance() - qrCodeRequestDto.amount - allReservedMoney > lowerLimit) {
+                Transaction reserveTransaction = new Transaction();
+                reserveTransaction.setTransactionNumber(UUID.randomUUID());
+                reserveTransaction.setAmount(qrCodeRequestDto.amount);
+                reserveTransaction.setTransactionType(TransactionType.OUT);
+                reserveTransaction.setTransactionState(TransactionState.RECEIVED);
+                reserveTransaction.setTransactionDate(new Date());
+                reserveTransaction.setSourceAccountNumber(account.getAccountNumber());
+                reserveTransaction.setDestinationAccountNumber("1234567890123456");
+                reserveTransaction.setRecipientName("VivoNet");
+                UUID issuerOrderId = UUID.randomUUID();
+                UUID acquirerOrderId = qrCodeRequestDto.acquirerOrderId;
+                reserveTransaction.setIssuerOrderId(issuerOrderId);
+                reserveTransaction.setAcquirerOrderId(acquirerOrderId);
+                transactionRepository.save(reserveTransaction);
+
+                //poziv pcc-a
+                //TODO ovde isto mozda staviti da bude poziv ka qr controlleru
+                String url = "http://localhost:8094/api/pcc/requests/bank2ToBank1";
+                HttpHeaders headers = new HttpHeaders();
+                var requestEntity = new HttpEntity<>(new AnswerPCCDto(
+                        "uspesno",
+                        acquirerOrderId,
+                        new Date().getTime(),
+                        issuerOrderId,
+                        new Date().getTime()), headers);
+                var method = HttpMethod.POST;
+
+                try {
+                    String response = restTemplate().exchange(url, method, requestEntity, String.class).getBody();
+                } catch (HttpClientErrorException e) {
+                    System.out.println("Error calling endpoint: " + e.getMessage());
+                }
+
+                return "uspesno";
+            }
+        } catch (Exception e) {
+            return "neuspesno";
+        }
+
+        return "neuspesno";
     }
 
     public String reserveFunds(RequestDto requestDto) {

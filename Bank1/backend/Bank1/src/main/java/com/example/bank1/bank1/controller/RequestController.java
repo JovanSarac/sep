@@ -51,7 +51,7 @@ public class RequestController {
             paymentDataQRDto.qrData = "K:PR|" +
                     "V:01|" +
                     "C:1|" +
-                    "R:123456789012345678|" +
+                    "R:1234567890123456|" +
                     "N:Webshop d.o.o.|" +
                     "I:RSD1500,00|" +
                     "SF:289|" +
