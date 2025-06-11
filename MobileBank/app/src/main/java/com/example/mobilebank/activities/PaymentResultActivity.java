@@ -1,10 +1,13 @@
 package com.example.mobilebank.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.mobilebank.MainActivity;
 import com.example.mobilebank.R;
 
 public class PaymentResultActivity extends AppCompatActivity {
@@ -17,5 +20,13 @@ public class PaymentResultActivity extends AppCompatActivity {
 
         String message = getIntent().getStringExtra("message");
         resultMessage.setText(message != null ? message : "Nema poruke");
+
+        new Handler().postDelayed(() -> {
+            Intent intent = new Intent(PaymentResultActivity.this, MainActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            intent.putExtra("reset_ui", true);
+            startActivity(intent);
+            finish();
+        }, 5000);
     }
 }

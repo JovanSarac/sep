@@ -9,45 +9,33 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.*;
 
-import androidx.activity.EdgeToEdge;
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
+import com.example.mobilebank.activities.LoginActivity;
 import com.example.mobilebank.activities.PaymentResultActivity;
+import com.example.mobilebank.dto.MobileBankUserDto;
 import com.example.mobilebank.dto.QRPaymentDto;
 import com.example.mobilebank.dto.QRPaymentIdDto;
-import com.example.mobilebank.dto.UserIdentificationDto;
 import com.example.mobilebank.qrcode.QRCodeValidator;
 import com.example.mobilebank.retrofit.QRCodeApi;
 import com.example.mobilebank.retrofit.RetrofitService;
-import com.example.mobilebank.services.ApiService;
+import com.example.mobilebank.session.SessionManager;
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
 import java.io.IOException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.Date;
-import java.util.Locale;
 import java.util.UUID;
 
-import retrofit2.Retrofit;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity {
 
-    Button scan_btn, payBtn;
+    Button scan_btn, payBtn, logoutButton;
 
     TextView textView;
     String sellerName;
@@ -64,9 +52,24 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        MobileBankUserDto mobileBankUserDto = SessionManager.getUser(this);
+        if (mobileBankUserDto == null) {
+            // Nije prijavljen → nazad na login
+            startActivity(new Intent(this, LoginActivity.class));
+            finish();
+            return;
+        }
+
         scan_btn = findViewById(R.id.scanner);
         textView = findViewById(R.id.text);
         payBtn = findViewById(R.id.pay_button);
+        logoutButton = findViewById(R.id.logout_button);
+
+        logoutButton.setOnClickListener(v -> {
+            SessionManager.logout(this);
+            startActivity(new Intent(MainActivity.this, LoginActivity.class));
+            finish();
+        });
 
         scan_btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -89,8 +92,8 @@ public class MainActivity extends AppCompatActivity {
             qrPaymentDto.amount = paymentAmount;
             qrPaymentDto.paymentCode = paymentCode;
             qrPaymentDto.purposeOfPayment = purposeOfPayment;
-            qrPaymentDto.buyerAccountNumber = "1231237890123456";
-            qrPaymentDto.buyerName = "Leopoldina Djanic";
+            qrPaymentDto.buyerAccountNumber = mobileBankUserDto.accountNumber;
+            qrPaymentDto.buyerName = mobileBankUserDto.name;
             QRPaymentIdDto qrPaymentIdDto = new QRPaymentIdDto();
             qrPaymentIdDto.paymentId = UUID.fromString(qrPaymentId);
             qrCodeApi.validateQRData(qrPaymentDto)
@@ -106,15 +109,18 @@ public class MainActivity extends AppCompatActivity {
 
                                 Toast.makeText(MainActivity.this, "Odgovor: " + response.body(), Toast.LENGTH_LONG).show();
                                 qrCodeApi.changeQRRequestState(qrPaymentIdDto)
-                                        .enqueue(new Callback<String>() {
+                                        .enqueue(new Callback<ResponseBody>() {
                                             @Override
-                                            public void onResponse(Call<String> call, Response<String> response) {
+                                            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                                                 Toast.makeText(MainActivity.this, "Odgovor: " + response.body(), Toast.LENGTH_LONG).show();
+
                                             }
 
                                             @Override
-                                            public void onFailure(Call<String> call, Throwable t) {
+                                            public void onFailure(Call<ResponseBody> call, Throwable t) {
                                                 Toast.makeText(MainActivity.this, "Greška: " + t.getMessage(), Toast.LENGTH_LONG).show();
+                                                Log.d("DEBUG_DTO_DRUGI_API", new Gson().toJson(qrPaymentDto));
+                                                Log.d("DEBUG_DTO_DRUGI_API", t.getMessage());
                                             }
                                         });
                             } else {
@@ -196,5 +202,16 @@ public class MainActivity extends AppCompatActivity {
             super.onActivityResult(requestCode, resultCode, data);
         }
 
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        setIntent(intent);
+
+        if (intent.getBooleanExtra("reset_ui", false)) {
+            textView.setText("Scan a code to see data");
+            payBtn.setVisibility(View.GONE);
+        }
     }
 }

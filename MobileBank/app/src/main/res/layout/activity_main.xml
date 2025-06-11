@@ -9,6 +9,15 @@
     tools:context=".MainActivity">
 
     <Button
+        android:id="@+id/logout_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:text="Logout" />
+
+    <Button
         android:id="@+id/scanner"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -27,7 +36,7 @@
         android:layout_below="@+id/scanner"
         android:layout_marginTop="52dp"
         android:textSize="18sp"
-        android:text="Skeniraj kod da vidiš podatke"
+        android:text="Scan a code to see data"
         android:padding="16dp" />
 
     <Button

@@ -445,4 +445,8 @@ public class AccountService {
     public Account getAccountByAccountNumber(String accountNumber) {
         return accountRepository.findByAccountNumber(accountNumber).get();
     }
+
+    public Account getAccountById(Long id) {
+        return accountRepository.getById(id);
+    }
 }
