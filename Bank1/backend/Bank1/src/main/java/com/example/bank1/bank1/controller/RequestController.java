@@ -1,14 +1,15 @@
 package com.example.bank1.bank1.controller;
 
-import com.example.bank1.bank1.dto.PaymentDataDto;
-import com.example.bank1.bank1.dto.PaymentDataQRDto;
-import com.example.bank1.bank1.dto.RequestDto;
-import com.example.bank1.bank1.dto.UserIdentificationDto;
+import com.example.bank1.bank1.dto.*;
 import com.example.bank1.bank1.model.Account;
+import com.example.bank1.bank1.model.QRPaymentRequest;
+import com.example.bank1.bank1.model.QRPaymentRequestState;
 import com.example.bank1.bank1.model.User;
+import com.example.bank1.bank1.service.QRPaymentRequestService;
 import com.example.bank1.bank1.service.RequestService;
 import lombok.RequiredArgsConstructor;
 import org.apache.coyote.Request;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,6 +21,8 @@ import java.util.UUID;
 @RequestMapping("/api/bank1/requests")
 public class RequestController {
     private final RequestService requestService;
+    @Autowired
+    private QRPaymentRequestService qrPaymentRequestService;
     @PostMapping("/validateRequest")
     public ResponseEntity<PaymentDataDto> validateRequest(@RequestBody RequestDto requestDto) {
         //treba da se vrati payment_url i payment_id, ne url ce mozda da bude na koju se banku odnosi nmp jos
@@ -48,6 +51,15 @@ public class RequestController {
             paymentDataQRDto.paymentUrl = "http://localhost:4202/qrCode";
             //za sada su zakucane vrednosti za racun primaoca
             //treba dodati da se vuku podaci iz baze
+
+            UUID qrPaymentId = UUID.randomUUID();
+            QRPaymentRequestDto qrPaymentRequestDto = new QRPaymentRequestDto();
+            qrPaymentRequestDto.paymentId = qrPaymentId;
+            qrPaymentRequestDto.paymentUrl = paymentDataQRDto.paymentUrl;
+            qrPaymentRequestDto.qrPaymentRequestState = QRPaymentRequestState.PENDING;
+            qrPaymentRequestService.saveQRPaymentRequest(qrPaymentRequestDto);
+            paymentDataQRDto.qrPaymentId = qrPaymentId;
+
             paymentDataQRDto.qrData = "K:PR|" +
                     "V:01|" +
                     "C:1|" +
@@ -55,9 +67,25 @@ public class RequestController {
                     "N:Webshop d.o.o.|" +
                     "I:RSD1500,00|" +
                     "SF:289|" +
-                    "S:Plaćanje narudžbine #" + UUID.randomUUID();
+                    "S:Plaćanje narudžbine #" + qrPaymentId;
             return ResponseEntity.ok(paymentDataQRDto);
         }
         return (ResponseEntity<PaymentDataQRDto>) ResponseEntity.badRequest();
+    }
+
+    @PostMapping("/checkRequestState")
+    public ResponseEntity<String> chechQRRequestState(@RequestBody String string) {
+        UUID qrPaymentId = UUID.fromString(string);
+        QRPaymentRequest qrPaymentRequest = qrPaymentRequestService.findByQRPaymentId(qrPaymentId);
+
+        if (qrPaymentRequest.getQrPaymentRequestState() == QRPaymentRequestState.COMPLETED) {
+            return ResponseEntity.ok("COMPLETED");
+        } else if (qrPaymentRequest.getQrPaymentRequestState() == QRPaymentRequestState.ERROR) {
+            return ResponseEntity.ok("ERROR");
+        } else if (qrPaymentRequest.getQrPaymentRequestState() == QRPaymentRequestState.FAILED) {
+            return ResponseEntity.ok("FAILED");
+        } else {
+            return ResponseEntity.ok("PENDING");
+        }
     }
 }

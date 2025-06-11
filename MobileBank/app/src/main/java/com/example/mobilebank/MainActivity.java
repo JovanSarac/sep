@@ -19,6 +19,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.mobilebank.activities.PaymentResultActivity;
 import com.example.mobilebank.dto.QRPaymentDto;
+import com.example.mobilebank.dto.QRPaymentIdDto;
 import com.example.mobilebank.dto.UserIdentificationDto;
 import com.example.mobilebank.qrcode.QRCodeValidator;
 import com.example.mobilebank.retrofit.QRCodeApi;
@@ -36,6 +37,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.Locale;
+import java.util.UUID;
 
 import retrofit2.Retrofit;
 import retrofit2.Call;
@@ -48,7 +50,11 @@ public class MainActivity extends AppCompatActivity {
     Button scan_btn, payBtn;
 
     TextView textView;
-    String sellerName, sellerAccountNumber, buyerAccountNumber, purposeOfPayment;
+    String sellerName;
+    String sellerAccountNumber;
+    String buyerAccountNumber;
+    String purposeOfPayment;
+    String qrPaymentId;
     Double paymentAmount;
     Integer paymentCode;
 
@@ -85,6 +91,8 @@ public class MainActivity extends AppCompatActivity {
             qrPaymentDto.purposeOfPayment = purposeOfPayment;
             qrPaymentDto.buyerAccountNumber = "1231237890123456";
             qrPaymentDto.buyerName = "Leopoldina Djanic";
+            QRPaymentIdDto qrPaymentIdDto = new QRPaymentIdDto();
+            qrPaymentIdDto.paymentId = UUID.fromString(qrPaymentId);
             qrCodeApi.validateQRData(qrPaymentDto)
                     .enqueue(new Callback<String>() {
                         @Override
@@ -97,6 +105,18 @@ public class MainActivity extends AppCompatActivity {
                                 Log.d("DEBUG_DTO", new Gson().toJson(qrPaymentDto));
 
                                 Toast.makeText(MainActivity.this, "Odgovor: " + response.body(), Toast.LENGTH_LONG).show();
+                                qrCodeApi.changeQRRequestState(qrPaymentIdDto)
+                                        .enqueue(new Callback<String>() {
+                                            @Override
+                                            public void onResponse(Call<String> call, Response<String> response) {
+                                                Toast.makeText(MainActivity.this, "Odgovor: " + response.body(), Toast.LENGTH_LONG).show();
+                                            }
+
+                                            @Override
+                                            public void onFailure(Call<String> call, Throwable t) {
+                                                Toast.makeText(MainActivity.this, "Greška: " + t.getMessage(), Toast.LENGTH_LONG).show();
+                                            }
+                                        });
                             } else {
                                 Log.d("DEBUG_DTO", new Gson().toJson(qrPaymentDto));
                                 Log.e("RETROFIT_ERROR", "Error: " + response.code());
@@ -158,6 +178,7 @@ public class MainActivity extends AppCompatActivity {
                         paymentCode = Integer.parseInt(line.substring(3));
                     } else if (line.startsWith("S:")) {
                         purposeOfPayment = line.substring(2);
+                        qrPaymentId = purposeOfPayment.replace("Plaćanje narudžbine #", "");
                     }
                 }
                 // Prikaz u TextView

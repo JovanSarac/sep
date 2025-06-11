@@ -6,6 +6,7 @@ import com.example.bank1.bank1.dto.TransactionDto;
 import com.example.bank1.bank1.model.Account;
 import com.example.bank1.bank1.model.Transaction;
 import com.example.bank1.bank1.repository.AccountRepository;
+import com.example.bank1.bank1.repository.QRPaymentRequestRepository;
 import com.example.bank1.bank1.repository.TransactionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,6 +20,8 @@ public class TransactionService {
     private TransactionRepository transactionRepository;
     @Autowired
     private AccountRepository accountRepository;
+    @Autowired
+    private QRPaymentRequestRepository qrPaymentRequestRepository;
 
     private Boolean checkAccountBalance(TransactionDto transactionDto) {
         Account account = accountRepository.findByAccountNumber(transactionDto.getSourceAccountNumber()).get();

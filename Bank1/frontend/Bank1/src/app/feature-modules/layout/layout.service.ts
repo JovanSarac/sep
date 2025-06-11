@@ -15,4 +15,8 @@ export class LayoutService {
     return this.http.post<String>(environment.apiHost + 'bank1/accounts/validateData', userDataDto, {
       responseType: 'text' as 'json',});
   }
+
+  getQRRequestStatus(qrPaymentId: string): Observable<string> {
+  return this.http.post(environment.apiHost + 'bank1/requests/checkRequestState', qrPaymentId, { responseType: 'text' }) as Observable<string>;
+  }
 }

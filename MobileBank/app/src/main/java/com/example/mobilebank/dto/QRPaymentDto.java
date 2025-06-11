@@ -1,4 +1,5 @@
 package com.example.mobilebank.dto;
+
 public class QRPaymentDto {
     public String sellerAccountNumber;
     public String name;

@@ -6,4 +6,5 @@ export interface paymentQRDataDto {
     successUrl: string;
     failedUrl: string;
     errorUrl: string;
+    qrPaymentId: string;
 }

@@ -11,19 +11,21 @@ import (
 )
 
 type PaymentDataQR struct {
-	PaymentId  int64  `json:"paymentId"`
-	PaymentUrl string `json:"paymentUrl"`
-	QRData     string `json:"qrData"`
+	PaymentId   int64     `json:"paymentId"`
+	PaymentUrl  string    `json:"paymentUrl"`
+	QRData      string    `json:"qrData"`
+	QrPaymentId uuid.UUID `json:"qrPaymentId"`
 }
 
 type RequestPaymentQRDto struct {
-	PaymentId  int64   `json:"paymentId"`
-	PaymentUrl string  `json:"paymentUrl"`
-	Amount     float64 `json:"amount"`
-	SuccessUrl string  `json:"successUrl"`
-	FailedUrl  string  `json:"failedUrl"`
-	ErrorUrl   string  `json:"errorUrl"`
-	QRData     string  `json:"qrData"`
+	PaymentId   int64     `json:"paymentId"`
+	PaymentUrl  string    `json:"paymentUrl"`
+	Amount      float64   `json:"amount"`
+	SuccessUrl  string    `json:"successUrl"`
+	FailedUrl   string    `json:"failedUrl"`
+	ErrorUrl    string    `json:"errorUrl"`
+	QRData      string    `json:"qrData"`
+	QrPaymentId uuid.UUID `json:"qrPaymentId"`
 }
 
 type RequestDto struct {
@@ -92,7 +94,9 @@ func validateRequest(w http.ResponseWriter, r *http.Request) {
 	requestPaymentQRDto.PaymentId = paymentDataQR.PaymentId
 	requestPaymentQRDto.PaymentUrl = paymentDataQR.PaymentUrl
 	requestPaymentQRDto.QRData = paymentDataQR.QRData
+	requestPaymentQRDto.QrPaymentId = paymentDataQR.QrPaymentId
 
+	fmt.Println("PODACI")
 	fmt.Print(requestPaymentQRDto)
 
 	w.Header().Set("Content-Type", "application/json")

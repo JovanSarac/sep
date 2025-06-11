@@ -2,19 +2,26 @@ package com.example.bank1.bank1.controller;
 
 import com.example.bank1.bank1.dto.AnswerPCCDto;
 import com.example.bank1.bank1.dto.PCCRequestDto;
+import com.example.bank1.bank1.dto.QRPaymentIdDto;
 import com.example.bank1.bank1.dto.RequestDto;
+import com.example.bank1.bank1.service.QRPaymentRequestService;
 import com.example.bank1.bank1.service.TransactionService;
 import org.apache.coyote.Response;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.UUID;
+
 @RestController
 @RequestMapping("/api/bank1/transactions")
 public class TransactionController {
     private final TransactionService transactionService;
+    @Autowired
+    private QRPaymentRequestService qrPaymentRequestService;
 
     public TransactionController(TransactionService transactionService) {
         this.transactionService = transactionService;
@@ -35,6 +42,12 @@ public class TransactionController {
     @PostMapping("/PCCBank2ToBank1")
     public ResponseEntity<?> PCCBank2ToBank1(@RequestBody AnswerPCCDto answerPCCDto) {
         transactionService.finishTransactionBank2ToBank1(answerPCCDto);
+        return ResponseEntity.ok("Zavrsena transakcija");
+    }
+
+    @PostMapping("/changeQRRequestState")
+    public ResponseEntity<String> changeQRRequestState(@RequestBody QRPaymentIdDto qrPaymentIdDto) {
+        qrPaymentRequestService.finishQRPaymentTransaction(qrPaymentIdDto.paymentId);
         return ResponseEntity.ok("Zavrsena transakcija");
     }
 }
