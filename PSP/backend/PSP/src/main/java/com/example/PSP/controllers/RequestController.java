@@ -70,22 +70,6 @@ public class RequestController {
 
         //ovde dodajem string za qr data, posle treba namestiti da se ti podaci uzimaju iz banke prodavca i da
         //se rezultat vrati u requestPaymentDto, al moze da se napravi novi dto za qr kod onda
-        String qrData = "#IPS 1.0\n" +
-                "CPS\n" +
-                "PR|123456789012345678\n" +
-                "N|Webshop d.o.o.\n" +
-                "I|" + 1500 + "\n" +
-                "CU|RSD\n" +
-                "R|Plaćanje narudžbine #" + UUID.randomUUID();
-
-//        RequestQRCodePaymentDto qrCodePaymentDto = new RequestQRCodePaymentDto();
-//        qrCodePaymentDto.amount = requestPaymentDto.amount;
-//        qrCodePaymentDto.paymentId = requestPaymentDto.paymentId;
-//        qrCodePaymentDto.paymentUrl = requestPaymentDto.paymentUrl;
-//        qrCodePaymentDto.qrData = qrData;
-//        qrCodePaymentDto.errorUrl = requestPaymentDto.errorUrl;
-//        qrCodePaymentDto.failedUrl = requestPaymentDto.failedUrl;
-//        qrCodePaymentDto.successUrl = requestPaymentDto.successUrl;
 
         return ResponseEntity.ok(requestPaymentQRDto);
     }

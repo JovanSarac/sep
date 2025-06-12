@@ -112,8 +112,7 @@ public class MainActivity extends AppCompatActivity {
                                         .enqueue(new Callback<ResponseBody>() {
                                             @Override
                                             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                                                Toast.makeText(MainActivity.this, "Odgovor: " + response.body(), Toast.LENGTH_LONG).show();
-
+                                                //Toast.makeText(MainActivity.this, "Odgovor: " + response.body(), Toast.LENGTH_LONG).show();
                                             }
 
                                             @Override
@@ -167,7 +166,7 @@ public class MainActivity extends AppCompatActivity {
                 textView.setText(isValid);
             } else {
                 String[] lines = contents.split("\\|");
-                String account = "", name = "", currency = "", amount = "", sf = "";
+                String account = "", name = "", currency = "", amount = "", sf = "", amountUSD = "";
 
                 for (String line : lines) {
                     if (line.startsWith("R:")) {
@@ -184,14 +183,17 @@ public class MainActivity extends AppCompatActivity {
                         paymentCode = Integer.parseInt(line.substring(3));
                     } else if (line.startsWith("S:")) {
                         purposeOfPayment = line.substring(2);
-                        qrPaymentId = purposeOfPayment.replace("Plaćanje narudžbine #", "");
+                        qrPaymentId = purposeOfPayment.replace("Plaćanje narudžbine #", "").split(" \\(USD")[0];
+                        amountUSD = purposeOfPayment.replace("Plaćanje narudžbine #", "").split(" \\(USD")[1].replace("(USD", "");
+                        amountUSD = amountUSD.replace(")", "");
                     }
                 }
                 // Prikaz u TextView
                 String displayText = "Naziv primaoca: " + name + "\n"
                         + "Broj računa: " + account + "\n"
                         + "Valuta: " + currency + "\n"
-                        + "Iznos: " + amount;
+                        + "Iznos: " + amount + "RSD" + "\n"
+                        + "IznosUSD: " +amountUSD + "USD";
                 textView.setText(displayText);
 
                 // Prikaz dugmeta "Plati"

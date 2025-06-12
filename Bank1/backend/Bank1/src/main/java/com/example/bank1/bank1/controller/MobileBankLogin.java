@@ -32,6 +32,9 @@ public class MobileBankLogin {
         MobileBankUser mobileBankUser = mobileBankUserService.findUserByPin(loginPinDto.pin);
         //treba dodati proveru da li postoji taj user sa tim pinom, ako ne postoji da se vrati:
         //return (ResponseEntity<PaymentDataQRDto>) ResponseEntity.badRequest();
+        if (mobileBankUser == null) {
+            return (ResponseEntity<MobileBankUserDto>) ResponseEntity.badRequest();
+        }
         Account account = mobileBankUser.getAccount();
         User user = userRepository.findUserByAccount_Id(account.getId());
         MobileBankUserDto mobileBankUserDto = new MobileBankUserDto();

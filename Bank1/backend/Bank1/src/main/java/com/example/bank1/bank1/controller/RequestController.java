@@ -60,14 +60,26 @@ public class RequestController {
             qrPaymentRequestService.saveQRPaymentRequest(qrPaymentRequestDto);
             paymentDataQRDto.qrPaymentId = qrPaymentId;
 
+            Double amountRSD = requestDto.amount * 101.79;
+            amountRSD = amountRSD * 100;
+            amountRSD = (double) Math.round(amountRSD);
+            amountRSD = amountRSD / 100;
+            String amountRSDString = amountRSD.toString();
+
+            if (!amountRSDString.contains(".")) {
+                amountRSDString = amountRSDString + ",00";
+            } else {
+                amountRSDString = amountRSDString.replace(".", ",");
+            }
+
             paymentDataQRDto.qrData = "K:PR|" +
                     "V:01|" +
                     "C:1|" +
                     "R:1234567890123456|" +
                     "N:Webshop d.o.o.|" +
-                    "I:RSD1500,00|" +
+                    "I:RSD" + amountRSDString + "|" +
                     "SF:289|" +
-                    "S:Plaćanje narudžbine #" + qrPaymentId;
+                    "S:Plaćanje narudžbine #" + qrPaymentId + " (USD" + requestDto.amount + ")";
             return ResponseEntity.ok(paymentDataQRDto);
         }
         return (ResponseEntity<PaymentDataQRDto>) ResponseEntity.badRequest();

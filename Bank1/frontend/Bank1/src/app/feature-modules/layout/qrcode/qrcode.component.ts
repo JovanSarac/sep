@@ -41,22 +41,22 @@ export class QrcodeComponent {
   }
 
   checkStatus(): void {
-  this.layoutServiceL.getQRRequestStatus(this.qrPaymentId).subscribe({
-    next: (result) => {
-      if (result === 'COMPLETED') {
-        window.location.href = this.successUrl;
-      } else if (result === 'FAILED') {
-        window.location.href = this.failedUrl;
-      } else if (result === 'ERROR') {
-        window.location.href = this.errorUrl;
-      } else {
+    this.layoutServiceL.getQRRequestStatus(this.qrPaymentId).subscribe({
+      next: (result) => {
+        if (result === 'COMPLETED') {
+          window.location.href = this.successUrl;
+        } else if (result === 'FAILED') {
+          window.location.href = this.failedUrl;
+        } else if (result === 'ERROR') {
+          window.location.href = this.errorUrl;
+        } else {
+          setTimeout(() => this.checkStatus(), 3000);
+        }
+      },
+      error: () => {
         setTimeout(() => this.checkStatus(), 3000);
       }
-    },
-    error: () => {
-      setTimeout(() => this.checkStatus(), 3000);
-    }
-  });
-}
+    });
+  }
 
 }
