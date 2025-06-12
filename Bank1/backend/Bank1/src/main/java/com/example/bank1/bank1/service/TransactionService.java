@@ -5,6 +5,7 @@ import com.example.bank1.bank1.dto.PCCRequestDto;
 import com.example.bank1.bank1.dto.TransactionDto;
 import com.example.bank1.bank1.model.Account;
 import com.example.bank1.bank1.model.Transaction;
+import com.example.bank1.bank1.model.TransactionState;
 import com.example.bank1.bank1.repository.AccountRepository;
 import com.example.bank1.bank1.repository.QRPaymentRequestRepository;
 import com.example.bank1.bank1.repository.TransactionRepository;
@@ -40,6 +41,8 @@ public class TransactionService {
             account.setBalance(balance);
             accountRepository.save(account);
             //treba sacuvati i transakciju da je finished
+            transaction.setTransactionState(TransactionState.FINISHED);
+            transactionRepository.save(transaction);
         }
     }
 
@@ -52,6 +55,8 @@ public class TransactionService {
             account.setBalance(balance);
             accountRepository.save(account);
             //ovde mozda da se doda da transankcija bude finished
+            transaction.setTransactionState(TransactionState.FINISHED);
+            transactionRepository.save(transaction);
         }
     }
 
@@ -70,6 +75,8 @@ public class TransactionService {
             account.setBalance(balance);
             accountRepository.save(account);
             //mozda da se sacuva i transakcija kao finished
+            transaction.setTransactionState(TransactionState.FINISHED);
+            transactionRepository.save(transaction);
         }
     }
 }

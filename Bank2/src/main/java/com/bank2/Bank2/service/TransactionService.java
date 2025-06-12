@@ -4,6 +4,7 @@ import com.bank2.Bank2.dto.AnswerPCCDto;
 import com.bank2.Bank2.dto.TransactionDto;
 import com.bank2.Bank2.model.Account;
 import com.bank2.Bank2.model.Transaction;
+import com.bank2.Bank2.model.TransactionState;
 import com.bank2.Bank2.repository.AccountRepository;
 import com.bank2.Bank2.repository.TransactionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +40,8 @@ public class TransactionService {
             balance = balance - transaction.getAmount();
             account.setBalance(balance);
             accountRepository.save(account);
+            transaction.setTransactionState(TransactionState.FINISHED);
+            transactionRepository.save(transaction);
         }
     }
 }
