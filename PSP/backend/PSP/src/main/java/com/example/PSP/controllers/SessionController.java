@@ -1,6 +1,8 @@
 package com.example.PSP.controllers;
 
 import com.example.PSP.dtos.SubscriptionDto;
+import com.example.PSP.dtos.SessionDto;
+import com.example.PSP.dtos.CartItemDto;
 import com.example.PSP.models.PSPService;
 import com.example.PSP.models.Session;
 import com.example.PSP.services.SessionService;
@@ -42,6 +44,22 @@ public class SessionController {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Session not found");
             }
         } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error retrieving session");
+        }
+    }
+
+    @GetMapping("/session/{id}")
+    public ResponseEntity<?> getSessionById(@PathVariable Long id){
+        try{
+            Session session = sessionService.getSessionById(id);
+            SessionDto sessionDto = new SessionDto();
+            for(CartItemDto cartItemDto : session.getCart().getItems()){
+                sessionDto.itemNames.add(cartItemDto.getName());
+            }
+            sessionDto.totalPrice = session.getCart().getTotalPrice();
+            return ResponseEntity.ok(sessionDto);
+        } catch (Exception e){
+            System.out.println("Error retrieving session: " + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error retrieving session");
         }
     }

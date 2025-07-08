@@ -11,6 +11,7 @@ import com.example.PSP.services.SessionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,6 +22,7 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.UUID;
 
@@ -80,5 +82,18 @@ public class RequestController {
     @RabbitListener(queues = MQConfig.QUEUE_APIKEY_RESPONSE)
     public void apiKeyListener(ApiKeyResponseMessage message){
         this.responseMessage = message;
+    }
+
+    @GetMapping("/sendRequestCrypto")
+    @PreAuthorize("permitAll()")
+    public ResponseEntity<ArrayList<String>> sendRequestCrypto() {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+        HttpEntity<Void> entity = new HttpEntity<>(headers);
+
+        ResponseEntity<ArrayList<String>> response = restTemplate.exchange("http://localhost:8080/eth", HttpMethod.GET, entity, new ParameterizedTypeReference<ArrayList<String>>() {});
+        ArrayList<String> walletIds = response.getBody();
+
+        return ResponseEntity.ok(walletIds);
     }
 }
