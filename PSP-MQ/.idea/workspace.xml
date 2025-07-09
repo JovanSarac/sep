@@ -528,7 +528,7 @@
     &quot;spring.configuration.checksum&quot;: &quot;747165b6cc869f2c1874e42985287838&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}</component>
+}]]></component>
   <component name="RunManager">
     <configuration name="PspMqApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
       <module name="PSP-MQ" />
@@ -541,7 +541,7 @@
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="0336444d-e3e4-4354-8bff-5b708487f1e8" name="Changes" comment="" />
+      <changelist id="ddc5e432-10c4-450f-884a-a16097518649" name="Changes" comment="" />
       <created>1732544184333</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />

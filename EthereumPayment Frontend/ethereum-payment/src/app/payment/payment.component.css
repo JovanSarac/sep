@@ -1,0 +1,151 @@
+/* Full screen soft background */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(30, 144, 255, 0.1); /* soft light blue */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+/* The white form box */
+.form-container {
+  background-color: #fff;
+  padding: 28px 32px;
+  border-radius: 14px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  max-width: 420px;
+  width: 90vw;
+}
+
+/* Keep your existing form styling inside form-container */
+form {
+  margin: 0;
+  padding: 0;
+}
+
+/* Keep the form title style */
+.form-title {
+  margin-top: 0;
+  margin-bottom: 20px;
+  text-align: center;
+  font-size: 24px;
+  color: #333;
+  font-weight: 600;
+}
+
+/* Labels and inputs */
+form div {
+  margin-bottom: 16px;
+}
+
+label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 6px;
+}
+
+input,
+textarea {
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+  box-sizing: border-box;
+}
+
+input[readonly] {
+  background-color: #f0f0f0;
+  color: #555;
+}
+
+.input-with-suffix {
+  margin-bottom: 16px;
+}
+
+.input-suffix-wrapper {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+}
+
+.input-suffix-wrapper input {
+  width: 100%;
+  padding-right: 40px; /* space for suffix */
+  box-sizing: border-box;
+}
+
+.input-suffix-wrapper .suffix {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #666;
+  font-weight: 600;
+  pointer-events: none;
+  user-select: none;
+  font-size: 14px;
+}
+
+/* List styling */
+ul {
+  padding-left: 20px;
+  margin: 0;
+}
+
+li {
+  margin-bottom: 4px;
+}
+
+select {
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+  box-sizing: border-box;
+  background-color: white;
+  color: #333;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 10 10'%3E%3Cpath fill='%23666' d='M0 3l5 5 5-5z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 10px;
+}
+
+select:focus {
+  outline: none;
+  border-color: #1976d2;
+  box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.2);
+}
+
+
+/* Submit button */
+button[type="submit"] {
+  width: 100%;
+  padding: 10px;
+  background-color: #1976d2;
+  color: white;
+  font-weight: bold;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.2s ease;
+}
+
+button[type="submit"]:hover {
+  background-color: #115293;
+}
+
+button[disabled] {
+  background-color: #ccc;
+  cursor: not-allowed;
+}

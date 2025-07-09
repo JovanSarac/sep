@@ -18,21 +18,21 @@ import { ApiKeyDto } from '../model/api-key.model';
 export class SubscriptionDialogComponent implements OnInit {
 
   user!: User;
-  paymentService! : PaymentService;
+  paymentService!: PaymentService;
   fullPrice: number = 0;
   duration: number = 0;
 
   subscribeForm = new FormGroup({
-    subscriptionDuration: new FormControl('', [Validators.required, Validators.pattern('^[1-9][0-9]*$')]),    
+    subscriptionDuration: new FormControl('', [Validators.required, Validators.pattern('^[1-9][0-9]*$')]),
   });
 
   constructor(
     public dialogRef: MatDialogRef<SubscriptionDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: PaymentService,
-    private service : PaymentsService,
-    private authService : AuthService,
+    private service: PaymentsService,
+    private authService: AuthService,
     private toastr: ToastrService
-  ) {}
+  ) { }
 
 
   ngOnInit(): void {
@@ -48,11 +48,11 @@ export class SubscriptionDialogComponent implements OnInit {
     });
   }
 
-  closeDialog(){
+  closeDialog() {
     this.dialogRef.close();
   }
 
-  subscribe(){
+  subscribe() {
     this.markAllControlsAsTouched();
 
     if (this.subscribeForm.invalid) {
@@ -60,7 +60,7 @@ export class SubscriptionDialogComponent implements OnInit {
       return;
     }
 
-    const subscriptionDto : SubscriptionRequest = {
+    const subscriptionDto: SubscriptionRequest = {
       userId: this.user.id,
       serviceId: this.data.id,
       subscriptionDuration: this.duration
@@ -70,10 +70,10 @@ export class SubscriptionDialogComponent implements OnInit {
       next: (result) => {
         this.toastr.success('Subscription created successfully!', 'Success');
 
-        var apiKey : ApiKeyDto = {
+        var apiKey: ApiKeyDto = {
           merchantId: result.merchantId!,
           merchantPassword: result.merchantPassword!,
-          paymentType: this.data.id
+          paymentType: -1
         }
 
         this.service.saveApiKey(apiKey).subscribe({});
@@ -83,7 +83,7 @@ export class SubscriptionDialogComponent implements OnInit {
       error: (err) => {
         console.error('Error creating subscription:', err);
         this.toastr.error('Failed to create subscription. Please try again.', 'Error');
-      }, 
+      },
     })
 
   }

@@ -9,6 +9,7 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/gorilla/mux"
+	"github.com/rs/cors"
 )
 
 type RequestDto struct {
@@ -30,33 +31,65 @@ func main() {
 	router.HandleFunc("/card", proxy("/card", "http://localhost:8082")).Methods("GET")
 	router.HandleFunc("/bank1ValidateRequest", proxy("/bank1ValidateRequest", "http://localhost:8082")).Methods("POST")
 	router.HandleFunc("/bank1QRCodeValidateRequest", proxy("/bank1QRCodeValidateRequest", "http://localhost:8083")).Methods("POST")
+	router.HandleFunc("/eth", proxy("/eth", "http://localhost:8083")).Methods("GET")
+	router.HandleFunc("/eth/saveTransaction", proxy("/eth/saveTransaction", "http://localhost:8083")).Methods("POST")
 
-	log.Fatal(http.ListenAndServe(":8080", router))
+	c := cors.New(cors.Options{
+		AllowedOrigins:   []string{"*"},
+		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+		AllowedHeaders:   []string{"Content-Type", "Authorization"},
+		AllowCredentials: true,
+	})
+
+	log.Fatal(http.ListenAndServe(":8080", c.Handler(router)))
 }
 
 func proxy(path, target string) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		var requestDto RequestDto
-		if err := json.NewDecoder(r.Body).Decode(&requestDto); err != nil {
-			http.Error(w, "Invalid request body", http.StatusBadRequest)
+		if r.Method == http.MethodOptions {
+			w.WriteHeader(http.StatusNoContent)
 			return
 		}
-		log.Printf("Parsed RequestDto: %+v\n", requestDto)
 
-		requestBody, err := json.Marshal(requestDto)
+		var requestBody io.Reader
+
+		bodyBytes, err := io.ReadAll(r.Body)
 		if err != nil {
-			http.Error(w, "Failed to marshal request body", http.StatusInternalServerError)
+			http.Error(w, "Failed to read request body", http.StatusBadRequest)
 			return
+		}
+
+		if r.Method == http.MethodPost || r.Method == http.MethodPut || r.Method == http.MethodPatch {
+			switch path {
+			case "/card", "/bank1", "/bank1ValidateRequest":
+				var requestDto RequestDto
+				if err := json.NewDecoder(r.Body).Decode(&requestDto); err != nil {
+					http.Error(w, "Invalid request body", http.StatusBadRequest)
+					return
+				}
+				log.Printf("Parsed RequestDto: %+v\n", requestDto)
+
+				marshaled, err := json.Marshal(requestDto)
+				if err != nil {
+					http.Error(w, "Failed to marshal request body", http.StatusInternalServerError)
+					return
+				}
+				requestBody = bytes.NewReader(marshaled)
+				break
+			default:
+				//pass the raw body
+				requestBody = bytes.NewReader(bodyBytes)
+			}
 		}
 
 		targetURL := target + r.URL.Path
-		req, err := http.NewRequest(r.Method, targetURL, bytes.NewReader(requestBody))
+		req, err := http.NewRequest(r.Method, targetURL, requestBody)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadGateway)
 			return
 		}
 
-		req.Header = r.Header
+		req.Header = r.Header.Clone()
 
 		client := &http.Client{}
 		resp, err := client.Do(req)
@@ -73,11 +106,6 @@ func proxy(path, target string) http.HandlerFunc {
 		}
 
 		w.WriteHeader(resp.StatusCode)
-
-		_, err = io.Copy(w, resp.Body)
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusBadGateway)
-			return
-		}
+		io.Copy(w, resp.Body)
 	}
 }

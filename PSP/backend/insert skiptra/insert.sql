@@ -21,8 +21,8 @@ VALUES
     TRUE
     ),
     (-4, 
-    'Cryptocurrency Payment Service (Bitcoin)', 
-    'This payment service enables users to make payments using cryptocurrency, with Bitcoin as the primary supported currency. Transactions are processed via blockchain technology, offering anonymity and decentralization. It is ideal for businesses looking to accept cryptocurrency payments and expand their customer base to the digital currency market.', 
+    'Cryptocurrency Payment Service (Ethereum)', 
+    'This payment service enables users to make payments using cryptocurrency, with Ethereum as the primary supported currency. Transactions are processed via blockchain technology, offering anonymity and decentralization. It is ideal for businesses looking to accept cryptocurrency payments and expand their customer base to the digital currency market.', 
     89.99, 
     TRUE
     );
@@ -33,4 +33,4 @@ VALUES
     (-1, 'Debit Card'),
     (-2, 'QR Code'),
     (-3, 'PayPal'),
-    (-4, 'Bitcoin');
+    (-4, 'Ethereum');

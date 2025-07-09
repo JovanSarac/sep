@@ -6,6 +6,7 @@ import { environment } from 'src/env/environment';
 import { PaymentService } from '../payments/model/payment_service.model';
 import { paymentDataDto } from './dto/paymentDataDto';
 import { paymentQRDataDto } from './dto/paymentQRDataDto';
+import { SessionDto } from './dto/sessionDto';
 
 @Injectable({
   providedIn: 'root'
@@ -32,5 +33,9 @@ export class LayoutService {
   sendRequestToBank1QRCode(sessionId: number): Observable<paymentQRDataDto>{
     //return this.http.get<String>(environment.rabbitMQ + 'publishSendRequest/' + sessionId);
     return this.http.get<paymentQRDataDto>(environment.apiHost+ 'psp/requests/sendRequestQRCode/' + sessionId);
+  }
+
+  getSessionById(id: number) : Observable<SessionDto>{
+    return this.http.get<SessionDto>(environment.apiHost + 'session/' + id);
   }
 }

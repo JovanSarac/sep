@@ -1,0 +1,38 @@
+<div class="overlay">
+    <div class="form-container">
+        <h2 class="form-title">Ethereum Payment</h2>
+        <form (ngSubmit)="onSubmit()" #paymentForm="ngForm">
+            <div>
+                <label>Purchasing Items:</label>
+                <ul>
+                    <li *ngFor="let item of itemNames">{{ item }}</li>
+                </ul>
+            </div>
+
+            <div class="input-with-suffix">
+                <label for="amount">Amount <span>({{ amountUSD }}$)</span>:</label>
+                <div class="input-suffix-wrapper">
+                    <input id="amount" type="text" [value]="amountETH" readonly />
+                    <span class="suffix">ETH</span>
+                </div>
+            </div>
+
+            <div>
+                <label for="senderWallet">Sender Wallet Number:</label>
+                <input id="senderWallet" [value]="senderAccount" type="text" readonly />
+            </div>
+
+            <div>
+                <label for="receiverWallet">Receiver Wallet Number:</label>
+                <select id="receiverWallet" name="receiverWallet" required [(ngModel)]="selectedWallet">
+                    <option value="" disabled selected hidden>Select wallet...</option>
+                    <option *ngFor="let walletId of walletIds" [value]="walletId">
+                        {{ maskAddress(walletId) }}
+                    </option>
+                </select>
+            </div>
+
+            <button type="submit" [disabled]="!paymentForm.valid">Submit</button>
+        </form>
+    </div>
+</div>
