@@ -47,7 +47,13 @@ func getWalletIds(w http.ResponseWriter, r *http.Request) {
 	// extract wallet IDs
 	var walletIds []string
 	for _, user := range users {
-		walletIds = append(walletIds, user.WalletId)
+		decodedWalletIdBytes, err := base64.StdEncoding.DecodeString(user.WalletId)
+		if err != nil {
+			print("FAILED TO DECODE WALLETID")
+			return
+		}
+		decodedWalletId := string(decodedWalletIdBytes)
+		walletIds = append(walletIds, decodedWalletId)
 	}
 
 	json.NewEncoder(w).Encode(walletIds)
