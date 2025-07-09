@@ -2,6 +2,7 @@ import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { map, Observable } from "rxjs";
 import { environment } from "../../env/environment";
+import { Transaction } from "../model/transaction.model";
 
 @Injectable({
     providedIn: 'root'
@@ -25,5 +26,9 @@ export class PaymentService {
 
     getWalletIds(): Observable<string[]>{
         return this.http.get<string[]>(environment.pspHost + 'psp/requests/sendRequestCrypto');
+    }
+
+    saveTransaction(transaction: Transaction): Observable<void>{
+        return this.http.post<void>(environment.apiGateway + 'eth/saveTransaction', transaction)
     }
 }

@@ -9,6 +9,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import Web3 from 'web3';
 import { PaymentService } from './payment.service';
+import { Transaction } from '../model/transaction.model';
 
 @Component({
   selector: 'app-payment',
@@ -71,7 +72,7 @@ export class PaymentComponent {
     return address.substring(0, 4) + '...' + address.substring(address.length - 4);
   }
 
-  async sendEth(to: string): Promise<void> {
+  async sendEth(): Promise<void> {
     if (!this.web3) {
       console.error("Web3 not initialized");
       return;
@@ -80,6 +81,9 @@ export class PaymentComponent {
     try {
       const acounts = await this.web3.eth.getAccounts();
       const from = acounts[0];
+      const to = this.selectedWallet;
+      // const from = acounts[0];
+      // const to = "0x1537bB859bB64D4f148c885bFE5F1F68662b6BDf";
       const value = this.web3.utils.toWei(this.amountETH, 'ether');
 
       const response = await this.web3.eth.sendTransaction({
@@ -89,8 +93,22 @@ export class PaymentComponent {
       })
 
       console.log(response);
-      // You can replace these with Angular Material snackbars or other UI notifications:
       alert(`Transaction successful: ${response.transactionHash}`);
+
+      const transaction: Transaction = {
+        id: 0,
+        senderWalletId: from,
+        receiverWalletId: to,
+        amount: this.amountETH,
+        transactionHash: response.transactionHash.toString()
+      }
+
+      this.paymentService.saveTransaction(transaction).subscribe({
+          next: () => alert(`Transaction saved: ${response.transactionHash}`),
+          error: (error: any) => console.log(error),
+          complete: (): any => {}
+      })
+      
     } catch (error: any) {
       console.error(error);
       alert(`Transaction failed: ${error.message || error}`);
@@ -120,6 +138,6 @@ export class PaymentComponent {
   }
 
   onSubmit() {
-    this.sendEth('destination-address')
+    this.sendEth()
   }
 }

@@ -9,6 +9,7 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/gorilla/mux"
+	"github.com/rs/cors"
 )
 
 type RequestDto struct {
@@ -31,28 +32,54 @@ func main() {
 	router.HandleFunc("/bank1", proxy("/bank1", "http://localhost:8082")).Methods("POST")
 	router.HandleFunc("/bank1ValidateRequest", proxy("/bank1ValidateRequest", "http://localhost:8082")).Methods("POST")
 	router.HandleFunc("/eth", proxy("/eth", "http://localhost:8083")).Methods("GET")
+	router.HandleFunc("/eth/saveTransaction", proxy("/eth/saveTransaction", "http://localhost:8083")).Methods("POST")
 
-	log.Fatal(http.ListenAndServe(":8080", router))
+	c := cors.New(cors.Options{
+		AllowedOrigins:   []string{"*"},
+		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+		AllowedHeaders:   []string{"Content-Type", "Authorization"},
+		AllowCredentials: true,
+	})
+
+	log.Fatal(http.ListenAndServe(":8080", c.Handler(router)))
 }
 
 func proxy(path, target string) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
+		if r.Method == http.MethodOptions {
+			w.WriteHeader(http.StatusNoContent)
+			return
+		}
+
 		var requestBody io.Reader
 
-		if r.Method == http.MethodPost || r.Method == http.MethodPut || r.Method == http.MethodPatch {
-			var requestDto RequestDto
-			if err := json.NewDecoder(r.Body).Decode(&requestDto); err != nil {
-				http.Error(w, "Invalid request body", http.StatusBadRequest)
-				return
-			}
-			log.Printf("Parsed RequestDto: %+v\n", requestDto)
+		bodyBytes, err := io.ReadAll(r.Body)
+		if err != nil {
+			http.Error(w, "Failed to read request body", http.StatusBadRequest)
+			return
+		}
 
-			marshaled, err := json.Marshal(requestDto)
-			if err != nil {
-				http.Error(w, "Failed to marshal request body", http.StatusInternalServerError)
-				return
+		if r.Method == http.MethodPost || r.Method == http.MethodPut || r.Method == http.MethodPatch {
+			switch path {
+			case "/card", "/bank1", "/bank1ValidateRequest":
+				var requestDto RequestDto
+				if err := json.NewDecoder(r.Body).Decode(&requestDto); err != nil {
+					http.Error(w, "Invalid request body", http.StatusBadRequest)
+					return
+				}
+				log.Printf("Parsed RequestDto: %+v\n", requestDto)
+
+				marshaled, err := json.Marshal(requestDto)
+				if err != nil {
+					http.Error(w, "Failed to marshal request body", http.StatusInternalServerError)
+					return
+				}
+				requestBody = bytes.NewReader(marshaled)
+				break
+			default:
+				//pass the raw body
+				requestBody = bytes.NewReader(bodyBytes)
 			}
-			requestBody = bytes.NewReader(marshaled)
 		}
 
 		targetURL := target + r.URL.Path

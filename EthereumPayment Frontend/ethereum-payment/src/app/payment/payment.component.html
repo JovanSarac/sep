@@ -27,7 +27,7 @@
                 <select id="receiverWallet" name="receiverWallet" required [(ngModel)]="selectedWallet">
                     <option value="" disabled selected hidden>Select wallet...</option>
                     <option *ngFor="let walletId of walletIds" [value]="walletId">
-                        {{ walletId }}
+                        {{ maskAddress(walletId) }}
                     </option>
                 </select>
             </div>

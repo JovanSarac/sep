@@ -1,8 +1,9 @@
 package models
 
 type Transaction struct {
-	Id         int     `gorm:"column:firstName;primaryKey" json:"id"`
-	SenderId   int     `gorm:"column:senderId" json:"senderId"`
-	ReceiverId int     `gorm:"column:receiverId" json:"receiverId"`
-	Amount     float64 `gorm:"column:amount" json:"amount"`
+	Id               int     `gorm:"primaryKey" json:"id"`
+	SenderWalletId   string  `gorm:"column:senderWalletId" json:"senderWalletId"`
+	ReceiverWalletId string  `gorm:"column:receiverWalletId" json:"receiverWalletId"`
+	Amount           float64 `gorm:"column:amount" json:"amount"`
+	TransactionHash  string  `gorm:"column:transactionHash" json:"transactionHash"`
 }
