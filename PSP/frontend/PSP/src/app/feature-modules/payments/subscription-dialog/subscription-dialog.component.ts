@@ -73,7 +73,7 @@ export class SubscriptionDialogComponent implements OnInit {
         var apiKey: ApiKeyDto = {
           merchantId: result.merchantId!,
           merchantPassword: result.merchantPassword!,
-          paymentType: -1
+          paymentType: this.data.id
         }
 
         this.service.saveApiKey(apiKey).subscribe({});

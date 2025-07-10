@@ -31,8 +31,8 @@ func main() {
 	router.HandleFunc("/card", proxy("/card", "http://localhost:8082")).Methods("GET")
 	router.HandleFunc("/bank1ValidateRequest", proxy("/bank1ValidateRequest", "http://localhost:8082")).Methods("POST")
 	router.HandleFunc("/bank1QRCodeValidateRequest", proxy("/bank1QRCodeValidateRequest", "http://localhost:8083")).Methods("POST")
-	router.HandleFunc("/eth", proxy("/eth", "http://localhost:8083")).Methods("GET")
-	router.HandleFunc("/eth/saveTransaction", proxy("/eth/saveTransaction", "http://localhost:8083")).Methods("POST")
+	router.HandleFunc("/eth", proxy("/eth", "http://localhost:8084")).Methods("GET")
+	router.HandleFunc("/eth/saveTransaction", proxy("/eth/saveTransaction", "http://localhost:8084")).Methods("POST")
 
 	c := cors.New(cors.Options{
 		AllowedOrigins:   []string{"*"},

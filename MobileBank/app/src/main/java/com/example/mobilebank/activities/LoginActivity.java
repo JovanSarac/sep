@@ -3,6 +3,7 @@ package com.example.mobilebank.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputFilter;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -68,6 +69,7 @@ public class LoginActivity extends AppCompatActivity {
 
                 @Override
                 public void onFailure(Call<MobileBankUserDto> call, Throwable t) {
+                    Log.e("LOGIN_ERROR", "Greška u komunikaciji: " + t.getMessage(), t);
                     errorMessage.setText("Greška u komunikaciji.");
                     errorMessage.setVisibility(View.VISIBLE);
                 }

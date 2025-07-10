@@ -31,8 +31,8 @@ func main() {
 	http.HandleFunc("/eth", getWalletIds)
 	http.HandleFunc("/eth/saveTransaction", saveTransaction)
 
-	fmt.Print("EthService is running on :8083")
-	http.ListenAndServe(":8083", nil)
+	fmt.Print("EthService is running on :8084")
+	http.ListenAndServe(":8084", nil)
 }
 
 func getWalletIds(w http.ResponseWriter, r *http.Request) {
