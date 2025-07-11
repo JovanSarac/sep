@@ -1,0 +1,2 @@
+# Ignore all files in /monitoring/logs
+/monitoring/logs/*
