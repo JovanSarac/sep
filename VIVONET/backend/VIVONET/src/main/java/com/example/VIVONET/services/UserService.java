@@ -5,6 +5,8 @@ import com.example.VIVONET.dtos.UserInfoDto;
 import com.example.VIVONET.models.User;
 import com.example.VIVONET.models.UserType;
 import com.example.VIVONET.repositories.UserRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -18,12 +20,13 @@ public class UserService {
     private final UserRepository userRepository;
     @Autowired
     PasswordEncoder encoder;
+
+    private static final Logger logger = LoggerFactory.getLogger(UserService.class);
+
     @Autowired
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
-
-
 
     public User getUserById(Long id) {
         Optional<User> user=userRepository.findById(id);
@@ -31,15 +34,19 @@ public class UserService {
     }
 
     public String registerUser(RegistrationDto registrationDto) {
+        logger.info("Starting user registration..");
         if (!registrationDto.isMacthingPassword()) {
+            logger.error("Passwords do not match");
             return "Passwords do not match.";
         }
 
         if (userRepository.existsByUsername(registrationDto.getUsername())) {
+            logger.error("Username already exists");
             return "Username already exists.";
         }
 
         if (!isValidPassword(registrationDto.getPassword())) {
+            logger.error("Password must be at least 8 characters long, with at least one uppercase letter, one number, and one special character, such as #, !, %, ?, &.");
             return "Password must be at least 8 characters long, with at least one uppercase letter, one number, and one special character, such as #, !, %, ?, &.";
         }
 
@@ -52,6 +59,7 @@ public class UserService {
                 registrationDto.getUserType()
         );
 
+        logger.info("User registered successfully");
         userRepository.save(newUser);
         return "Registration successful!";
     }

@@ -7,6 +7,8 @@ import com.example.VIVONET.security.jwt.JwtUtils;
 import com.example.VIVONET.security.services.UserDetailsImpl;
 import com.example.VIVONET.services.UserService;
 import jakarta.validation.Valid;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
@@ -29,14 +31,18 @@ public class AuthController {
     JwtUtils jwtUtils;
     @Autowired
     private UserService userService;
+    private static final Logger logger = LoggerFactory.getLogger(AuthController.class);
+
     @PostMapping("/login")
     public ResponseEntity<?> loginUser(@Valid @RequestBody CredentialDto loginRequest) {
+        logger.info("Authenticating user: " + loginRequest.getUsername());
         Authentication authentication = authenticationManager
                 .authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
         ResponseCookie jwtCookie = jwtUtils.generateJwtCookie(userDetails);
 
+        logger.info("User " + loginRequest.getUsername() + " logged in successfully");
         String jwtSource = jwtCookie.toString().split("=")[1].split(";")[0];
         return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, jwtSource)
                 .body(new AccessToken(userDetails.getId(), jwtSource));
