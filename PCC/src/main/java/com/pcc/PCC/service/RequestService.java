@@ -3,6 +3,9 @@ package com.pcc.PCC.service;
 import com.pcc.PCC.dto.RequestDto;
 import com.pcc.PCC.model.Request;
 import com.pcc.PCC.repository.RequestRepository;
+import lombok.extern.java.Log;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.ResourceAccessException;
@@ -14,6 +17,8 @@ public class RequestService {
     @Autowired
     private RequestRepository requestRepository;
 
+    private final static Logger logger = LoggerFactory.getLogger(RequestService.class);
+
     public RequestDto create(RequestDto requestDto){
         Request request = new Request(requestDto.PAN,
                 requestDto.securityCode,
@@ -23,11 +28,14 @@ public class RequestService {
                 requestDto.acquirerOrderId,
                 requestDto.acquirerTimestamp);
 
-        requestRepository.save(request);
+        Request savedRequest = requestRepository.save(request);
+        logger.info("Saved new request " + savedRequest.getId());
+
         return requestDto;
     }
 
     public Request findByAcquirerOrderId(UUID id){
+        logger.info("Retrieving request by acquirerOrderId " + id);
         Optional<Request> optionalRequest = requestRepository.findByAcquirerOrderId(id);
         if(!optionalRequest.isPresent()) throw new ResourceAccessException("No request in PCC for " + id + " acquirerOrderId");
 

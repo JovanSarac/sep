@@ -103,3 +103,374 @@
 2025-07-12T12:36:15.795+02:00  INFO 17692 --- [VIVONET] [http-nio-8093-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
 2025-07-12T12:36:15.795+02:00  INFO 17692 --- [VIVONET] [http-nio-8093-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
 2025-07-12T12:36:15.796+02:00  INFO 17692 --- [VIVONET] [http-nio-8093-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
+2025-07-12T14:21:42.257+02:00  INFO 17692 --- [VIVONET] [http-nio-8093-exec-3] c.e.V.services.VivonetServicesService    : Retrieving all internet services for personal use from database
+2025-07-12T14:23:07.670+02:00  INFO 17692 --- [VIVONET] [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-1] o.s.a.r.l.SimpleMessageListenerContainer : Restarting Consumer@1db9572: tags=[[amq.ctag-a-njyjGvn6TCfeP2rOvkPg]], channel=Cached Rabbit Channel: AMQChannel(amqp://guest@127.0.0.1:5672/,1), conn: Proxy@4970b93d Shared Rabbit Connection: SimpleConnection@281e2377 [delegate=amqp://guest@127.0.0.1:5672/, localPort=63365], acknowledgeMode=AUTO local queue size=0
+2025-07-12T14:23:07.673+02:00  INFO 17692 --- [VIVONET] [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-2] o.s.a.r.c.CachingConnectionFactory       : Attempting to connect to: [localhost:5672]
+2025-07-12T14:23:07.680+02:00 ERROR 17692 --- [VIVONET] [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-2] o.s.a.r.l.SimpleMessageListenerContainer : Failed to check/redeclare auto-delete queue(s).
+
+org.springframework.amqp.AmqpIOException: java.io.IOException
+	at org.springframework.amqp.rabbit.support.RabbitExceptionTranslator.convertRabbitAccessException(RabbitExceptionTranslator.java:70) ~[spring-rabbit-3.1.8.jar:3.1.8]
+	at org.springframework.amqp.rabbit.connection.AbstractConnectionFactory.createBareConnection(AbstractConnectionFactory.java:623) ~[spring-rabbit-3.1.8.jar:3.1.8]
+	at org.springframework.amqp.rabbit.connection.CachingConnectionFactory.createConnection(CachingConnectionFactory.java:726) ~[spring-rabbit-3.1.8.jar:3.1.8]
+	at org.springframework.amqp.rabbit.connection.CachingConnectionFactory.createBareChannel(CachingConnectionFactory.java:671) ~[spring-rabbit-3.1.8.jar:3.1.8]
+	at org.springframework.amqp.rabbit.connection.CachingConnectionFactory.getCachedChannelProxy(CachingConnectionFactory.java:644) ~[spring-rabbit-3.1.8.jar:3.1.8]
+	at org.springframework.amqp.rabbit.connection.CachingConnectionFactory.getChannel(CachingConnectionFactory.java:533) ~[spring-rabbit-3.1.8.jar:3.1.8]
+	at org.springframework.amqp.rabbit.connection.CachingConnectionFactory$ChannelCachingConnectionProxy.createChannel(CachingConnectionFactory.java:1484) ~[spring-rabbit-3.1.8.jar:3.1.8]
+	at org.springframework.amqp.rabbit.core.RabbitTemplate.doExecute(RabbitTemplate.java:2255) ~[spring-rabbit-3.1.8.jar:3.1.8]
+	at org.springframework.amqp.rabbit.core.RabbitTemplate.execute(RabbitTemplate.java:2222) ~[spring-rabbit-3.1.8.jar:3.1.8]
+	at org.springframework.amqp.rabbit.core.RabbitTemplate.execute(RabbitTemplate.java:2202) ~[spring-rabbit-3.1.8.jar:3.1.8]
+	at org.springframework.amqp.rabbit.core.RabbitAdmin.getQueueInfo(RabbitAdmin.java:468) ~[spring-rabbit-3.1.8.jar:3.1.8]
+	at org.springframework.amqp.rabbit.core.RabbitAdmin.getQueueProperties(RabbitAdmin.java:452) ~[spring-rabbit-3.1.8.jar:3.1.8]
+	at org.springframework.amqp.rabbit.listener.AbstractMessageListenerContainer.attemptDeclarations(AbstractMessageListenerContainer.java:1960) ~[spring-rabbit-3.1.8.jar:3.1.8]
+	at org.springframework.amqp.rabbit.listener.AbstractMessageListenerContainer.redeclareElementsIfNecessary(AbstractMessageListenerContainer.java:1924) ~[spring-rabbit-3.1.8.jar:3.1.8]
+	at org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer$AsyncMessageProcessingConsumer.initialize(SimpleMessageListenerContainer.java:1479) ~[spring-rabbit-3.1.8.jar:3.1.8]
+	at org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer$AsyncMessageProcessingConsumer.run(SimpleMessageListenerContainer.java:1320) ~[spring-rabbit-3.1.8.jar:3.1.8]
+	at java.base/java.lang.Thread.run(Thread.java:1575) ~[na:na]
+Caused by: java.io.IOException: null
+	at com.rabbitmq.client.impl.AMQChannel.wrap(AMQChannel.java:140) ~[amqp-client-5.19.0.jar:5.19.0]
+	at com.rabbitmq.client.impl.AMQChannel.wrap(AMQChannel.java:136) ~[amqp-client-5.19.0.jar:5.19.0]
+	at com.rabbitmq.client.impl.AMQConnection.start(AMQConnection.java:406) ~[amqp-client-5.19.0.jar:5.19.0]
+	at com.rabbitmq.client.ConnectionFactory.newConnection(ConnectionFactory.java:1251) ~[amqp-client-5.19.0.jar:5.19.0]
+	at com.rabbitmq.client.ConnectionFactory.newConnection(ConnectionFactory.java:1198) ~[amqp-client-5.19.0.jar:5.19.0]
+	at org.springframework.amqp.rabbit.connection.AbstractConnectionFactory.connectAddresses(AbstractConnectionFactory.java:669) ~[spring-rabbit-3.1.8.jar:3.1.8]
+	at org.springframework.amqp.rabbit.connection.AbstractConnectionFactory.connect(AbstractConnectionFactory.java:638) ~[spring-rabbit-3.1.8.jar:3.1.8]
+	at org.springframework.amqp.rabbit.connection.AbstractConnectionFactory.createBareConnection(AbstractConnectionFactory.java:585) ~[spring-rabbit-3.1.8.jar:3.1.8]
+	... 15 common frames omitted
+Caused by: com.rabbitmq.client.ShutdownSignalException: connection error
+	at com.rabbitmq.utility.ValueOrException.getValue(ValueOrException.java:66) ~[amqp-client-5.19.0.jar:5.19.0]
+	at com.rabbitmq.utility.BlockingValueOrException.uninterruptibleGetValue(BlockingValueOrException.java:36) ~[amqp-client-5.19.0.jar:5.19.0]
+	at com.rabbitmq.client.impl.AMQChannel$BlockingRpcContinuation.getReply(AMQChannel.java:552) ~[amqp-client-5.19.0.jar:5.19.0]
+	at com.rabbitmq.client.impl.AMQConnection.start(AMQConnection.java:336) ~[amqp-client-5.19.0.jar:5.19.0]
+	... 20 common frames omitted
+Caused by: java.io.EOFException: null
+	at java.base/java.io.DataInputStream.readUnsignedByte(DataInputStream.java:297) ~[na:na]
+	at com.rabbitmq.client.impl.Frame.readFrom(Frame.java:91) ~[amqp-client-5.19.0.jar:5.19.0]
+	at com.rabbitmq.client.impl.SocketFrameHandler.readFrame(SocketFrameHandler.java:199) ~[amqp-client-5.19.0.jar:5.19.0]
+	at com.rabbitmq.client.impl.AMQConnection$MainLoop.run(AMQConnection.java:687) ~[amqp-client-5.19.0.jar:5.19.0]
+	... 1 common frames omitted
+
+2025-07-12T14:23:07.685+02:00  INFO 17692 --- [VIVONET] [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-2] o.s.a.r.c.CachingConnectionFactory       : Attempting to connect to: [localhost:5672]
+2025-07-12T14:23:12.853+02:00  INFO 17692 --- [VIVONET] [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-2] o.s.a.r.l.SimpleMessageListenerContainer : Restarting Consumer@668ff15a: tags=[[]], channel=null, acknowledgeMode=AUTO local queue size=0
+2025-07-12T14:23:12.853+02:00  INFO 17692 --- [VIVONET] [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-3] o.s.a.r.c.CachingConnectionFactory       : Attempting to connect to: [localhost:5672]
+2025-07-12T14:23:12.864+02:00 ERROR 17692 --- [VIVONET] [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-3] o.s.a.r.l.SimpleMessageListenerContainer : Failed to check/redeclare auto-delete queue(s).
+2025-07-12T14:23:12.864+02:00  INFO 17692 --- [VIVONET] [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-3] o.s.a.r.c.CachingConnectionFactory       : Attempting to connect to: [localhost:5672]
+2025-07-12T14:23:18.070+02:00  WARN 17692 --- [VIVONET] [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-3] o.s.a.r.l.SimpleMessageListenerContainer : Consumer raised exception, processing can restart if the connection factory supports it. Exception summary: org.springframework.amqp.AmqpConnectException: java.net.ConnectException: Connection refused: getsockopt
+2025-07-12T14:23:18.070+02:00  INFO 17692 --- [VIVONET] [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-3] o.s.a.r.l.SimpleMessageListenerContainer : Restarting Consumer@45344841: tags=[[]], channel=null, acknowledgeMode=AUTO local queue size=0
+2025-07-12T14:23:18.071+02:00  INFO 17692 --- [VIVONET] [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-4] o.s.a.r.c.CachingConnectionFactory       : Attempting to connect to: [localhost:5672]
+2025-07-12T14:23:18.103+02:00 ERROR 17692 --- [VIVONET] [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-4] o.s.a.r.l.SimpleMessageListenerContainer : Failed to check/redeclare auto-delete queue(s).
+2025-07-12T14:23:18.103+02:00  INFO 17692 --- [VIVONET] [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-4] o.s.a.r.c.CachingConnectionFactory       : Attempting to connect to: [localhost:5672]
+2025-07-12T14:23:23.275+02:00  WARN 17692 --- [VIVONET] [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-4] o.s.a.r.l.SimpleMessageListenerContainer : Consumer raised exception, processing can restart if the connection factory supports it. Exception summary: org.springframework.amqp.AmqpConnectException: java.net.ConnectException: Connection refused: getsockopt
+2025-07-12T14:23:23.275+02:00  INFO 17692 --- [VIVONET] [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-4] o.s.a.r.l.SimpleMessageListenerContainer : Restarting Consumer@7698994b: tags=[[]], channel=null, acknowledgeMode=AUTO local queue size=0
+2025-07-12T14:23:23.275+02:00  INFO 17692 --- [VIVONET] [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-5] o.s.a.r.c.CachingConnectionFactory       : Attempting to connect to: [localhost:5672]
+2025-07-12T14:23:23.307+02:00 ERROR 17692 --- [VIVONET] [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-5] o.s.a.r.l.SimpleMessageListenerContainer : Failed to check/redeclare auto-delete queue(s).
+2025-07-12T14:23:23.307+02:00  INFO 17692 --- [VIVONET] [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-5] o.s.a.r.c.CachingConnectionFactory       : Attempting to connect to: [localhost:5672]
+2025-07-12T14:23:28.513+02:00  WARN 17692 --- [VIVONET] [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-5] o.s.a.r.l.SimpleMessageListenerContainer : Consumer raised exception, processing can restart if the connection factory supports it. Exception summary: org.springframework.amqp.AmqpConnectException: java.net.ConnectException: Connection refused: getsockopt
+2025-07-12T14:23:28.513+02:00  INFO 17692 --- [VIVONET] [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-5] o.s.a.r.l.SimpleMessageListenerContainer : Restarting Consumer@60be8b3f: tags=[[]], channel=null, acknowledgeMode=AUTO local queue size=0
+2025-07-12T14:23:28.513+02:00  INFO 17692 --- [VIVONET] [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-6] o.s.a.r.c.CachingConnectionFactory       : Attempting to connect to: [localhost:5672]
+2025-07-12T14:23:28.529+02:00 ERROR 17692 --- [VIVONET] [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-6] o.s.a.r.l.SimpleMessageListenerContainer : Failed to check/redeclare auto-delete queue(s).
+2025-07-12T14:23:28.529+02:00  INFO 17692 --- [VIVONET] [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-6] o.s.a.r.c.CachingConnectionFactory       : Attempting to connect to: [localhost:5672]
+2025-07-12T14:23:31.812+02:00  INFO 17692 --- [VIVONET] [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-7] o.s.a.r.l.SimpleMessageListenerContainer : Waiting for workers to finish.
+2025-07-12T14:23:31.812+02:00  INFO 17692 --- [VIVONET] [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-7] o.s.a.r.l.SimpleMessageListenerContainer : Successfully waited for workers to finish.
+2025-07-12T14:23:31.828+02:00  INFO 17692 --- [VIVONET] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-07-12T14:23:31.836+02:00  INFO 17692 --- [VIVONET] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2025-07-12T14:23:31.836+02:00  INFO 17692 --- [VIVONET] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2025-07-12T14:26:22.655+02:00  INFO 8556 --- [VIVONET] [main] com.example.VIVONET.VivonetApplication   : Starting VivonetApplication using Java 23.0.2 with PID 8556 (F:\Nevena\faks\master\SEP\projekat\sep\VIVONET\backend\VIVONET\target\classes started by gligo in F:\Nevena\faks\master\SEP\projekat\sep\VIVONET\backend\VIVONET)
+2025-07-12T14:26:22.655+02:00  INFO 8556 --- [VIVONET] [main] com.example.VIVONET.VivonetApplication   : No active profile set, falling back to 1 default profile: "default"
+2025-07-12T14:26:24.969+02:00  INFO 8556 --- [VIVONET] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-07-12T14:26:25.084+02:00  INFO 8556 --- [VIVONET] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 107 ms. Found 3 JPA repository interfaces.
+2025-07-12T14:26:26.812+02:00  INFO 8556 --- [VIVONET] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8093 (http)
+2025-07-12T14:26:26.863+02:00  INFO 8556 --- [VIVONET] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-07-12T14:26:26.863+02:00  INFO 8556 --- [VIVONET] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.33]
+2025-07-12T14:26:27.000+02:00  INFO 8556 --- [VIVONET] [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-07-12T14:26:27.000+02:00  INFO 8556 --- [VIVONET] [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 4264 ms
+2025-07-12T14:26:27.926+02:00  INFO 8556 --- [VIVONET] [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-07-12T14:26:28.149+02:00  INFO 8556 --- [VIVONET] [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.4.10.Final
+2025-07-12T14:26:28.269+02:00  INFO 8556 --- [VIVONET] [main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-07-12T14:26:28.706+02:00  INFO 8556 --- [VIVONET] [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-07-12T14:26:28.731+02:00  INFO 8556 --- [VIVONET] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-07-12T14:26:29.161+02:00  INFO 8556 --- [VIVONET] [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@4c9cce17
+2025-07-12T14:26:29.161+02:00  INFO 8556 --- [VIVONET] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-07-12T14:26:29.220+02:00  WARN 8556 --- [VIVONET] [main] org.hibernate.orm.deprecation            : HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-07-12T14:26:30.614+02:00  INFO 8556 --- [VIVONET] [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-07-12T14:26:30.706+02:00  INFO 8556 --- [VIVONET] [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-07-12T14:26:32.076+02:00  INFO 8556 --- [VIVONET] [main] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+2025-07-12T14:26:32.951+02:00  WARN 8556 --- [VIVONET] [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-07-12T14:26:33.595+02:00  INFO 8556 --- [VIVONET] [main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 1 endpoint(s) beneath base path '/actuator'
+2025-07-12T14:26:33.805+02:00  INFO 8556 --- [VIVONET] [main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@661fe6c4, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@2027e9f9, org.springframework.security.web.context.SecurityContextHolderFilter@40def23, org.springframework.security.web.header.HeaderWriterFilter@772a370d, org.springframework.security.web.authentication.logout.LogoutFilter@2dad6fc9, com.example.VIVONET.security.jwt.AuthTokenFilter@42af2977, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@19146ad8, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@7cb84fb5, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@42eb459d, org.springframework.security.web.session.SessionManagementFilter@4a244aa3, org.springframework.security.web.access.ExceptionTranslationFilter@42e1bfe1, org.springframework.security.web.access.intercept.AuthorizationFilter@1aa9635c]
+2025-07-12T14:26:35.322+02:00  INFO 8556 --- [VIVONET] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8093 (http) with context path ''
+2025-07-12T14:26:35.331+02:00  INFO 8556 --- [VIVONET] [main] o.s.a.r.c.CachingConnectionFactory       : Attempting to connect to: [localhost:5672]
+2025-07-12T14:26:35.391+02:00  INFO 8556 --- [VIVONET] [main] o.s.a.r.c.CachingConnectionFactory       : Created new connection: rabbitConnectionFactory#58b03882:0/SimpleConnection@eb2ce99 [delegate=amqp://guest@127.0.0.1:5672/, localPort=51908]
+2025-07-12T14:26:35.487+02:00  INFO 8556 --- [VIVONET] [main] com.example.VIVONET.VivonetApplication   : Started VivonetApplication in 13.634 seconds (process running for 14.365)
+2025-07-12T14:26:35.876+02:00  INFO 8556 --- [VIVONET] [http-nio-8093-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-07-12T14:26:35.886+02:00  INFO 8556 --- [VIVONET] [http-nio-8093-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2025-07-12T14:26:35.887+02:00  INFO 8556 --- [VIVONET] [http-nio-8093-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
+2025-07-12T14:37:56.704+02:00  INFO 8556 --- [VIVONET] [http-nio-8093-exec-4] c.e.V.security.jwt.AuthTokenFilter       : Authentication of user user done successfully
+2025-07-12T14:37:56.713+02:00  INFO 8556 --- [VIVONET] [http-nio-8093-exec-4] c.e.V.services.VivonetServicesService    : Retrieving all landline services for personal use from database
+2025-07-12T14:50:10.603+02:00  INFO 3400 --- [VIVONET] [main] com.example.VIVONET.VivonetApplication   : Starting VivonetApplication using Java 23.0.2 with PID 3400 (F:\Nevena\faks\master\SEP\projekat\sep\VIVONET\backend\VIVONET\target\classes started by gligo in F:\Nevena\faks\master\SEP\projekat\sep\VIVONET\backend\VIVONET)
+2025-07-12T14:50:10.635+02:00  INFO 3400 --- [VIVONET] [main] com.example.VIVONET.VivonetApplication   : No active profile set, falling back to 1 default profile: "default"
+2025-07-12T14:50:13.146+02:00  INFO 3400 --- [VIVONET] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-07-12T14:50:13.258+02:00  INFO 3400 --- [VIVONET] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 100 ms. Found 3 JPA repository interfaces.
+2025-07-12T14:50:14.667+02:00  INFO 3400 --- [VIVONET] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8093 (http)
+2025-07-12T14:50:14.681+02:00  INFO 3400 --- [VIVONET] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-07-12T14:50:14.681+02:00  INFO 3400 --- [VIVONET] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.33]
+2025-07-12T14:50:14.756+02:00  INFO 3400 --- [VIVONET] [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-07-12T14:50:14.756+02:00  INFO 3400 --- [VIVONET] [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 4006 ms
+2025-07-12T14:50:15.816+02:00  INFO 3400 --- [VIVONET] [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-07-12T14:50:16.115+02:00  INFO 3400 --- [VIVONET] [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.4.10.Final
+2025-07-12T14:50:16.277+02:00  INFO 3400 --- [VIVONET] [main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-07-12T14:50:16.848+02:00  INFO 3400 --- [VIVONET] [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-07-12T14:50:16.881+02:00  INFO 3400 --- [VIVONET] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-07-12T14:50:17.331+02:00  INFO 3400 --- [VIVONET] [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@665ed71a
+2025-07-12T14:50:17.345+02:00  INFO 3400 --- [VIVONET] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-07-12T14:50:17.421+02:00  WARN 3400 --- [VIVONET] [main] org.hibernate.orm.deprecation            : HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-07-12T14:50:18.809+02:00  INFO 3400 --- [VIVONET] [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-07-12T14:50:18.908+02:00  INFO 3400 --- [VIVONET] [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-07-12T14:50:20.456+02:00  INFO 3400 --- [VIVONET] [main] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+2025-07-12T14:50:21.063+02:00  WARN 3400 --- [VIVONET] [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-07-12T14:50:21.577+02:00  INFO 3400 --- [VIVONET] [main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 1 endpoint(s) beneath base path '/actuator'
+2025-07-12T14:50:21.763+02:00  INFO 3400 --- [VIVONET] [main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@66dad66f, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@7cb040b7, org.springframework.security.web.context.SecurityContextHolderFilter@1f94df5, org.springframework.security.web.header.HeaderWriterFilter@42e1bfe1, org.springframework.security.web.authentication.logout.LogoutFilter@64e41da0, com.example.VIVONET.security.jwt.AuthTokenFilter@2122b4bd, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@74947f2b, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@21c301ab, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@1aa9635c, org.springframework.security.web.session.SessionManagementFilter@362aa318, org.springframework.security.web.access.ExceptionTranslationFilter@46672a62, org.springframework.security.web.access.intercept.AuthorizationFilter@6cdfd50a]
+2025-07-12T14:50:23.285+02:00  INFO 3400 --- [VIVONET] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8093 (http) with context path ''
+2025-07-12T14:50:23.313+02:00  INFO 3400 --- [VIVONET] [main] o.s.a.r.c.CachingConnectionFactory       : Attempting to connect to: [localhost:5672]
+2025-07-12T14:50:23.366+02:00  INFO 3400 --- [VIVONET] [main] o.s.a.r.l.SimpleMessageListenerContainer : Broker not available; cannot force queue declarations during start: java.net.ConnectException: Connection refused: getsockopt
+2025-07-12T14:50:23.379+02:00  INFO 3400 --- [VIVONET] [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-1] o.s.a.r.c.CachingConnectionFactory       : Attempting to connect to: [localhost:5672]
+2025-07-12T14:50:23.411+02:00 ERROR 3400 --- [VIVONET] [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-1] o.s.a.r.l.SimpleMessageListenerContainer : Failed to check/redeclare auto-delete queue(s).
+
+org.springframework.amqp.AmqpConnectException: java.net.ConnectException: Connection refused: getsockopt
+	at org.springframework.amqp.rabbit.support.RabbitExceptionTranslator.convertRabbitAccessException(RabbitExceptionTranslator.java:61) ~[spring-rabbit-3.1.8.jar:3.1.8]
+	at org.springframework.amqp.rabbit.connection.AbstractConnectionFactory.createBareConnection(AbstractConnectionFactory.java:623) ~[spring-rabbit-3.1.8.jar:3.1.8]
+	at org.springframework.amqp.rabbit.connection.CachingConnectionFactory.createConnection(CachingConnectionFactory.java:726) ~[spring-rabbit-3.1.8.jar:3.1.8]
+	at org.springframework.amqp.rabbit.connection.ConnectionFactoryUtils.createConnection(ConnectionFactoryUtils.java:257) ~[spring-rabbit-3.1.8.jar:3.1.8]
+	at org.springframework.amqp.rabbit.core.RabbitTemplate.doExecute(RabbitTemplate.java:2249) ~[spring-rabbit-3.1.8.jar:3.1.8]
+	at org.springframework.amqp.rabbit.core.RabbitTemplate.execute(RabbitTemplate.java:2222) ~[spring-rabbit-3.1.8.jar:3.1.8]
+	at org.springframework.amqp.rabbit.core.RabbitTemplate.execute(RabbitTemplate.java:2202) ~[spring-rabbit-3.1.8.jar:3.1.8]
+	at org.springframework.amqp.rabbit.core.RabbitAdmin.getQueueInfo(RabbitAdmin.java:468) ~[spring-rabbit-3.1.8.jar:3.1.8]
+	at org.springframework.amqp.rabbit.core.RabbitAdmin.getQueueProperties(RabbitAdmin.java:452) ~[spring-rabbit-3.1.8.jar:3.1.8]
+	at org.springframework.amqp.rabbit.listener.AbstractMessageListenerContainer.attemptDeclarations(AbstractMessageListenerContainer.java:1960) ~[spring-rabbit-3.1.8.jar:3.1.8]
+	at org.springframework.amqp.rabbit.listener.AbstractMessageListenerContainer.redeclareElementsIfNecessary(AbstractMessageListenerContainer.java:1924) ~[spring-rabbit-3.1.8.jar:3.1.8]
+	at org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer$AsyncMessageProcessingConsumer.initialize(SimpleMessageListenerContainer.java:1479) ~[spring-rabbit-3.1.8.jar:3.1.8]
+	at org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer$AsyncMessageProcessingConsumer.run(SimpleMessageListenerContainer.java:1320) ~[spring-rabbit-3.1.8.jar:3.1.8]
+	at java.base/java.lang.Thread.run(Thread.java:1575) ~[na:na]
+Caused by: java.net.ConnectException: Connection refused: getsockopt
+	at java.base/sun.nio.ch.Net.pollConnect(Native Method) ~[na:na]
+	at java.base/sun.nio.ch.Net.pollConnectNow(Net.java:682) ~[na:na]
+	at java.base/sun.nio.ch.NioSocketImpl.timedFinishConnect(NioSocketImpl.java:542) ~[na:na]
+	at java.base/sun.nio.ch.NioSocketImpl.connect(NioSocketImpl.java:592) ~[na:na]
+	at java.base/java.net.SocksSocketImpl.connect(SocksSocketImpl.java:327) ~[na:na]
+	at java.base/java.net.Socket.connect(Socket.java:760) ~[na:na]
+	at com.rabbitmq.client.impl.SocketFrameHandlerFactory.create(SocketFrameHandlerFactory.java:61) ~[amqp-client-5.19.0.jar:5.19.0]
+	at com.rabbitmq.client.ConnectionFactory.newConnection(ConnectionFactory.java:1249) ~[amqp-client-5.19.0.jar:5.19.0]
+	at com.rabbitmq.client.ConnectionFactory.newConnection(ConnectionFactory.java:1198) ~[amqp-client-5.19.0.jar:5.19.0]
+	at org.springframework.amqp.rabbit.connection.AbstractConnectionFactory.connectAddresses(AbstractConnectionFactory.java:669) ~[spring-rabbit-3.1.8.jar:3.1.8]
+	at org.springframework.amqp.rabbit.connection.AbstractConnectionFactory.connect(AbstractConnectionFactory.java:638) ~[spring-rabbit-3.1.8.jar:3.1.8]
+	at org.springframework.amqp.rabbit.connection.AbstractConnectionFactory.createBareConnection(AbstractConnectionFactory.java:585) ~[spring-rabbit-3.1.8.jar:3.1.8]
+	... 12 common frames omitted
+
+2025-07-12T14:50:23.417+02:00  INFO 3400 --- [VIVONET] [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-1] o.s.a.r.c.CachingConnectionFactory       : Attempting to connect to: [localhost:5672]
+2025-07-12T14:50:23.452+02:00  INFO 3400 --- [VIVONET] [main] com.example.VIVONET.VivonetApplication   : Started VivonetApplication in 13.605 seconds (process running for 20.172)
+2025-07-12T14:50:28.600+02:00  WARN 3400 --- [VIVONET] [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-1] o.s.a.r.l.SimpleMessageListenerContainer : Consumer raised exception, processing can restart if the connection factory supports it. Exception summary: org.springframework.amqp.AmqpConnectException: java.net.ConnectException: Connection refused: getsockopt
+2025-07-12T14:50:28.606+02:00  INFO 3400 --- [VIVONET] [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-1] o.s.a.r.l.SimpleMessageListenerContainer : Restarting Consumer@51102651: tags=[[]], channel=null, acknowledgeMode=AUTO local queue size=0
+2025-07-12T14:50:28.611+02:00  INFO 3400 --- [VIVONET] [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-2] o.s.a.r.c.CachingConnectionFactory       : Attempting to connect to: [localhost:5672]
+2025-07-12T14:50:28.643+02:00 ERROR 3400 --- [VIVONET] [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-2] o.s.a.r.l.SimpleMessageListenerContainer : Failed to check/redeclare auto-delete queue(s).
+2025-07-12T14:50:28.643+02:00  INFO 3400 --- [VIVONET] [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-2] o.s.a.r.c.CachingConnectionFactory       : Attempting to connect to: [localhost:5672]
+2025-07-12T14:50:29.865+02:00  INFO 3400 --- [VIVONET] [http-nio-8093-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-07-12T14:50:29.865+02:00  INFO 3400 --- [VIVONET] [http-nio-8093-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2025-07-12T14:50:29.865+02:00  INFO 3400 --- [VIVONET] [http-nio-8093-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 0 ms
+2025-07-12T14:50:33.844+02:00  WARN 3400 --- [VIVONET] [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-2] o.s.a.r.l.SimpleMessageListenerContainer : Consumer raised exception, processing can restart if the connection factory supports it. Exception summary: org.springframework.amqp.AmqpConnectException: java.net.ConnectException: Connection refused: getsockopt
+2025-07-12T14:50:33.844+02:00  INFO 3400 --- [VIVONET] [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-2] o.s.a.r.l.SimpleMessageListenerContainer : Restarting Consumer@bbbe3db: tags=[[]], channel=null, acknowledgeMode=AUTO local queue size=0
+2025-07-12T14:50:33.846+02:00  INFO 3400 --- [VIVONET] [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-3] o.s.a.r.c.CachingConnectionFactory       : Attempting to connect to: [localhost:5672]
+2025-07-12T14:50:33.847+02:00 ERROR 3400 --- [VIVONET] [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-3] o.s.a.r.l.SimpleMessageListenerContainer : Failed to check/redeclare auto-delete queue(s).
+2025-07-12T14:50:33.847+02:00  INFO 3400 --- [VIVONET] [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-3] o.s.a.r.c.CachingConnectionFactory       : Attempting to connect to: [localhost:5672]
+2025-07-12T14:50:39.035+02:00  WARN 3400 --- [VIVONET] [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-3] o.s.a.r.l.SimpleMessageListenerContainer : Consumer raised exception, processing can restart if the connection factory supports it. Exception summary: org.springframework.amqp.AmqpConnectException: java.net.ConnectException: Connection refused: getsockopt
+2025-07-12T14:50:39.037+02:00  INFO 3400 --- [VIVONET] [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-3] o.s.a.r.l.SimpleMessageListenerContainer : Restarting Consumer@4154f5a0: tags=[[]], channel=null, acknowledgeMode=AUTO local queue size=0
+2025-07-12T14:50:39.042+02:00  INFO 3400 --- [VIVONET] [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-4] o.s.a.r.c.CachingConnectionFactory       : Attempting to connect to: [localhost:5672]
+2025-07-12T14:50:39.072+02:00 ERROR 3400 --- [VIVONET] [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-4] o.s.a.r.l.SimpleMessageListenerContainer : Failed to check/redeclare auto-delete queue(s).
+2025-07-12T14:50:39.072+02:00  INFO 3400 --- [VIVONET] [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-4] o.s.a.r.c.CachingConnectionFactory       : Attempting to connect to: [localhost:5672]
+2025-07-12T14:50:44.311+02:00  WARN 3400 --- [VIVONET] [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-4] o.s.a.r.l.SimpleMessageListenerContainer : Consumer raised exception, processing can restart if the connection factory supports it. Exception summary: org.springframework.amqp.AmqpConnectException: java.net.ConnectException: Connection refused: getsockopt
+2025-07-12T14:50:44.313+02:00  INFO 3400 --- [VIVONET] [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-4] o.s.a.r.l.SimpleMessageListenerContainer : Restarting Consumer@4927eb99: tags=[[]], channel=null, acknowledgeMode=AUTO local queue size=0
+2025-07-12T14:50:44.316+02:00  INFO 3400 --- [VIVONET] [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-5] o.s.a.r.c.CachingConnectionFactory       : Attempting to connect to: [localhost:5672]
+2025-07-12T14:50:44.318+02:00 ERROR 3400 --- [VIVONET] [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-5] o.s.a.r.l.SimpleMessageListenerContainer : Failed to check/redeclare auto-delete queue(s).
+2025-07-12T14:50:44.318+02:00  INFO 3400 --- [VIVONET] [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-5] o.s.a.r.c.CachingConnectionFactory       : Attempting to connect to: [localhost:5672]
+2025-07-12T14:50:49.514+02:00  WARN 3400 --- [VIVONET] [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-5] o.s.a.r.l.SimpleMessageListenerContainer : Consumer raised exception, processing can restart if the connection factory supports it. Exception summary: org.springframework.amqp.AmqpConnectException: java.net.ConnectException: Connection refused: getsockopt
+2025-07-12T14:50:49.517+02:00  INFO 3400 --- [VIVONET] [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-5] o.s.a.r.l.SimpleMessageListenerContainer : Restarting Consumer@3877f414: tags=[[]], channel=null, acknowledgeMode=AUTO local queue size=0
+2025-07-12T14:50:49.522+02:00  INFO 3400 --- [VIVONET] [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-6] o.s.a.r.c.CachingConnectionFactory       : Attempting to connect to: [localhost:5672]
+2025-07-12T14:50:49.562+02:00 ERROR 3400 --- [VIVONET] [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-6] o.s.a.r.l.SimpleMessageListenerContainer : Failed to check/redeclare auto-delete queue(s).
+2025-07-12T14:50:49.562+02:00  INFO 3400 --- [VIVONET] [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-6] o.s.a.r.c.CachingConnectionFactory       : Attempting to connect to: [localhost:5672]
+2025-07-12T14:50:54.595+02:00  WARN 3400 --- [VIVONET] [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-6] o.s.a.r.l.SimpleMessageListenerContainer : Consumer raised exception, processing can restart if the connection factory supports it. Exception summary: org.springframework.amqp.AmqpConnectException: java.net.ConnectException: Connection refused: getsockopt
+2025-07-12T14:50:54.595+02:00  INFO 3400 --- [VIVONET] [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-6] o.s.a.r.l.SimpleMessageListenerContainer : Restarting Consumer@4580dc0f: tags=[[]], channel=null, acknowledgeMode=AUTO local queue size=0
+2025-07-12T14:50:54.599+02:00  INFO 3400 --- [VIVONET] [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-7] o.s.a.r.c.CachingConnectionFactory       : Attempting to connect to: [localhost:5672]
+2025-07-12T14:50:54.630+02:00 ERROR 3400 --- [VIVONET] [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-7] o.s.a.r.l.SimpleMessageListenerContainer : Failed to check/redeclare auto-delete queue(s).
+2025-07-12T14:50:54.630+02:00  INFO 3400 --- [VIVONET] [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-7] o.s.a.r.c.CachingConnectionFactory       : Attempting to connect to: [localhost:5672]
+2025-07-12T14:50:59.847+02:00  WARN 3400 --- [VIVONET] [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-7] o.s.a.r.l.SimpleMessageListenerContainer : Consumer raised exception, processing can restart if the connection factory supports it. Exception summary: org.springframework.amqp.AmqpConnectException: java.net.ConnectException: Connection refused: getsockopt
+2025-07-12T14:50:59.847+02:00  INFO 3400 --- [VIVONET] [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-7] o.s.a.r.l.SimpleMessageListenerContainer : Restarting Consumer@331af02b: tags=[[]], channel=null, acknowledgeMode=AUTO local queue size=0
+2025-07-12T14:50:59.850+02:00  INFO 3400 --- [VIVONET] [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-8] o.s.a.r.c.CachingConnectionFactory       : Attempting to connect to: [localhost:5672]
+2025-07-12T14:50:59.850+02:00 ERROR 3400 --- [VIVONET] [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-8] o.s.a.r.l.SimpleMessageListenerContainer : Failed to check/redeclare auto-delete queue(s).
+2025-07-12T14:50:59.850+02:00  INFO 3400 --- [VIVONET] [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-8] o.s.a.r.c.CachingConnectionFactory       : Attempting to connect to: [localhost:5672]
+2025-07-12T14:51:05.020+02:00  WARN 3400 --- [VIVONET] [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-8] o.s.a.r.l.SimpleMessageListenerContainer : Consumer raised exception, processing can restart if the connection factory supports it. Exception summary: org.springframework.amqp.AmqpConnectException: java.net.ConnectException: Connection refused: getsockopt
+2025-07-12T14:51:05.020+02:00  INFO 3400 --- [VIVONET] [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-8] o.s.a.r.l.SimpleMessageListenerContainer : Restarting Consumer@75a7abd6: tags=[[]], channel=null, acknowledgeMode=AUTO local queue size=0
+2025-07-12T14:51:05.020+02:00  INFO 3400 --- [VIVONET] [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-9] o.s.a.r.c.CachingConnectionFactory       : Attempting to connect to: [localhost:5672]
+2025-07-12T14:51:05.037+02:00 ERROR 3400 --- [VIVONET] [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-9] o.s.a.r.l.SimpleMessageListenerContainer : Failed to check/redeclare auto-delete queue(s).
+2025-07-12T14:51:05.037+02:00  INFO 3400 --- [VIVONET] [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-9] o.s.a.r.c.CachingConnectionFactory       : Attempting to connect to: [localhost:5672]
+2025-07-12T14:51:10.232+02:00  WARN 3400 --- [VIVONET] [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-9] o.s.a.r.l.SimpleMessageListenerContainer : Consumer raised exception, processing can restart if the connection factory supports it. Exception summary: org.springframework.amqp.AmqpConnectException: java.net.ConnectException: Connection refused: getsockopt
+2025-07-12T14:51:10.232+02:00  INFO 3400 --- [VIVONET] [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-9] o.s.a.r.l.SimpleMessageListenerContainer : Restarting Consumer@545952c7: tags=[[]], channel=null, acknowledgeMode=AUTO local queue size=0
+2025-07-12T14:51:10.233+02:00  INFO 3400 --- [VIVONET] [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-10] o.s.a.r.c.CachingConnectionFactory       : Attempting to connect to: [localhost:5672]
+2025-07-12T14:51:10.265+02:00 ERROR 3400 --- [VIVONET] [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-10] o.s.a.r.l.SimpleMessageListenerContainer : Failed to check/redeclare auto-delete queue(s).
+2025-07-12T14:51:10.267+02:00  INFO 3400 --- [VIVONET] [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-10] o.s.a.r.c.CachingConnectionFactory       : Attempting to connect to: [localhost:5672]
+2025-07-12T14:51:15.469+02:00  WARN 3400 --- [VIVONET] [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-10] o.s.a.r.l.SimpleMessageListenerContainer : Consumer raised exception, processing can restart if the connection factory supports it. Exception summary: org.springframework.amqp.AmqpConnectException: java.net.ConnectException: Connection refused: getsockopt
+2025-07-12T14:51:15.469+02:00  INFO 3400 --- [VIVONET] [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-10] o.s.a.r.l.SimpleMessageListenerContainer : Restarting Consumer@5556e74b: tags=[[]], channel=null, acknowledgeMode=AUTO local queue size=0
+2025-07-12T14:51:15.475+02:00  INFO 3400 --- [VIVONET] [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-11] o.s.a.r.c.CachingConnectionFactory       : Attempting to connect to: [localhost:5672]
+2025-07-12T14:51:15.508+02:00 ERROR 3400 --- [VIVONET] [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-11] o.s.a.r.l.SimpleMessageListenerContainer : Failed to check/redeclare auto-delete queue(s).
+2025-07-12T14:51:15.508+02:00  INFO 3400 --- [VIVONET] [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-11] o.s.a.r.c.CachingConnectionFactory       : Attempting to connect to: [localhost:5672]
+2025-07-12T14:51:20.713+02:00  WARN 3400 --- [VIVONET] [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-11] o.s.a.r.l.SimpleMessageListenerContainer : Consumer raised exception, processing can restart if the connection factory supports it. Exception summary: org.springframework.amqp.AmqpConnectException: java.net.ConnectException: Connection refused: getsockopt
+2025-07-12T14:51:20.713+02:00  INFO 3400 --- [VIVONET] [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-11] o.s.a.r.l.SimpleMessageListenerContainer : Restarting Consumer@b5b5a85: tags=[[]], channel=null, acknowledgeMode=AUTO local queue size=0
+2025-07-12T14:51:20.715+02:00  INFO 3400 --- [VIVONET] [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-12] o.s.a.r.c.CachingConnectionFactory       : Attempting to connect to: [localhost:5672]
+2025-07-12T14:51:20.715+02:00 ERROR 3400 --- [VIVONET] [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-12] o.s.a.r.l.SimpleMessageListenerContainer : Failed to check/redeclare auto-delete queue(s).
+2025-07-12T14:51:20.715+02:00  INFO 3400 --- [VIVONET] [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-12] o.s.a.r.c.CachingConnectionFactory       : Attempting to connect to: [localhost:5672]
+2025-07-12T14:51:25.903+02:00  WARN 3400 --- [VIVONET] [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-12] o.s.a.r.l.SimpleMessageListenerContainer : Consumer raised exception, processing can restart if the connection factory supports it. Exception summary: org.springframework.amqp.AmqpConnectException: java.net.ConnectException: Connection refused: getsockopt
+2025-07-12T14:51:25.904+02:00  INFO 3400 --- [VIVONET] [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-12] o.s.a.r.l.SimpleMessageListenerContainer : Restarting Consumer@5140efdc: tags=[[]], channel=null, acknowledgeMode=AUTO local queue size=0
+2025-07-12T14:51:25.904+02:00  INFO 3400 --- [VIVONET] [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-13] o.s.a.r.c.CachingConnectionFactory       : Attempting to connect to: [localhost:5672]
+2025-07-12T14:51:25.935+02:00 ERROR 3400 --- [VIVONET] [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-13] o.s.a.r.l.SimpleMessageListenerContainer : Failed to check/redeclare auto-delete queue(s).
+2025-07-12T14:51:25.935+02:00  INFO 3400 --- [VIVONET] [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-13] o.s.a.r.c.CachingConnectionFactory       : Attempting to connect to: [localhost:5672]
+2025-07-12T14:51:31.165+02:00  WARN 3400 --- [VIVONET] [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-13] o.s.a.r.l.SimpleMessageListenerContainer : Consumer raised exception, processing can restart if the connection factory supports it. Exception summary: org.springframework.amqp.AmqpConnectException: java.net.ConnectException: Connection refused: getsockopt
+2025-07-12T14:51:31.165+02:00  INFO 3400 --- [VIVONET] [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-13] o.s.a.r.l.SimpleMessageListenerContainer : Restarting Consumer@fef51db: tags=[[]], channel=null, acknowledgeMode=AUTO local queue size=0
+2025-07-12T14:51:31.168+02:00  INFO 3400 --- [VIVONET] [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-14] o.s.a.r.c.CachingConnectionFactory       : Attempting to connect to: [localhost:5672]
+2025-07-12T14:51:31.184+02:00 ERROR 3400 --- [VIVONET] [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-14] o.s.a.r.l.SimpleMessageListenerContainer : Failed to check/redeclare auto-delete queue(s).
+2025-07-12T14:51:31.184+02:00  INFO 3400 --- [VIVONET] [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-14] o.s.a.r.c.CachingConnectionFactory       : Attempting to connect to: [localhost:5672]
+2025-07-12T14:51:36.383+02:00  WARN 3400 --- [VIVONET] [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-14] o.s.a.r.l.SimpleMessageListenerContainer : Consumer raised exception, processing can restart if the connection factory supports it. Exception summary: org.springframework.amqp.AmqpConnectException: java.net.ConnectException: Connection refused: getsockopt
+2025-07-12T14:51:36.383+02:00  INFO 3400 --- [VIVONET] [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-14] o.s.a.r.l.SimpleMessageListenerContainer : Restarting Consumer@4d06e8f3: tags=[[]], channel=null, acknowledgeMode=AUTO local queue size=0
+2025-07-12T14:51:36.385+02:00  INFO 3400 --- [VIVONET] [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-15] o.s.a.r.c.CachingConnectionFactory       : Attempting to connect to: [localhost:5672]
+2025-07-12T14:51:36.417+02:00 ERROR 3400 --- [VIVONET] [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-15] o.s.a.r.l.SimpleMessageListenerContainer : Failed to check/redeclare auto-delete queue(s).
+2025-07-12T14:51:36.417+02:00  INFO 3400 --- [VIVONET] [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-15] o.s.a.r.c.CachingConnectionFactory       : Attempting to connect to: [localhost:5672]
+2025-07-12T14:51:41.612+02:00  WARN 3400 --- [VIVONET] [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-15] o.s.a.r.l.SimpleMessageListenerContainer : Consumer raised exception, processing can restart if the connection factory supports it. Exception summary: org.springframework.amqp.AmqpConnectException: java.net.ConnectException: Connection refused: getsockopt
+2025-07-12T14:51:41.612+02:00  INFO 3400 --- [VIVONET] [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-15] o.s.a.r.l.SimpleMessageListenerContainer : Restarting Consumer@15c426f8: tags=[[]], channel=null, acknowledgeMode=AUTO local queue size=0
+2025-07-12T14:51:41.614+02:00  INFO 3400 --- [VIVONET] [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-16] o.s.a.r.c.CachingConnectionFactory       : Attempting to connect to: [localhost:5672]
+2025-07-12T14:51:41.638+02:00 ERROR 3400 --- [VIVONET] [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-16] o.s.a.r.l.SimpleMessageListenerContainer : Failed to check/redeclare auto-delete queue(s).
+2025-07-12T14:51:41.638+02:00  INFO 3400 --- [VIVONET] [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-16] o.s.a.r.c.CachingConnectionFactory       : Attempting to connect to: [localhost:5672]
+2025-07-12T14:51:46.816+02:00  WARN 3400 --- [VIVONET] [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-16] o.s.a.r.l.SimpleMessageListenerContainer : Consumer raised exception, processing can restart if the connection factory supports it. Exception summary: org.springframework.amqp.AmqpConnectException: java.net.ConnectException: Connection refused: getsockopt
+2025-07-12T14:51:46.816+02:00  INFO 3400 --- [VIVONET] [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-16] o.s.a.r.l.SimpleMessageListenerContainer : Restarting Consumer@c94389c: tags=[[]], channel=null, acknowledgeMode=AUTO local queue size=0
+2025-07-12T14:51:46.816+02:00  INFO 3400 --- [VIVONET] [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-17] o.s.a.r.c.CachingConnectionFactory       : Attempting to connect to: [localhost:5672]
+2025-07-12T14:51:46.816+02:00 ERROR 3400 --- [VIVONET] [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-17] o.s.a.r.l.SimpleMessageListenerContainer : Failed to check/redeclare auto-delete queue(s).
+2025-07-12T14:51:46.816+02:00  INFO 3400 --- [VIVONET] [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-17] o.s.a.r.c.CachingConnectionFactory       : Attempting to connect to: [localhost:5672]
+2025-07-12T14:51:49.092+02:00  INFO 3400 --- [VIVONET] [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-18] o.s.a.r.l.SimpleMessageListenerContainer : Waiting for workers to finish.
+2025-07-12T14:51:49.092+02:00  INFO 3400 --- [VIVONET] [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-18] o.s.a.r.l.SimpleMessageListenerContainer : Successfully waited for workers to finish.
+2025-07-12T14:51:49.114+02:00  INFO 3400 --- [VIVONET] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-07-12T14:51:49.116+02:00  INFO 3400 --- [VIVONET] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2025-07-12T14:51:49.120+02:00  INFO 3400 --- [VIVONET] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2025-07-12T14:51:52.299+02:00  INFO 24404 --- [VIVONET] [main] com.example.VIVONET.VivonetApplication   : Starting VivonetApplication using Java 23.0.2 with PID 24404 (F:\Nevena\faks\master\SEP\projekat\sep\VIVONET\backend\VIVONET\target\classes started by gligo in F:\Nevena\faks\master\SEP\projekat\sep\VIVONET\backend\VIVONET)
+2025-07-12T14:51:52.299+02:00  INFO 24404 --- [VIVONET] [main] com.example.VIVONET.VivonetApplication   : No active profile set, falling back to 1 default profile: "default"
+2025-07-12T14:51:54.500+02:00  INFO 24404 --- [VIVONET] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-07-12T14:51:54.682+02:00  INFO 24404 --- [VIVONET] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 163 ms. Found 3 JPA repository interfaces.
+2025-07-12T14:51:56.738+02:00  INFO 24404 --- [VIVONET] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8093 (http)
+2025-07-12T14:51:56.792+02:00  INFO 24404 --- [VIVONET] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-07-12T14:51:56.792+02:00  INFO 24404 --- [VIVONET] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.33]
+2025-07-12T14:51:56.932+02:00  INFO 24404 --- [VIVONET] [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-07-12T14:51:56.932+02:00  INFO 24404 --- [VIVONET] [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 4548 ms
+2025-07-12T14:51:57.468+02:00  INFO 24404 --- [VIVONET] [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-07-12T14:51:57.606+02:00  INFO 24404 --- [VIVONET] [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.4.10.Final
+2025-07-12T14:51:57.681+02:00  INFO 24404 --- [VIVONET] [main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-07-12T14:51:57.980+02:00  INFO 24404 --- [VIVONET] [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-07-12T14:51:58.005+02:00  INFO 24404 --- [VIVONET] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-07-12T14:51:58.279+02:00  INFO 24404 --- [VIVONET] [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@665ed71a
+2025-07-12T14:51:58.279+02:00  INFO 24404 --- [VIVONET] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-07-12T14:51:58.320+02:00  WARN 24404 --- [VIVONET] [main] org.hibernate.orm.deprecation            : HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-07-12T14:51:59.333+02:00  INFO 24404 --- [VIVONET] [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-07-12T14:51:59.390+02:00  INFO 24404 --- [VIVONET] [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-07-12T14:52:00.716+02:00  INFO 24404 --- [VIVONET] [main] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+2025-07-12T14:52:01.351+02:00  WARN 24404 --- [VIVONET] [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-07-12T14:52:01.698+02:00  INFO 24404 --- [VIVONET] [main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 1 endpoint(s) beneath base path '/actuator'
+2025-07-12T14:52:01.803+02:00  INFO 24404 --- [VIVONET] [main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@2bfe51d5, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@158566f8, org.springframework.security.web.context.SecurityContextHolderFilter@184d73af, org.springframework.security.web.header.HeaderWriterFilter@1b3aa246, org.springframework.security.web.authentication.logout.LogoutFilter@1f94df5, com.example.VIVONET.security.jwt.AuthTokenFilter@15d0f2a3, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@40ea5cd3, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@46672a62, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@e7afdd0, org.springframework.security.web.session.SessionManagementFilter@40ee664c, org.springframework.security.web.access.ExceptionTranslationFilter@3bafa95b, org.springframework.security.web.access.intercept.AuthorizationFilter@6127ae9e]
+2025-07-12T14:52:02.695+02:00  INFO 24404 --- [VIVONET] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8093 (http) with context path ''
+2025-07-12T14:52:02.705+02:00  INFO 24404 --- [VIVONET] [main] o.s.a.r.c.CachingConnectionFactory       : Attempting to connect to: [localhost:5672]
+2025-07-12T14:52:02.725+02:00  INFO 24404 --- [VIVONET] [main] o.s.a.r.l.SimpleMessageListenerContainer : Broker not available; cannot force queue declarations during start: java.net.ConnectException: Connection refused: getsockopt
+2025-07-12T14:52:02.731+02:00  INFO 24404 --- [VIVONET] [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-1] o.s.a.r.c.CachingConnectionFactory       : Attempting to connect to: [localhost:5672]
+2025-07-12T14:52:02.752+02:00 ERROR 24404 --- [VIVONET] [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-1] o.s.a.r.l.SimpleMessageListenerContainer : Failed to check/redeclare auto-delete queue(s).
+
+org.springframework.amqp.AmqpConnectException: java.net.ConnectException: Connection refused: getsockopt
+	at org.springframework.amqp.rabbit.support.RabbitExceptionTranslator.convertRabbitAccessException(RabbitExceptionTranslator.java:61) ~[spring-rabbit-3.1.8.jar:3.1.8]
+	at org.springframework.amqp.rabbit.connection.AbstractConnectionFactory.createBareConnection(AbstractConnectionFactory.java:623) ~[spring-rabbit-3.1.8.jar:3.1.8]
+	at org.springframework.amqp.rabbit.connection.CachingConnectionFactory.createConnection(CachingConnectionFactory.java:726) ~[spring-rabbit-3.1.8.jar:3.1.8]
+	at org.springframework.amqp.rabbit.connection.ConnectionFactoryUtils.createConnection(ConnectionFactoryUtils.java:257) ~[spring-rabbit-3.1.8.jar:3.1.8]
+	at org.springframework.amqp.rabbit.core.RabbitTemplate.doExecute(RabbitTemplate.java:2249) ~[spring-rabbit-3.1.8.jar:3.1.8]
+	at org.springframework.amqp.rabbit.core.RabbitTemplate.execute(RabbitTemplate.java:2222) ~[spring-rabbit-3.1.8.jar:3.1.8]
+	at org.springframework.amqp.rabbit.core.RabbitTemplate.execute(RabbitTemplate.java:2202) ~[spring-rabbit-3.1.8.jar:3.1.8]
+	at org.springframework.amqp.rabbit.core.RabbitAdmin.getQueueInfo(RabbitAdmin.java:468) ~[spring-rabbit-3.1.8.jar:3.1.8]
+	at org.springframework.amqp.rabbit.core.RabbitAdmin.getQueueProperties(RabbitAdmin.java:452) ~[spring-rabbit-3.1.8.jar:3.1.8]
+	at org.springframework.amqp.rabbit.listener.AbstractMessageListenerContainer.attemptDeclarations(AbstractMessageListenerContainer.java:1960) ~[spring-rabbit-3.1.8.jar:3.1.8]
+	at org.springframework.amqp.rabbit.listener.AbstractMessageListenerContainer.redeclareElementsIfNecessary(AbstractMessageListenerContainer.java:1924) ~[spring-rabbit-3.1.8.jar:3.1.8]
+	at org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer$AsyncMessageProcessingConsumer.initialize(SimpleMessageListenerContainer.java:1479) ~[spring-rabbit-3.1.8.jar:3.1.8]
+	at org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer$AsyncMessageProcessingConsumer.run(SimpleMessageListenerContainer.java:1320) ~[spring-rabbit-3.1.8.jar:3.1.8]
+	at java.base/java.lang.Thread.run(Thread.java:1575) ~[na:na]
+Caused by: java.net.ConnectException: Connection refused: getsockopt
+	at java.base/sun.nio.ch.Net.pollConnect(Native Method) ~[na:na]
+	at java.base/sun.nio.ch.Net.pollConnectNow(Net.java:682) ~[na:na]
+	at java.base/sun.nio.ch.NioSocketImpl.timedFinishConnect(NioSocketImpl.java:542) ~[na:na]
+	at java.base/sun.nio.ch.NioSocketImpl.connect(NioSocketImpl.java:592) ~[na:na]
+	at java.base/java.net.SocksSocketImpl.connect(SocksSocketImpl.java:327) ~[na:na]
+	at java.base/java.net.Socket.connect(Socket.java:760) ~[na:na]
+	at com.rabbitmq.client.impl.SocketFrameHandlerFactory.create(SocketFrameHandlerFactory.java:61) ~[amqp-client-5.19.0.jar:5.19.0]
+	at com.rabbitmq.client.ConnectionFactory.newConnection(ConnectionFactory.java:1249) ~[amqp-client-5.19.0.jar:5.19.0]
+	at com.rabbitmq.client.ConnectionFactory.newConnection(ConnectionFactory.java:1198) ~[amqp-client-5.19.0.jar:5.19.0]
+	at org.springframework.amqp.rabbit.connection.AbstractConnectionFactory.connectAddresses(AbstractConnectionFactory.java:669) ~[spring-rabbit-3.1.8.jar:3.1.8]
+	at org.springframework.amqp.rabbit.connection.AbstractConnectionFactory.connect(AbstractConnectionFactory.java:638) ~[spring-rabbit-3.1.8.jar:3.1.8]
+	at org.springframework.amqp.rabbit.connection.AbstractConnectionFactory.createBareConnection(AbstractConnectionFactory.java:585) ~[spring-rabbit-3.1.8.jar:3.1.8]
+	... 12 common frames omitted
+
+2025-07-12T14:52:02.756+02:00  INFO 24404 --- [VIVONET] [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-1] o.s.a.r.c.CachingConnectionFactory       : Attempting to connect to: [localhost:5672]
+2025-07-12T14:52:02.797+02:00  INFO 24404 --- [VIVONET] [main] com.example.VIVONET.VivonetApplication   : Started VivonetApplication in 11.242 seconds (process running for 11.952)
+2025-07-12T14:52:03.873+02:00  INFO 24404 --- [VIVONET] [http-nio-8093-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-07-12T14:52:03.874+02:00  INFO 24404 --- [VIVONET] [http-nio-8093-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2025-07-12T14:52:03.876+02:00  INFO 24404 --- [VIVONET] [http-nio-8093-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 2 ms
+2025-07-12T14:52:07.917+02:00  WARN 24404 --- [VIVONET] [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-1] o.s.a.r.l.SimpleMessageListenerContainer : Consumer raised exception, processing can restart if the connection factory supports it. Exception summary: org.springframework.amqp.AmqpConnectException: java.net.ConnectException: Connection refused: getsockopt
+2025-07-12T14:52:07.917+02:00  INFO 24404 --- [VIVONET] [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-1] o.s.a.r.l.SimpleMessageListenerContainer : Restarting Consumer@287cd9b2: tags=[[]], channel=null, acknowledgeMode=AUTO local queue size=0
+2025-07-12T14:52:07.917+02:00  INFO 24404 --- [VIVONET] [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-2] o.s.a.r.c.CachingConnectionFactory       : Attempting to connect to: [localhost:5672]
+2025-07-12T14:52:07.938+02:00 ERROR 24404 --- [VIVONET] [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-2] o.s.a.r.l.SimpleMessageListenerContainer : Failed to check/redeclare auto-delete queue(s).
+2025-07-12T14:52:07.938+02:00  INFO 24404 --- [VIVONET] [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-2] o.s.a.r.c.CachingConnectionFactory       : Attempting to connect to: [localhost:5672]
+2025-07-12T14:52:13.091+02:00  WARN 24404 --- [VIVONET] [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-2] o.s.a.r.l.SimpleMessageListenerContainer : Consumer raised exception, processing can restart if the connection factory supports it. Exception summary: org.springframework.amqp.AmqpConnectException: java.net.ConnectException: Connection refused: getsockopt
+2025-07-12T14:52:13.092+02:00  INFO 24404 --- [VIVONET] [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-2] o.s.a.r.l.SimpleMessageListenerContainer : Restarting Consumer@75c913d7: tags=[[]], channel=null, acknowledgeMode=AUTO local queue size=0
+2025-07-12T14:52:13.094+02:00  INFO 24404 --- [VIVONET] [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-3] o.s.a.r.c.CachingConnectionFactory       : Attempting to connect to: [localhost:5672]
+2025-07-12T14:52:13.119+02:00 ERROR 24404 --- [VIVONET] [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-3] o.s.a.r.l.SimpleMessageListenerContainer : Failed to check/redeclare auto-delete queue(s).
+2025-07-12T14:52:13.119+02:00  INFO 24404 --- [VIVONET] [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-3] o.s.a.r.c.CachingConnectionFactory       : Attempting to connect to: [localhost:5672]
+2025-07-12T14:52:18.271+02:00  WARN 24404 --- [VIVONET] [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-3] o.s.a.r.l.SimpleMessageListenerContainer : Consumer raised exception, processing can restart if the connection factory supports it. Exception summary: org.springframework.amqp.AmqpConnectException: java.net.ConnectException: Connection refused: getsockopt
+2025-07-12T14:52:18.271+02:00  INFO 24404 --- [VIVONET] [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-3] o.s.a.r.l.SimpleMessageListenerContainer : Restarting Consumer@40e5d971: tags=[[]], channel=null, acknowledgeMode=AUTO local queue size=0
+2025-07-12T14:52:18.271+02:00  INFO 24404 --- [VIVONET] [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-4] o.s.a.r.c.CachingConnectionFactory       : Attempting to connect to: [localhost:5672]
+2025-07-12T14:52:18.289+02:00 ERROR 24404 --- [VIVONET] [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-4] o.s.a.r.l.SimpleMessageListenerContainer : Failed to check/redeclare auto-delete queue(s).
+2025-07-12T14:52:18.289+02:00  INFO 24404 --- [VIVONET] [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-4] o.s.a.r.c.CachingConnectionFactory       : Attempting to connect to: [localhost:5672]
+2025-07-12T14:52:23.416+02:00  INFO 24404 --- [VIVONET] [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-4] o.s.a.r.l.SimpleMessageListenerContainer : Restarting Consumer@4064231c: tags=[[]], channel=null, acknowledgeMode=AUTO local queue size=0
+2025-07-12T14:52:23.416+02:00  INFO 24404 --- [VIVONET] [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-5] o.s.a.r.c.CachingConnectionFactory       : Attempting to connect to: [localhost:5672]
+2025-07-12T14:52:23.468+02:00  INFO 24404 --- [VIVONET] [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-5] o.s.a.r.c.CachingConnectionFactory       : Created new connection: rabbitConnectionFactory#10c11e36:9/SimpleConnection@2c042365 [delegate=amqp://guest@127.0.0.1:5672/, localPort=58384]
+2025-07-12T14:52:38.874+02:00  INFO 24404 --- [VIVONET] [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-6] o.s.a.r.l.SimpleMessageListenerContainer : Waiting for workers to finish.
+2025-07-12T14:52:39.640+02:00  INFO 24404 --- [VIVONET] [org.springframework.amqp.rabbit.RabbitListenerEndpointContainer#0-6] o.s.a.r.l.SimpleMessageListenerContainer : Successfully waited for workers to finish.
+2025-07-12T14:52:39.662+02:00  INFO 24404 --- [VIVONET] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-07-12T14:52:39.664+02:00  INFO 24404 --- [VIVONET] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2025-07-12T14:52:39.668+02:00  INFO 24404 --- [VIVONET] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2025-07-12T14:52:42.788+02:00  INFO 25516 --- [VIVONET] [main] com.example.VIVONET.VivonetApplication   : Starting VivonetApplication using Java 23.0.2 with PID 25516 (F:\Nevena\faks\master\SEP\projekat\sep\VIVONET\backend\VIVONET\target\classes started by gligo in F:\Nevena\faks\master\SEP\projekat\sep\VIVONET\backend\VIVONET)
+2025-07-12T14:52:42.788+02:00  INFO 25516 --- [VIVONET] [main] com.example.VIVONET.VivonetApplication   : No active profile set, falling back to 1 default profile: "default"
+2025-07-12T14:52:43.905+02:00  INFO 25516 --- [VIVONET] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-07-12T14:52:44.029+02:00  INFO 25516 --- [VIVONET] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 111 ms. Found 3 JPA repository interfaces.
+2025-07-12T14:52:45.461+02:00  INFO 25516 --- [VIVONET] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8093 (http)
+2025-07-12T14:52:45.473+02:00  INFO 25516 --- [VIVONET] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-07-12T14:52:45.473+02:00  INFO 25516 --- [VIVONET] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.33]
+2025-07-12T14:52:45.566+02:00  INFO 25516 --- [VIVONET] [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-07-12T14:52:45.566+02:00  INFO 25516 --- [VIVONET] [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 2709 ms
+2025-07-12T14:52:46.358+02:00  INFO 25516 --- [VIVONET] [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-07-12T14:52:46.606+02:00  INFO 25516 --- [VIVONET] [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.4.10.Final
+2025-07-12T14:52:46.774+02:00  INFO 25516 --- [VIVONET] [main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-07-12T14:52:47.640+02:00  INFO 25516 --- [VIVONET] [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-07-12T14:52:47.714+02:00  INFO 25516 --- [VIVONET] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-07-12T14:52:48.143+02:00  INFO 25516 --- [VIVONET] [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@54caeadc
+2025-07-12T14:52:48.151+02:00  INFO 25516 --- [VIVONET] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-07-12T14:52:48.289+02:00  WARN 25516 --- [VIVONET] [main] org.hibernate.orm.deprecation            : HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-07-12T14:52:49.610+02:00  INFO 25516 --- [VIVONET] [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-07-12T14:52:49.699+02:00  INFO 25516 --- [VIVONET] [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-07-12T14:52:51.316+02:00  INFO 25516 --- [VIVONET] [main] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+2025-07-12T14:52:52.117+02:00  WARN 25516 --- [VIVONET] [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-07-12T14:52:52.688+02:00  INFO 25516 --- [VIVONET] [main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 1 endpoint(s) beneath base path '/actuator'
+2025-07-12T14:52:52.857+02:00  INFO 25516 --- [VIVONET] [main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@608ccfcd, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@793c2cde, org.springframework.security.web.context.SecurityContextHolderFilter@720bf74d, org.springframework.security.web.header.HeaderWriterFilter@22265a8d, org.springframework.security.web.authentication.logout.LogoutFilter@50e3be0a, com.example.VIVONET.security.jwt.AuthTokenFilter@61868687, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@21c301ab, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@2bfe51d5, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@66cb7a21, org.springframework.security.web.session.SessionManagementFilter@1b74dd88, org.springframework.security.web.access.ExceptionTranslationFilter@4bdc0fb0, org.springframework.security.web.access.intercept.AuthorizationFilter@f9da676]
+2025-07-12T14:52:54.068+02:00  INFO 25516 --- [VIVONET] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8093 (http) with context path ''
+2025-07-12T14:52:54.073+02:00  INFO 25516 --- [VIVONET] [main] o.s.a.r.c.CachingConnectionFactory       : Attempting to connect to: [localhost:5672]
+2025-07-12T14:52:54.115+02:00  INFO 25516 --- [VIVONET] [main] o.s.a.r.c.CachingConnectionFactory       : Created new connection: rabbitConnectionFactory#39068df9:0/SimpleConnection@39e16443 [delegate=amqp://guest@127.0.0.1:5672/, localPort=58438]
+2025-07-12T14:52:54.311+02:00  INFO 25516 --- [VIVONET] [main] com.example.VIVONET.VivonetApplication   : Started VivonetApplication in 12.205 seconds (process running for 13.076)
+2025-07-12T14:52:55.869+02:00  INFO 25516 --- [VIVONET] [http-nio-8093-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-07-12T14:52:55.869+02:00  INFO 25516 --- [VIVONET] [http-nio-8093-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2025-07-12T14:52:55.871+02:00  INFO 25516 --- [VIVONET] [http-nio-8093-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 2 ms
+2025-07-12T15:05:36.002+02:00  INFO 25516 --- [VIVONET] [http-nio-8093-exec-2] c.e.V.security.jwt.AuthTokenFilter       : Authentication of user user done successfully
+2025-07-12T15:05:36.002+02:00  INFO 25516 --- [VIVONET] [http-nio-8093-exec-2] c.e.V.services.VivonetServicesService    : Retrieving all landline services for personal use from database

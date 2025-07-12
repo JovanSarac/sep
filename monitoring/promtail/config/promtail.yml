@@ -23,3 +23,10 @@ scrape_configs:
         labels:
           job: psp
           __path__: /logs/psp.log
+  - job_name: 'PCC'
+    static_configs:
+      - targets:
+          - localhost
+        labels:
+          job: psp
+          __path__: /logs/pcc.log

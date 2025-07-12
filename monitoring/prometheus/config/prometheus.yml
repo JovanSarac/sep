@@ -20,3 +20,14 @@ scrape_configs:
     basic_auth:
       username: "prometheus"
       password: "secret123"
+
+  - job_name: 'PCC input'
+    metrics_path: '/actuator/prometheus'
+    scrape_interval: 2s
+    static_configs:
+      - targets: [ 'host.docker.internal:8094' ]
+        labels:
+          application: "PCC"
+    basic_auth:
+      username: "prometheus"
+      password: "secret123"
