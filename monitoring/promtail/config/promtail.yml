@@ -37,3 +37,11 @@ scrape_configs:
         labels:
           job: bank1
           __path__: /logs/bank1.log
+
+  - job_name: 'Bank2'
+    static_configs:
+      - targets:
+          - localhost
+        labels:
+          job: bank2
+          __path__: /logs/bank2.log

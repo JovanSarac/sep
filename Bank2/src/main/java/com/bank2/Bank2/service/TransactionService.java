@@ -7,6 +7,8 @@ import com.bank2.Bank2.model.Transaction;
 import com.bank2.Bank2.model.TransactionState;
 import com.bank2.Bank2.repository.AccountRepository;
 import com.bank2.Bank2.repository.TransactionRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.ResourceAccessException;
@@ -19,6 +21,8 @@ public class TransactionService {
     private TransactionRepository transactionRepository;
     @Autowired
     private AccountRepository accountRepository;
+
+    private static final Logger logger = LoggerFactory.getLogger(TransactionService.class);
 
     private Boolean checkAccountBalance(TransactionDto transactionDto) {
         /*Optional<Account> accountOptional = accountRepository.findByAccountNumber(transactionDto.sourceAccountNumber);
@@ -33,6 +37,7 @@ public class TransactionService {
     }
 
     public void finishTransactionIssuer(AnswerPCCDto answerPCCDto) {
+        logger.info("Finishin transaction for issuer..");
         if (answerPCCDto.transactionResult.equals("uspesno")) {
             Transaction transaction = transactionRepository.findByAcquirerOrderId(answerPCCDto.acquirerOrderId);
             Account account = accountRepository.findByAccountNumber(transaction.getSourceAccountNumber()).get();
@@ -42,6 +47,8 @@ public class TransactionService {
             accountRepository.save(account);
             transaction.setTransactionState(TransactionState.FINISHED);
             transactionRepository.save(transaction);
+
+            logger.info("Transaction for issuer finished successfully and it was saved");
         }
     }
 }

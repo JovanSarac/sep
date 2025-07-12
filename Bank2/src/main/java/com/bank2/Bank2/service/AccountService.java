@@ -7,6 +7,8 @@ import com.bank2.Bank2.dto.UserIdentificationDto;
 import com.bank2.Bank2.model.*;
 import com.bank2.Bank2.repository.AccountRepository;
 import com.bank2.Bank2.repository.TransactionRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpEntity;
@@ -17,11 +19,7 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -34,6 +32,8 @@ public class AccountService {
     private AccountRepository accountRepository;
     @Autowired
     private TransactionRepository transactionRepository;
+
+    private static final Logger logger = LoggerFactory.getLogger(AccountService.class);
 
     public Boolean validateData(RequestDto requestDto, Account account) {
         //check pan
@@ -153,6 +153,7 @@ public class AccountService {
     }
 
     public Account getAccountByPAN(Long PAN) {
+        logger.info("Retrieving account by PAN " + Base64.getEncoder().encodeToString((PAN).toString().getBytes()));
         Optional<Account> account = accountRepository.findByPAN(PAN);
 
         if(!account.isPresent()) throw new ResourceAccessException("Account with PAN " + PAN + " doesnt exist");
@@ -160,6 +161,8 @@ public class AccountService {
     }
 
     public Account getAccountByAccountNumber(String accountNumber) {
+        logger.info("Retrieving account by accountNumber " + Base64.getEncoder().encodeToString(accountNumber.toString().getBytes()));
+
         Optional<Account> account = accountRepository.findByAccountNumber(accountNumber);
         if(!account.isPresent()) throw new ResourceAccessException("Account with number " + accountNumber + " doesnt exist");
         return account.get();
@@ -167,6 +170,8 @@ public class AccountService {
 
     public String reserveFundsQRCode(QRCodeRequestDto qrCodeRequestDto) {
         try {
+            logger.info("Retrieving account by accountNumber " + Base64.getEncoder().encodeToString(qrCodeRequestDto.buyerAccountNumber.getBytes()));
+
             Optional<Account> optionalAccount = accountRepository.findByAccountNumber(qrCodeRequestDto.buyerAccountNumber);
             if(!optionalAccount.isPresent()) throw new ResourceAccessException("There is no account in bank2 with " + qrCodeRequestDto.buyerAccountNumber + " account number");
 
@@ -197,7 +202,9 @@ public class AccountService {
                     UUID acquirerOrderId = qrCodeRequestDto.acquirerOrderId;
                     reserveTransaction.setIssuerOrderId(issuerOrderId);
                     reserveTransaction.setAcquirerOrderId(acquirerOrderId);
-                    transactionRepository.save(reserveTransaction);
+                    Transaction savedTransaction = transactionRepository.save(reserveTransaction);
+                    logger.info("New transaction saved with id " + savedTransaction.getId());
+
 
                     //poziv pcc-a
                     //mozda staviti da ova metoda bude u qr controlleru
@@ -241,7 +248,8 @@ public class AccountService {
                 UUID acquirerOrderId = qrCodeRequestDto.acquirerOrderId;
                 reserveTransaction.setIssuerOrderId(issuerOrderId);
                 reserveTransaction.setAcquirerOrderId(acquirerOrderId);
-                transactionRepository.save(reserveTransaction);
+                Transaction savedTransaction = transactionRepository.save(reserveTransaction);
+                logger.info("New transaction saved with id " + savedTransaction.getId());
 
                 //poziv pcc-a
                 //TODO ovde isto mozda staviti da bude poziv ka qr controlleru
@@ -272,11 +280,14 @@ public class AccountService {
 
     public String reserveFunds(RequestDto requestDto) {
         try {
+            logger.info("Retrieving account by accountNumber " + Base64.getEncoder().encodeToString(requestDto.PAN.toString().getBytes()));
+
             Optional<Account> optionalAccount = accountRepository.findByPAN(requestDto.PAN);
             if(!optionalAccount.isPresent()) throw new ResourceAccessException("There is no account in bank2 with " + requestDto.PAN + " PAN");
 
             Account account = optionalAccount.get();
 
+            logger.info("Retrieving all transactions by sourceAccountNumber " + Base64.getEncoder().encodeToString(account.getAccountNumber().getBytes()));
             List<Transaction> transactions = transactionRepository.findAllBySourceAccountNumber(account.getAccountNumber());
             List<Transaction> receivedTransactions = transactions.stream()
                     .filter(transaction -> TransactionState.RECEIVED.equals(transaction.getTransactionState()))
@@ -303,7 +314,8 @@ public class AccountService {
                     UUID acquirerOrderId = requestDto.acquirerOrderId;
                     reserveTransaction.setIssuerOrderId(issuerOrderId);
                     reserveTransaction.setAcquirerOrderId(acquirerOrderId);
-                    transactionRepository.save(reserveTransaction);
+                    Transaction savedTransaction = transactionRepository.save(reserveTransaction);
+                    logger.info("New transaction saved with id " + savedTransaction.getId());
 
                     //poziv pcc-a
                     String url = "http://localhost:8094/api/pcc/requests/bank2ToBank1";
@@ -347,7 +359,8 @@ public class AccountService {
                 UUID acquirerOrderId = requestDto.acquirerOrderId;
                 reserveTransaction.setIssuerOrderId(issuerOrderId);
                 reserveTransaction.setAcquirerOrderId(acquirerOrderId);
-                transactionRepository.save(reserveTransaction);
+                Transaction savedTransaction = transactionRepository.save(reserveTransaction);
+                logger.info("New transaction saved with id " + savedTransaction.getId());
 
                 //poziv pcc-a
                 String url = "http://localhost:8094/api/pcc/requests/bank2ToBank1";
