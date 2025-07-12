@@ -28,5 +28,12 @@ scrape_configs:
       - targets:
           - localhost
         labels:
-          job: psp
+          job: pcc
           __path__: /logs/pcc.log
+  - job_name: 'Bank1'
+    static_configs:
+      - targets:
+          - localhost
+        labels:
+          job: bank1
+          __path__: /logs/bank1.log

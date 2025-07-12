@@ -31,3 +31,14 @@ scrape_configs:
     basic_auth:
       username: "prometheus"
       password: "secret123"
+
+  - job_name: 'Bank1 input'
+    metrics_path: '/actuator/prometheus'
+    scrape_interval: 2s
+    static_configs:
+      - targets: [ 'host.docker.internal:8091' ]
+        labels:
+          application: "Bank1"
+    basic_auth:
+      username: "prometheus"
+      password: "secret123"

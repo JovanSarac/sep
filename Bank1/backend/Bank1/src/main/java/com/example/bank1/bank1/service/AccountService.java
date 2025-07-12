@@ -4,6 +4,8 @@ import com.example.bank1.bank1.dto.*;
 import com.example.bank1.bank1.model.*;
 import com.example.bank1.bank1.repository.AccountRepository;
 import com.example.bank1.bank1.repository.TransactionRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpEntity;
@@ -13,10 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -29,6 +28,8 @@ public class AccountService {
     private AccountRepository accountRepository;
     @Autowired
     private TransactionRepository transactionRepository;
+
+    private static final Logger logger = LoggerFactory.getLogger(AccountService.class);
 
     public Boolean validateData(UserIdentificationDto userIdentificationDto, Account account) {
         //check pan
@@ -127,7 +128,9 @@ public class AccountService {
         UUID issuerOrderId = UUID.randomUUID();
         reserveTransaction.setIssuerOrderId(issuerOrderId);
         reserveTransaction.setAcquirerOrderId(acquirerOrderId);
-        transactionRepository.save(reserveTransaction);
+
+        Transaction savedTransaction = transactionRepository.save(reserveTransaction);
+        logger.info("Saved new transaction with id " + savedTransaction.getId());
 
         String url = "http://localhost:8094/api/pcc/qrCodeRequests/checkAndRoute";
         HttpHeaders headers = new HttpHeaders();
@@ -167,7 +170,9 @@ public class AccountService {
         UUID issuerOrderId = UUID.randomUUID();
         reserveTransaction.setIssuerOrderId(issuerOrderId);
         reserveTransaction.setAcquirerOrderId(acquirerOrderId);
-        transactionRepository.save(reserveTransaction);
+        Transaction savedTransaction = transactionRepository.save(reserveTransaction);
+
+        logger.info("New transaction saved with id " + savedTransaction.getId());
 
         String url = "http://localhost:8094/api/pcc/requests/checkAndRoute";
         HttpHeaders headers = new HttpHeaders();
@@ -185,8 +190,10 @@ public class AccountService {
 
     public String sameBanksQRCode (QRPaymentDto qrPaymentDto, User user) {
         try {
+            logger.info("Retrieving account by account number " + Base64.getEncoder().encodeToString(qrPaymentDto.buyerAccountNumber.getBytes()) + " for QR code");
             Account account = accountRepository.findByAccountNumber(qrPaymentDto.buyerAccountNumber).get();
             if (account.getBalance() - qrPaymentDto.amount > 0) {
+                logger.info("Retrieving all transactions by source account number " + Base64.getEncoder().encodeToString(account.getAccountNumber().getBytes()));
                 List<Transaction> transactions = transactionRepository.findAllBySourceAccountNumber(account.getAccountNumber());
                 List<Transaction> receivedTransactions = transactions.stream()
                         .filter(transaction -> TransactionState.RECEIVED.equals(transaction.getTransactionState()))
@@ -210,7 +217,8 @@ public class AccountService {
                     UUID acquirerOrderId = UUID.randomUUID();
                     reserveTransaction.setIssuerOrderId(issuerOrderId);
                     reserveTransaction.setAcquirerOrderId(acquirerOrderId);
-                    transactionRepository.save(reserveTransaction);
+                    Transaction savedTransaction = transactionRepository.save(reserveTransaction);
+                    logger.info("New transaction saved with id " + savedTransaction.getId());
 
                     //poziv pcc-a
                     String url = "http://localhost:8094/api/pcc/requests/checkAndRouteBank1";
@@ -253,7 +261,8 @@ public class AccountService {
                 UUID acquirerOrderId = UUID.randomUUID();
                 reserveTransaction.setIssuerOrderId(issuerOrderId);
                 reserveTransaction.setAcquirerOrderId(acquirerOrderId);
-                transactionRepository.save(reserveTransaction);
+                Transaction savedTransaction = transactionRepository.save(reserveTransaction);
+                logger.info("New transaction saved with id " + savedTransaction.getId());
 
                 //poziv pcc-a
                 String url = "http://localhost:8094/api/pcc/requests/checkAndRouteBank1";
@@ -281,8 +290,10 @@ public class AccountService {
 
     public String sameBanks(UserIdentificationDto userIdentificationDto) {
         try {
+            logger.info("Retrieving account by PAN " + Base64.getEncoder().encodeToString((userIdentificationDto.PAN).toString().getBytes()));
             Account account = accountRepository.findByPAN(userIdentificationDto.getPAN()).get();
             if (account.getBalance() - userIdentificationDto.amount > 0) {
+                logger.info("Retrieving all transactions by sourceAccountNumber " + Base64.getEncoder().encodeToString(account.getAccountNumber().getBytes()));
                 List<Transaction> transactions = transactionRepository.findAllBySourceAccountNumber(account.getAccountNumber());
                 List<Transaction> receivedTransactions = transactions.stream()
                         .filter(transaction -> TransactionState.RECEIVED.equals(transaction.getTransactionState()))
@@ -309,7 +320,8 @@ public class AccountService {
                         UUID acquirerOrderId = UUID.randomUUID();
                         reserveTransaction.setIssuerOrderId(issuerOrderId);
                         reserveTransaction.setAcquirerOrderId(acquirerOrderId);
-                        transactionRepository.save(reserveTransaction);
+                        Transaction savedTransaction = transactionRepository.save(reserveTransaction);
+                        logger.info("New transaction saved with id " + savedTransaction.getId());
 
                         //poziv pcc-a
                         String url = "http://localhost:8094/api/pcc/requests/checkAndRouteBank1";
@@ -353,7 +365,8 @@ public class AccountService {
                     UUID acquirerOrderId = UUID.randomUUID();
                     reserveTransaction.setIssuerOrderId(issuerOrderId);
                     reserveTransaction.setAcquirerOrderId(acquirerOrderId);
-                    transactionRepository.save(reserveTransaction);
+                    Transaction savedTransaction = transactionRepository.save(reserveTransaction);
+                    logger.info("New transaction saved with id " + savedTransaction.getId());
 
                     //poziv pcc-a
                     String url = "http://localhost:8094/api/pcc/requests/checkAndRouteBank1";
