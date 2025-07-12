@@ -9,3 +9,14 @@ scrape_configs:
     basic_auth:
       username: "prometheus"
       password: "secret123"
+
+  - job_name: 'PSP input'
+    metrics_path: '/actuator/prometheus'
+    scrape_interval: 2s
+    static_configs:
+      - targets: ['host.docker.internal:8090']
+        labels:
+          application: "PSP"
+    basic_auth:
+      username: "prometheus"
+      password: "secret123"

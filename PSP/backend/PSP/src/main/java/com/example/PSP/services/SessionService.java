@@ -6,6 +6,8 @@ import com.example.PSP.models.ApiKey;
 import com.example.PSP.models.Session;
 import com.example.PSP.models.User;
 import com.example.PSP.repositories.SessionRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +23,8 @@ public class SessionService {
     @Autowired
     private ApiKeyService apiKeyService;
 
+    private static final Logger logger = LoggerFactory.getLogger(SessionService.class);
+
 
     public Session createSession(Long requestorId, String firstName, String lastName, String email, CartDto cart, User webshop) {
         Session session = new Session();
@@ -30,14 +34,19 @@ public class SessionService {
         session.setRequestorEmail(email);
         session.setCart(cart);
         session.setUser(webshop);
-        return sessionRepository.save(session);
+
+        Session savedSession = sessionRepository.save(session);
+        logger.info("Creating new session with id " + savedSession.getId() + ", requested by user with userId " +savedSession.getUser().getId());
+        return savedSession;
     }
 
     public Session getSessionById(Long id) {
+        logger.info("Retrieving session with id " + id);
         return sessionRepository.findById(id).get();
     }
 
     public RequestDto createRequestBySession(Long id) {
+        logger.info("Retrieving API key by sessionId " + id);
         Session session = getSessionById(id);
         ApiKey apiKey = apiKeyService.findByWebShopId(session.getUser().getId());
 

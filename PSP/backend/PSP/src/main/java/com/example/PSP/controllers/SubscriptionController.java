@@ -12,6 +12,8 @@ import com.example.PSP.exceptions.ResourceNotFoundException;
 import com.example.PSP.exceptions.BadRequestException;
 import com.example.PSP.services.ApiKeyService;
 import com.example.PSP.services.SubscriptionService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -42,6 +44,8 @@ public class SubscriptionController {
     @Autowired
     private SubscriptionRepository subscriptionRepository;
 
+    private static final Logger logger = LoggerFactory.getLogger(SubscriptionController.class);
+
     public SubscriptionController(SubscriptionService subscriptionService) {
         this.subscriptionService = subscriptionService;
     }
@@ -49,6 +53,7 @@ public class SubscriptionController {
     @PostMapping("/user/create_subscription")
     @PreAuthorize("hasRole('ROLE_USER')")
     public ResponseEntity<SubscriptionDto> createSubscription(@RequestBody SubscriptionRequest request) {
+        logger.info("Checking PSP service and user info before creating a new subscription");
         PSPService service = pspServiceRepository.findById(request.getServiceId()).orElseThrow(() -> new ResourceNotFoundException("Service not found"));
         User user = userRepository.findById(request.getUserId()).orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
@@ -91,6 +96,7 @@ public class SubscriptionController {
         } catch (IllegalArgumentException ex) {
             Map<String, String> response = new HashMap<>();
             response.put("error", ex.getMessage());
+            logger.error(ex.getMessage());
             return ResponseEntity.badRequest().body(response);
         }
     }

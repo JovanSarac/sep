@@ -11,6 +11,8 @@ import com.example.PSP.models.ApiKey;
 import com.example.PSP.services.ApiKeyService;
 import com.example.PSP.services.SessionService;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
@@ -42,9 +44,12 @@ public class RequestController {
 
     private ApiKeyResponseMessage responseMessage;
 
+    private static final Logger logger = LoggerFactory.getLogger(RequestController.class);
+
     @GetMapping("/sendRequestQRCode/{sessionId}")
     @PreAuthorize("permitAll()")
     public ResponseEntity<RequestQRCodePaymentDto> sendRequestQRCode(@PathVariable Long sessionId) {
+        logger.info("Processing the QR code request..");
         String url = "http://localhost:9000/publishApiKeyRequest";
         HttpHeaders headersMQ = new HttpHeaders();
         var requestEntity = new HttpEntity<>(-2, headersMQ);
@@ -80,6 +85,7 @@ public class RequestController {
     @GetMapping("/sendRequest/{sessionId}")
     @PreAuthorize("permitAll()")
     public ResponseEntity<RequestPaymentDto> sendRequest(@PathVariable Long sessionId) {
+        logger.info("Processing car payment request..");
         //formira se objekat request
         //ocekuje se rezultat da bude objekat koji ce imati payment_url i payment_id
         //ili mozda ne mora to da bude odg
@@ -125,6 +131,7 @@ public class RequestController {
     @GetMapping("/sendRequestCrypto")
     @PreAuthorize("permitAll()")
     public ResponseEntity<ArrayList<String>> sendRequestCrypto() {
+        logger.info("Processing crypto request..");
         HttpHeaders headers = new HttpHeaders();
         headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
         HttpEntity<Void> entity = new HttpEntity<>(headers);

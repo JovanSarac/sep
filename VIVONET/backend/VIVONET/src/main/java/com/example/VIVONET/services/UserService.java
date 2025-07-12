@@ -34,7 +34,7 @@ public class UserService {
     }
 
     public String registerUser(RegistrationDto registrationDto) {
-        logger.info("Starting user registration..");
+        logger.info("Starting registration for " + registrationDto.getUsername() + "..");
         if (!registrationDto.isMacthingPassword()) {
             logger.error("Passwords do not match");
             return "Passwords do not match.";
@@ -59,7 +59,7 @@ public class UserService {
                 registrationDto.getUserType()
         );
 
-        logger.info("User registered successfully");
+        logger.info("User " + newUser.getUsername() + " registered successfully");
         userRepository.save(newUser);
         return "Registration successful!";
     }

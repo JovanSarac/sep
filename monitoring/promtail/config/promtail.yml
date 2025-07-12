@@ -16,3 +16,10 @@ scrape_configs:
         labels:
           job: vivonet
           __path__: /logs/vivonet.log
+  - job_name: 'PSP'
+    static_configs:
+      - targets:
+          - localhost
+        labels:
+          job: psp
+          __path__: /logs/psp.log

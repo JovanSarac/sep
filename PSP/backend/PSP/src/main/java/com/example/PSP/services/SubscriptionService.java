@@ -7,6 +7,8 @@ import com.example.PSP.models.User;
 import com.example.PSP.repositories.PSPServiceRepository;
 import com.example.PSP.repositories.SubscriptionRepository;
 import jakarta.transaction.Transactional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -23,7 +25,11 @@ public class SubscriptionService {
     @Autowired
     private PSPServiceRepository pspServiceRepository;
 
+    private static final Logger logger = LoggerFactory.getLogger(SubscriptionService.class);
+
+
     public SubscriptionDto createSubscription(User user, PSPService service, Integer subscriptionDuration) {
+        logger.info("Creating new subsciption for user " + user.getUsername() + " on " + service.getName());
         Subscription subscription = new Subscription();
         subscription.setUser(user);
         subscription.setService(service);
@@ -52,6 +58,7 @@ public class SubscriptionService {
     }
 
     public List<SubscriptionDto> getActiveSubscriptionsByUserId(Long userId) {
+        logger.info("Retrieving all active subscriptions for user with id " + userId);
         List<Subscription> subscriptions = subscriptionRepository.findActiveSubscriptionsByUserId(userId);
         return subscriptions.stream().map(sub -> {
             SubscriptionDto dto = new SubscriptionDto();
@@ -68,6 +75,7 @@ public class SubscriptionService {
     }
 
     public List<SubscriptionDto> getSubscriptionsByUserId(Long userId) {
+        logger.info("Retrieving all subscriptions for user with userId " + userId);
         List<Subscription> subscriptions = subscriptionRepository.findSubscriptionsByUserId(userId);
         return subscriptions.stream().map(sub -> {
             SubscriptionDto dto = new SubscriptionDto();
@@ -100,6 +108,7 @@ public class SubscriptionService {
     }
 
     public void updateSubscription(SubscriptionDto subscriptionDTO) {
+        logger.info("Updating subscription for " + subscriptionDTO.getService().getName() + " by user with userId " + subscriptionDTO.getUserId());
         Subscription subscription = subscriptionRepository.findById(subscriptionDTO.getId())
                 .orElseThrow(() -> new IllegalArgumentException("Subscription with ID " + subscriptionDTO.getId() + " does not exist."));
 

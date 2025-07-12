@@ -10,6 +10,8 @@ import com.example.PSP.services.PSPServiceService;
 import com.example.PSP.services.SessionService;
 import com.example.PSP.services.SubscriptionService;
 import com.example.PSP.services.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,6 +29,8 @@ public class CheckoutDataController {
     private final SessionService sessionService;
     private final UserService userService;
 
+    private static final Logger logger = LoggerFactory.getLogger(CheckoutDataController.class);
+
     @Autowired
     public CheckoutDataController(SubscriptionService subscriptionService, SessionService sessionService, UserService userService) {
         this.subscriptionService = subscriptionService;
@@ -37,11 +41,13 @@ public class CheckoutDataController {
     public ResponseEntity<?> checkingWebShopServices(@RequestBody CheckoutDataDto request) {
         User user = userService.getUserById(request.getWebShopId());
         if(!user.getCompanyName().equals(request.getWebShopName()) || !user.getWebURL().equals(request.getWebShopUrl())){
+            logger.error("The provided webshop details do not match our records. Please verify the webshop name and URL.");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body("The provided webshop details do not match our records. Please verify the webshop name and URL.");
         }
         List<SubscriptionDto> activeSubscriptionsForWebShop = subscriptionService.getActiveSubscriptionsByUserId(request.getWebShopId());
         if (activeSubscriptionsForWebShop.isEmpty()) {
+            logger.error("No active subscriptions found for this webshop.");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body("No active subscriptions found for this webshop.");
         }

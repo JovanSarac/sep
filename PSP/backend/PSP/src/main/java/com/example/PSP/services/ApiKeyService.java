@@ -3,6 +3,8 @@ package com.example.PSP.services;
 import com.example.PSP.exceptions.ResourceNotFoundException;
 import com.example.PSP.models.ApiKey;
 import com.example.PSP.repositories.ApiKeyRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -18,6 +20,8 @@ public class ApiKeyService {
     @Autowired
     private PasswordEncoder encoder;
 
+    private final Logger logger = LoggerFactory.getLogger(ApiKeyService.class);
+
     public ApiKeyService(ApiKeyRepository apiKeyRepository){
         this.apiKeyRepository = apiKeyRepository;
     }
@@ -28,10 +32,14 @@ public class ApiKeyService {
         apiKey.setMerchantPassword(RandomStringUtils.randomAlphanumeric(15));
         apiKey.setWebShopId(webShopId);
 
-        return apiKeyRepository.save(apiKey);
+        ApiKey savedApiKey = apiKeyRepository.save(apiKey);
+        logger.info("Saving new API key with id " + savedApiKey.getId());
+
+        return savedApiKey;
     }
 
     public ApiKey findByWebShopId(Long id){
+        logger.info("Retrieving API key by webShopId " + id);
         Optional<ApiKey> optionalApiKey = apiKeyRepository.findByWebShopId(id);
 
         if(!optionalApiKey.isPresent())
@@ -41,6 +49,8 @@ public class ApiKeyService {
     }
 
     public ApiKey findByMerchantId(UUID id){
+        logger.info("Retrieving API key by merchantId " + id);
+
         Optional<ApiKey> optionalApiKey = apiKeyRepository.findByMerchantId(id);
 
         if(!optionalApiKey.isPresent())

@@ -7,6 +7,8 @@ import com.example.PSP.security.jwt.JwtUtils;
 import com.example.PSP.security.services.UserDetailsImpl;
 import com.example.PSP.services.UserService;
 import jakarta.validation.Valid;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
@@ -33,6 +35,9 @@ public class AuthController {
     JwtUtils jwtUtils;
     @Autowired
     private UserService userService;
+
+    private static final Logger logger = LoggerFactory.getLogger(AuthController.class);
+
     @PostMapping("/login")
     public ResponseEntity<?> loginUser(@Valid @RequestBody CredentialDto loginRequest) {
         Authentication authentication = authenticationManager
@@ -42,6 +47,7 @@ public class AuthController {
         ResponseCookie jwtCookie = jwtUtils.generateJwtCookie(userDetails);
 
         String jwtSource = jwtCookie.toString().split("=")[1].split(";")[0];
+        logger.info("User " + loginRequest.getUsername() + " logged in successfully");
         return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, jwtSource)
                 .body(new AccessToken(userDetails.getId(), jwtSource));
     }

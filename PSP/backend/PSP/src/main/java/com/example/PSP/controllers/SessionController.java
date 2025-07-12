@@ -8,6 +8,8 @@ import com.example.PSP.models.Session;
 import com.example.PSP.services.SessionService;
 import com.example.PSP.services.SubscriptionService;
 import com.example.PSP.services.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +24,8 @@ import java.util.stream.Collectors;
 public class SessionController {
     private final SubscriptionService subscriptionService;
     private final SessionService sessionService;
+
+    private static final Logger logger = LoggerFactory.getLogger(SessionController.class);
 
     @Autowired
     public SessionController(SubscriptionService subscriptionService, SessionService sessionService) {
@@ -44,6 +48,7 @@ public class SessionController {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Session not found");
             }
         } catch (Exception e) {
+            logger.error("Error retrieving session: ", e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error retrieving session");
         }
     }
@@ -59,6 +64,7 @@ public class SessionController {
             sessionDto.totalPrice = session.getCart().getTotalPrice();
             return ResponseEntity.ok(sessionDto);
         } catch (Exception e){
+            logger.error("Error retrieving session: ", e.getMessage());
             System.out.println("Error retrieving session: " + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error retrieving session");
         }
