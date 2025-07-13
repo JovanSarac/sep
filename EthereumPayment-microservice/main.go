@@ -47,7 +47,6 @@ func initTracer() func() {
 		sdktrace.WithBatcher(exp),
 		sdktrace.WithResource(resource.NewWithAttributes(
 			semconv.SchemaURL,
-			semconv.ServiceNameKey.String("EthPayment"),
 		)),
 	)
 

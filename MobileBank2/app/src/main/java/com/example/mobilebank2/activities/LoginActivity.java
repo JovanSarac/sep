@@ -16,8 +16,8 @@ import com.example.mobilebank2.R;
 import com.example.mobilebank2.dto.LoginPinDto;
 import com.example.mobilebank2.dto.MobileBankUserDto;
 import com.example.mobilebank2.retrofit.Bank2Api;
-import com.example.mobilebank2.retrofit.LoginApi;
-import com.example.mobilebank2.retrofit.QRCodeApi;
+/*import com.example.mobilebank2.retrofit.LoginApi;
+import com.example.mobilebank2.retrofit.QRCodeApi;*/
 import com.example.mobilebank2.retrofit.RetrofitService;
 import com.example.mobilebank2.session.SessionManager;
 
