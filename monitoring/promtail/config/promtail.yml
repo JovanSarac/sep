@@ -45,3 +45,11 @@ scrape_configs:
         labels:
           job: bank2
           __path__: /logs/bank2.log
+
+  - job_name: 'EthPayment'
+    static_configs:
+      - targets:
+          - localhost
+        labels:
+          job: bank2
+          __path__: /logs/ethPayment.log
