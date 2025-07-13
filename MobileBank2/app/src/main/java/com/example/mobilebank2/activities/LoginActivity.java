@@ -31,7 +31,7 @@ public class LoginActivity extends AppCompatActivity {
     TextView errorMessage;
 
     private final String correctPin = "1234";
-    RetrofitService retrofitBank2Service = new RetrofitService("http://192.168.0.159:8092");
+    RetrofitService retrofitBank2Service = new RetrofitService("http://192.168.0.61:8092");
     Bank2Api loginApi = retrofitBank2Service.getRetrofit().create(Bank2Api.class);
 
     @Override
