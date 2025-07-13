@@ -8,6 +8,9 @@ management:
       enabled: true
   server:
     port: 8092
+  tracing:
+    sampling:
+      probability: 1.0
 
 spring:
   security:
@@ -15,6 +18,11 @@ spring:
       name: prometheus
       password: secret123
 
+tracing:
+  url: http://localhost:4318/v1/traces
+
 logging:
+  pattern:
+    level: "%5p [${spring.application.name:},%X{traceId:-N/A},%X{spanId:-N/A}]"
   file:
     name: F:\\Nevena\\faks\\master\\SEP\\projekat\\sep\\monitoring\\logs\\bank2.log
