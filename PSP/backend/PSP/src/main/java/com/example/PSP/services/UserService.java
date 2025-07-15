@@ -24,7 +24,8 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-
+    private static final int MAX_FAILED_ATTEMPTS = 5;
+    private static final long LOCK_TIME_DURATION = 2 * 60 * 1000; //2 min zakljucano
 
     public User getUserById(Long id) {
         Optional<User> user=userRepository.findById(id);
@@ -88,6 +89,54 @@ public class UserService {
                 user.getWebURL(),
                 user.getCopmanyAddress()
         );
+    }
+
+    public void increaseFailedAttempts(String username) {
+        Optional<User> userOpt = userRepository.findByUsername(username);
+        if (userOpt.isPresent()) {
+            User user = userOpt.get();
+            int attempts = user.getFailedAttempts() + 1;
+            user.setFailedAttempts(attempts);
+
+            if (attempts >= MAX_FAILED_ATTEMPTS) {
+                user.setAccountNonLocked(false);
+                user.setLockTime(System.currentTimeMillis());
+            }
+
+            userRepository.save(user);
+        }
+    }
+
+    public void resetFailedAttempts(String username) {
+        Optional<User> userOpt = userRepository.findByUsername(username);
+        userOpt.ifPresent(user -> {
+            user.setFailedAttempts(0);
+            user.setAccountNonLocked(true);
+            user.setLockTime(null);
+            userRepository.save(user);
+        });
+    }
+
+    public boolean isAccountLocked(String username) {
+        Optional<User> userOpt = userRepository.findByUsername(username);
+        if (userOpt.isPresent()) {
+            User user = userOpt.get();
+
+            if (!user.getAccountNonLocked()) {
+                long lockTime = user.getLockTime();
+                long now = System.currentTimeMillis();
+
+                if (now - lockTime >= LOCK_TIME_DURATION) {
+                    user.setAccountNonLocked(true);
+                    user.setFailedAttempts(0);
+                    user.setLockTime(null);
+                    userRepository.save(user);
+                    return false;
+                }
+                return true;
+            }
+        }
+        return false;
     }
 
 }

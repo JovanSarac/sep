@@ -32,6 +32,10 @@ public class User {
     public String username;
     public String password;
     public boolean isAdmin;
+    private Boolean enabled;
+    private Boolean accountNonLocked;
+    private Integer failedAttempts;
+    private Long lockTime;
 
     public User(){
         super();
@@ -47,6 +51,9 @@ public class User {
         this.username = username;
         this.password = password;
         this.isAdmin = isAdmin;
+        this.enabled = true;
+        this.accountNonLocked = true;
+        this.failedAttempts = 0;
     }
 
     public Long getId() {
@@ -119,5 +126,37 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public Boolean getEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(Boolean enabled) {
+        this.enabled = enabled;
+    }
+
+    public Boolean getAccountNonLocked() {
+        return accountNonLocked;
+    }
+
+    public void setAccountNonLocked(Boolean accountNonLocked) {
+        this.accountNonLocked = accountNonLocked;
+    }
+
+    public Integer getFailedAttempts() {
+        return failedAttempts;
+    }
+
+    public void setFailedAttempts(Integer failedAttempts) {
+        this.failedAttempts = failedAttempts;
+    }
+
+    public Long getLockTime() {
+        return lockTime;
+    }
+
+    public void setLockTime(Long lockTime) {
+        this.lockTime = lockTime;
     }
 }

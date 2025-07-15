@@ -35,15 +35,26 @@ public class AuthController {
     private UserService userService;
     @PostMapping("/login")
     public ResponseEntity<?> loginUser(@Valid @RequestBody CredentialDto loginRequest) {
-        Authentication authentication = authenticationManager
-                .authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-        ResponseCookie jwtCookie = jwtUtils.generateJwtCookie(userDetails);
+        String username = loginRequest.getUsername();
 
-        String jwtSource = jwtCookie.toString().split("=")[1].split(";")[0];
-        return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, jwtSource)
-                .body(new AccessToken(userDetails.getId(), jwtSource));
+        if (userService.isAccountLocked(username)) {
+            return ResponseEntity.status(423).body("Account is locked. Try again later");
+        }
+        try {
+            Authentication authentication = authenticationManager
+                    .authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
+
+            userService. resetFailedAttempts(username);
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+            ResponseCookie jwtCookie = jwtUtils.generateJwtCookie(userDetails);
+            String jwtSource = jwtCookie.toString().split("=")[1].split(";")[0];
+            return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, jwtSource)
+                    .body(new AccessToken(userDetails.getId(), jwtSource));
+        } catch (Exception ex) {
+            userService.increaseFailedAttempts(username);
+            return ResponseEntity.status(401).body("Invalid username or password");
+        }
     }
 
     @PostMapping("/register")

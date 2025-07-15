@@ -37,6 +37,9 @@
                 (click)="login()"
             >
             </xp-primary-button>
+            <div *ngIf="wrongCredential" class="error-message">
+                {{ errorMessage }}
+            </div>
 
             <div class="separator"></div>
 
