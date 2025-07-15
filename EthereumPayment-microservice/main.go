@@ -5,9 +5,12 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"ethereum-payment-microservice/models"
+	"html"
 	"log"
 	"net/http"
 	"os"
+	"regexp"
+	"strings"
 
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"gorm.io/driver/postgres"
@@ -134,8 +137,106 @@ func saveTransaction(w http.ResponseWriter, r *http.Request) {
 
 	log.Printf("[EthPayment] Received transaction: %+v", tx)
 
-	tx.SenderWalletId = base64.StdEncoding.EncodeToString([]byte(tx.SenderWalletId))
-	tx.ReceiverWalletId = base64.StdEncoding.EncodeToString([]byte(tx.ReceiverWalletId))
+	//remove scripts and spaces
+	originalSender := tx.SenderWalletId
+	tx.SenderWalletId = sanitize(tx.SenderWalletId)
+	if originalSender != tx.SenderWalletId {
+		log.Printf("[EthPayment] senderWalletId contained disallowed characters")
+		http.Error(w, "senderWalletId contains invalid characters", http.StatusBadRequest)
+		return
+	}
+
+	originalReceiver := tx.ReceiverWalletId
+	tx.ReceiverWalletId = sanitize(tx.ReceiverWalletId)
+	if originalReceiver != tx.ReceiverWalletId {
+		log.Printf("[EthPayment] receiverWalletId contained disallowed characters")
+		http.Error(w, "receiverWalletId contains invalid characters", http.StatusBadRequest)
+		return
+	}
+
+	originalHash := tx.TransactionHash
+	tx.TransactionHash = sanitize(tx.TransactionHash)
+	if originalHash != tx.TransactionHash {
+		log.Printf("[EthPayment] transactionHash contained disallowed characters")
+		http.Error(w, "transactionHash contains invalid characters", http.StatusBadRequest)
+		return
+	}
+
+	//validate amount
+	if tx.Amount <= 0 {
+		log.Printf("[EthPayment] Amount must be positive and non-zero")
+		http.Error(w, "Amount must be positive and non-zero", http.StatusBadRequest)
+		return
+	}
+	if tx.Amount > 1_000_000_000_000 {
+		log.Printf("[EthPayment] Amount too large")
+		http.Error(w, "Amount too large", http.StatusBadRequest)
+		return
+	}
+
+	//validate wallet ids and transaction hash formats
+	if !isValidWalletId(tx.SenderWalletId) {
+		log.Printf("[EthPayment] Invalid sender wallet ID format")
+		http.Error(w, "Invalid sender wallet ID format", http.StatusBadRequest)
+		return
+	}
+	if !isValidWalletId(tx.ReceiverWalletId) {
+		log.Printf("[EthPayment] Invalid receiver wallet ID format")
+		http.Error(w, "Invalid receiver wallet ID format", http.StatusBadRequest)
+		return
+	}
+	if !isValidTxHash(tx.TransactionHash) {
+		log.Printf("[EthPayment] Invalid transaction hash format")
+		http.Error(w, "Invalid transaction hash format", http.StatusBadRequest)
+		return
+	}
+
+	//check senderWalletId not empty after sanitization
+	if len(tx.SenderWalletId) == 0 {
+		log.Printf("[EthPayment] senderWalletId is empty after sanitization")
+		http.Error(w, "senderWalletId cannot be empty", http.StatusBadRequest)
+		return
+	}
+
+	//check receiverWalletId not empty after sanitization
+	if len(tx.ReceiverWalletId) == 0 {
+		log.Printf("[EthPayment] receiverWalletId is empty after sanitization")
+		http.Error(w, "receiverWalletId cannot be empty", http.StatusBadRequest)
+		return
+	}
+
+	//check transaction hash uniqueness
+	var existingTx models.Transaction
+	err := database.WithContext(ctx).
+		Where(`"transactionHash" = ?`, tx.TransactionHash).
+		First(&existingTx).Error
+	if err == nil {
+		log.Printf("[EthPayment] Duplicate transaction hash detected: %s", tx.TransactionHash)
+		http.Error(w, "Transaction hash already exists", http.StatusConflict)
+		return
+	} else if err != gorm.ErrRecordNotFound {
+		log.Printf("[EthPayment] DB error checking transaction hash: %v", err)
+		http.Error(w, "Internal server error", http.StatusInternalServerError)
+		return
+	}
+
+	//defensive base64 encode senderWalletId
+	encodedSender := base64.StdEncoding.EncodeToString([]byte(tx.SenderWalletId))
+	if encodedSender == "" {
+		log.Printf("[EthPayment] Failed to encode senderWalletId")
+		http.Error(w, "Invalid senderWalletId", http.StatusBadRequest)
+		return
+	}
+	tx.SenderWalletId = encodedSender
+
+	//defensive base64 encode receiverWalletId
+	encodedReceiver := base64.StdEncoding.EncodeToString([]byte(tx.ReceiverWalletId))
+	if encodedReceiver == "" {
+		log.Printf("[EthPayment] Failed to encode receiverWalletId")
+		http.Error(w, "Invalid receiverWalletId", http.StatusBadRequest)
+		return
+	}
+	tx.ReceiverWalletId = encodedReceiver
 
 	if err := database.WithContext(ctx).Create(&tx).Error; err != nil {
 		log.Printf("[EthPayment] Failed to save transaction: %v", err)
@@ -145,4 +246,26 @@ func saveTransaction(w http.ResponseWriter, r *http.Request) {
 
 	log.Printf("[EthPayment] Transaction saved: ID=%d", tx.Id)
 	w.WriteHeader(http.StatusCreated)
+}
+
+func sanitize(input string) string {
+	//remove script tags
+	scriptTag := regexp.MustCompile(`(?i)<script.*?>.*?</script>`)
+	cleaned := scriptTag.ReplaceAllString(input, "")
+
+	//escape all HTML entities (e.g. <, >, &, ', ") to prevent XSS
+	escaped := html.EscapeString(cleaned)
+
+	//trim whitespace and restrict input length
+	return strings.TrimSpace(escaped)
+}
+
+func isValidTxHash(hash string) bool {
+	match, _ := regexp.MatchString(`^0x[a-fA-F0-9]{64}$`, hash)
+	return match
+}
+
+func isValidWalletId(walletId string) bool {
+	match, _ := regexp.MatchString(`^0x[a-fA-F0-9]{40}$`, walletId)
+	return match
 }

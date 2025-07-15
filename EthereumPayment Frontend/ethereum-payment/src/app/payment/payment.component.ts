@@ -2,11 +2,6 @@ import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatSelectModule } from '@angular/material/select';
-import { MatIconModule } from '@angular/material/icon';
-import { MatButtonModule } from '@angular/material/button';
 import Web3 from 'web3';
 import { PaymentService } from './payment.service';
 import { Transaction } from '../model/transaction.model';
@@ -14,11 +9,8 @@ import { Transaction } from '../model/transaction.model';
 @Component({
   selector: 'app-payment',
   standalone: true,
-  imports: [CommonModule, FormsModule, MatFormFieldModule,
-    MatInputModule,
-    MatSelectModule,
-    MatIconModule,
-    MatButtonModule],
+  imports: [CommonModule, 
+    FormsModule],
   templateUrl: './payment.component.html',
   styleUrl: './payment.component.css'
 })
