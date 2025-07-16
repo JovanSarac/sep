@@ -15,6 +15,7 @@ import { Registration } from './model/registration.model';
 })
 export class AuthService {
   user$ = new BehaviorSubject<User>({username: "", id: 0, role: "" });
+  private jwtHelperService = new JwtHelperService();
 
   constructor(private http: HttpClient,
     private tokenStorage: TokenStorage,
@@ -56,16 +57,25 @@ export class AuthService {
     if (accessToken == null) {
       return;
     }
+    if (this.jwtHelperService.isTokenExpired(accessToken)) {
+      this.logout();
+      return;
+    }
     this.setUser();
   }
 
+  isLoggedIn(): boolean {
+    const token = this.tokenStorage.getAccessToken();
+    return token != null && !this.jwtHelperService.isTokenExpired(token);
+  }
+
   private setUser(): void {
-    const jwtHelperService = new JwtHelperService();
     const accessToken = this.tokenStorage.getAccessToken() || "";
+     const decodedToken = this.jwtHelperService.decodeToken(accessToken);
     const user: User = {
-      id: +jwtHelperService.decodeToken(accessToken).id,
-      username: jwtHelperService.decodeToken(accessToken).username,
-      role: jwtHelperService.decodeToken(accessToken).role,
+      id: +decodedToken.id,
+      username: decodedToken.username,
+      role: decodedToken.role,
     };
     this.user$.next(user);
   }

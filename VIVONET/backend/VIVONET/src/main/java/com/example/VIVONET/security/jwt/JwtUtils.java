@@ -72,10 +72,13 @@ public class JwtUtils {
     }
 
     public String generateTokenFrom(Long id, String role, String username) {
+        Date now = new Date();
+        Date expiryDate = new Date(now.getTime() + jwtExpirationMs);
         return Jwts.builder()
                 .claim("id", id)
                 .claim("role", role)
                 .claim("username", username)
+                .claim("lastActivity", now.getTime())
                 .setIssuedAt(new Date())
                 .setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))
                 .signWith(key(), SignatureAlgorithm.HS256)
