@@ -23,8 +23,7 @@ export class JwtInterceptor implements HttpInterceptor {
 
     return next.handle(request).pipe(
     catchError(err => {
-      if (err.status === 401) {
-        // npr. redirect na login stranicu
+      if (err.status === 401 || err.status === 403) {
         this.router.navigate(['/login']);
         localStorage.removeItem(ACCESS_TOKEN);
       }
