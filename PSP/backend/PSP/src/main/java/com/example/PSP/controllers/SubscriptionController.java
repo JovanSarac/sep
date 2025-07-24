@@ -87,17 +87,14 @@ public class SubscriptionController {
 
     @PutMapping("/user/update_subscription")
     @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
-    public ResponseEntity<Map<String, String>> updateSubscription(@RequestBody SubscriptionDto subscriptionDTO) {
+    public ResponseEntity<String> updateSubscription(@RequestBody SubscriptionDto subscriptionDTO) {
         try {
             subscriptionService.updateSubscription(subscriptionDTO);
-            Map<String, String> response = new HashMap<>();
-            response.put("message", "Subscription updated successfully.");
+            String response = "Subscription updated successfully";
             return ResponseEntity.ok(response);
         } catch (IllegalArgumentException ex) {
-            Map<String, String> response = new HashMap<>();
-            response.put("error", ex.getMessage());
             logger.error(ex.getMessage());
-            return ResponseEntity.badRequest().body(response);
+            return ResponseEntity.badRequest().body(ex.getMessage());
         }
     }
 }
