@@ -12,6 +12,7 @@ import { SessionDto } from './dto/sessionDto';
   providedIn: 'root'
 })
 export class LayoutService {
+  typeOfCardPayment: string = '';
 
   constructor(
     private http: HttpClient
@@ -26,13 +27,15 @@ export class LayoutService {
   }
 
   sendRequestToBank1(sessionId: number): Observable<paymentDataDto>{
-    return this.http.get<paymentDataDto>(environment.rabbitMQ + 'publishSendRequest/' + sessionId);
+    this.typeOfCardPayment = 'card';
+    return this.http.get<paymentDataDto>(environment.rabbitMQ + 'publishSendRequest/' + sessionId + '/' + this.typeOfCardPayment);
     //return this.http.get<paymentDataDto>(environment.apiHost+ 'psp/requests/sendRequest/' + sessionId);
   } //treba dodati da se salje i odabrani nacin placanja
 
   sendRequestToBank1QRCode(sessionId: number): Observable<paymentQRDataDto>{
-    //return this.http.get<String>(environment.rabbitMQ + 'publishSendRequest/' + sessionId);
-    return this.http.get<paymentQRDataDto>(environment.apiHost+ 'psp/requests/sendRequestQRCode/' + sessionId);
+    this.typeOfCardPayment = 'QRCode'
+    return this.http.get<paymentQRDataDto>(environment.rabbitMQ + 'publishSendRequest/' + sessionId + '/' + this.typeOfCardPayment);
+    //return this.http.get<paymentQRDataDto>(environment.apiHost+ 'psp/requests/sendRequestQRCode/' + sessionId);
   }
 
   getSessionById(id: number) : Observable<SessionDto>{

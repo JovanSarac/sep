@@ -48,7 +48,7 @@ public class RequestController {
 
     @GetMapping("/sendRequestQRCode/{sessionId}")
     @PreAuthorize("permitAll()")
-    public ResponseEntity<RequestQRCodePaymentDto> sendRequestQRCode(@PathVariable Long sessionId) {
+    public RequestQRCodePaymentDto sendRequestQRCode(@PathVariable Long sessionId) {
         logger.info("Processing the QR code request..");
         String url = "http://localhost:9000/publishApiKeyRequest";
         HttpHeaders headersMQ = new HttpHeaders();
@@ -78,7 +78,7 @@ public class RequestController {
         //ovde dodajem string za qr data, posle treba namestiti da se ti podaci uzimaju iz banke prodavca i da
         //se rezultat vrati u requestPaymentDto, al moze da se napravi novi dto za qr kod onda
 
-        return ResponseEntity.ok(requestPaymentQRDto);
+        return requestPaymentQRDto;
     }
 
 

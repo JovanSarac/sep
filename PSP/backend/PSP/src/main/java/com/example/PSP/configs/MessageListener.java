@@ -53,7 +53,9 @@ public class MessageListener {
 
     @RabbitListener(queues = MQConfig.QUEUE_REQUEST)
     public String subscriptionListener(RequestMessage message){
-        String url = "http://localhost:8090/api/psp/requests/sendRequest/" + message.getSessionId();
+        String url = message.getTypeOfCardPayment().equals("card") ?
+                "http://localhost:8090/api/psp/requests/sendRequest/" + message.getSessionId()
+                : "http://localhost:8090/api/psp/requests/sendRequestQRCode/" + message.getSessionId();
 
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", message.getJWTToken());

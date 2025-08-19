@@ -82,14 +82,16 @@ public class MessageController {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }
 
-    @GetMapping("/publishSendRequest/{sessionId}")
-    public ResponseEntity<PaymentDataDto> publishSendRequest(@RequestHeader Map<String, String> headers,
-                                                             @PathVariable Long sessionId){
+    @GetMapping("/publishSendRequest/{sessionId}/{typeOfCardPayment}")
+    public ResponseEntity<?> publishSendRequest(@RequestHeader Map<String, String> headers,
+                                                             @PathVariable Long sessionId,
+                                                             @PathVariable String typeOfCardPayment){
         RequestMessage message = new RequestMessage(
                 UUID.randomUUID().toString(),
                 headers.get("authorization"),
                 sessionId,
-                new Date());
+                new Date(),
+                typeOfCardPayment);
 
         try{
             Object response = asyncRabbitTemplate.convertSendAndReceive(
@@ -98,8 +100,13 @@ public class MessageController {
                     message).get();
 
             if (response instanceof String) {
-                PaymentDataDto dto = objectMapper.readValue((String) response, PaymentDataDto.class);
-                return ResponseEntity.ok(dto);
+                if(typeOfCardPayment.equals("card")){
+                    PaymentDataDto dto = objectMapper.readValue((String) response, PaymentDataDto.class);
+                    return ResponseEntity.ok(dto);
+                } else {
+                    PaymentDataDto dto = objectMapper.readValue((String) response, PaymentDataDto.class);
+                    return ResponseEntity.ok(dto);
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();

@@ -14,15 +14,17 @@ public class RequestMessage {
     private String JWTToken;
     private Long sessionId;
     private Date messageDate;
+    private String typeOfCardPayment;
 
     public RequestMessage() {
     }
 
-    public RequestMessage(String messageId, String JWTToken, Long sessionId, Date messageDate) {
+    public RequestMessage(String messageId, String JWTToken, Long sessionId, Date messageDate, String typeOfCardPayment) {
         this.messageId = messageId;
         this.JWTToken = JWTToken;
         this.sessionId = sessionId;
         this.messageDate = messageDate;
+        this.typeOfCardPayment = typeOfCardPayment;
     }
 
     public String getMessageId() {
@@ -55,5 +57,13 @@ public class RequestMessage {
 
     public void setMessageDate(Date messageDate) {
         this.messageDate = messageDate;
+    }
+
+    public String getTypeOfCardPayment() {
+        return typeOfCardPayment;
+    }
+
+    public void setTypeOfCardPayment(String typeOfCardPayment) {
+        this.typeOfCardPayment = typeOfCardPayment;
     }
 }
