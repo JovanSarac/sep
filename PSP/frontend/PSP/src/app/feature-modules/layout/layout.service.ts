@@ -13,6 +13,7 @@ import { SessionDto } from './dto/sessionDto';
 })
 export class LayoutService {
   typeOfCardPayment: string = '';
+  typeOfOutputSession: string = '';
 
   constructor(
     private http: HttpClient
@@ -24,7 +25,9 @@ export class LayoutService {
   }
 
   getSesstionById(id:number): Observable<PaymentService[]>{
-    return this.http.get<PaymentService[]>(environment.rabbitMQ + 'active_pspservices_bysession/' + id);
+    //return this.http.get<PaymentService[]>(environment.apiHost + 'active_pspservices_bysession/' + id);
+    this.typeOfOutputSession = 'PSPServices'
+    return this.http.get<PaymentService[]>(environment.rabbitMQ + 'session/' + id + '/' + this.typeOfOutputSession);
   }
 
   sendRequestToBank1(sessionId: number): Observable<paymentDataDto>{
@@ -40,6 +43,8 @@ export class LayoutService {
   }
 
   getSessionById(id: number) : Observable<SessionDto>{
-    return this.http.get<SessionDto>(environment.apiHost + 'session/' + id);
+    //return this.http.get<SessionDto>(environment.apiHost + 'session/' + id);
+    this.typeOfOutputSession = 'session'
+    return this.http.get<SessionDto>(environment.rabbitMQ + 'session/' + id + '/' + this.typeOfOutputSession);
   }
 }

@@ -91,8 +91,10 @@ public class MessageListener {
     }
 
     @RabbitListener(queues = MQConfig.QUEUE_PSP_SERVICES_BY_SESSION)
-    public String getActivePSPServicesBySessionId(UserInfoMessage message){
-        String url = "http://localhost:8090/api/active_pspservices_bysession/" + message.getUserId();
+    public String sessionChannel(SessionMessage message){
+        String url = message.getTpyeOfOutput().equals("PSPServices") ?
+                "http://localhost:8090/api/active_pspservices_bysession/" + message.getSessionId()
+                : "http://localhost:8090/api/session/" + message.getSessionId();
 
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", message.getJWTToken());

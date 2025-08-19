@@ -150,16 +150,18 @@ public class MessageController {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }
 
-    @GetMapping("/active_pspservices_bysession/{id}")
-    public ResponseEntity<List<PSPService>> getActivePSPServicesBySessionId(@RequestHeader Map<String, String> headers,
-                                                                            @PathVariable Long id){
+    @GetMapping("/session/{id}/{typeOfOutput}")
+    public ResponseEntity<?> getActivePSPServicesBySessionId(@RequestHeader Map<String, String> headers,
+                                                                            @PathVariable Long id,
+                                                                            @PathVariable String typeOfOutput){
         //UserInfoMessage has the same parameters needed for this
         //so it will be used instead of creating a new class
-        UserInfoMessage message = new UserInfoMessage(
+        SessionMessage message = new SessionMessage(
                 UUID.randomUUID().toString(),
                 headers.get("authorization"),
                 new Date(),
-                id);
+                id,
+                typeOfOutput);
 
         try{
             Object response = asyncRabbitTemplate.convertSendAndReceive(
@@ -168,11 +170,17 @@ public class MessageController {
                     message).get();
 
             if (response instanceof String) {
-                List<PSPService> dto = objectMapper.readValue(
-                        (String) response,
-                        new TypeReference<List<PSPService>>() {}
-                );
-                return ResponseEntity.ok(dto);
+                if(typeOfOutput.equals("PSPServices")) {
+                    List<PSPService> dto = objectMapper.readValue(
+                            (String) response,
+                            new TypeReference<List<PSPService>>() {
+                            }
+                    );
+                    return ResponseEntity.ok(dto);
+                } else if(typeOfOutput.equals("session")){
+                    SessionDto dto = objectMapper.readValue((String) response, SessionDto.class);
+                    return ResponseEntity.ok(dto);
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
