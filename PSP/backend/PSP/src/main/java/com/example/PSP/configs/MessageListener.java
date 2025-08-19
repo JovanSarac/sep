@@ -111,4 +111,24 @@ public class MessageListener {
             return null;
         }
     }
+
+    @RabbitListener(queues = MQConfig.QUEUE_PSP_SERVICES)
+    public String pspServicesChannel(DefaultMessage message){
+        String url = "http://localhost:8090/api/user/active_payment_services";
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", message.getJWTToken());
+
+        var requestEntity = new HttpEntity<>(null, headers);
+
+        try {
+            ResponseEntity<String> response = restTemplate.exchange(
+                    url, HttpMethod.GET, requestEntity, String.class);
+
+            return response.getBody();
+        } catch (HttpClientErrorException e) {
+            System.out.println("Error calling endpoint: " + e.getMessage());
+            return null;
+        }
+    }
 }

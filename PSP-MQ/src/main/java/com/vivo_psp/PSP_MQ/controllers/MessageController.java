@@ -154,8 +154,6 @@ public class MessageController {
     public ResponseEntity<?> getActivePSPServicesBySessionId(@RequestHeader Map<String, String> headers,
                                                                             @PathVariable Long id,
                                                                             @PathVariable String typeOfOutput){
-        //UserInfoMessage has the same parameters needed for this
-        //so it will be used instead of creating a new class
         SessionMessage message = new SessionMessage(
                 UUID.randomUUID().toString(),
                 headers.get("authorization"),
@@ -181,6 +179,35 @@ public class MessageController {
                     SessionDto dto = objectMapper.readValue((String) response, SessionDto.class);
                     return ResponseEntity.ok(dto);
                 }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+    }
+
+    @GetMapping("/activePaymentServices")
+    public ResponseEntity<?> getActivePSPServices(@RequestHeader Map<String, String> headers){
+        DefaultMessage message = new DefaultMessage(
+                UUID.randomUUID().toString(),
+                headers.get("authorization"),
+                new Date());
+
+        try{
+            Object response = asyncRabbitTemplate.convertSendAndReceive(
+                    MQConfig.EXCHANGE_PSP_SERVICES,
+                    MQConfig.ROUTING_KEY_PSP_SERVICES,
+                    message).get();
+
+            if (response instanceof String) {
+                List<PSPService> dto = objectMapper.readValue(
+                        (String) response,
+                        new TypeReference<List<PSPService>>() {
+                        }
+                );
+
+                return ResponseEntity.ok(dto);
             }
         } catch (Exception e) {
             e.printStackTrace();

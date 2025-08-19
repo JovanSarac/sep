@@ -18,7 +18,8 @@ export class PaymentsService {
   ) { }
 
   getActivePaymentServices(): Observable<PaymentService[]> {
-    return this.http.get<PaymentService[]>(environment.apiHost + 'user/active_payment_services');
+    //return this.http.get<PaymentService[]>(environment.apiHost + 'user/active_payment_services');
+    return this.http.get<PaymentService[]>(environment.rabbitMQ + 'activePaymentServices');
   }
 
   createSubscription(subscriptionDuration: SubscriptionRequest) : Observable<SubscriptionDto>{
