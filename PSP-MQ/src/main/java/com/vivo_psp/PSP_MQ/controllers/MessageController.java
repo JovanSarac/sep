@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Date;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -90,14 +91,18 @@ public class MessageController {
                 sessionId,
                 new Date());
 
-        Object response = template.convertSendAndReceive(
-                MQConfig.EXCHANGE_REQUEST,
-                MQConfig.ROUTING_KEY_REQUEST,
-                message
-        );
+        try{
+            Object response = asyncRabbitTemplate.convertSendAndReceive(
+                    MQConfig.EXCHANGE_REQUEST,
+                    MQConfig.ROUTING_KEY_REQUEST,
+                    message).get();
 
-        if (response instanceof PaymentDataDto) {
-            return ResponseEntity.ok((PaymentDataDto) response);
+            if (response instanceof String) {
+                PaymentDataDto dto = objectMapper.readValue((String) response, PaymentDataDto.class);
+                return ResponseEntity.ok(dto);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();

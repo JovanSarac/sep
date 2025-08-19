@@ -35,7 +35,7 @@
     "RunOnceActivity.git.unshallow": "true",
     "git-widget-placeholder": "<unknown>",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "F:/Nevena/faks/master/SEP/projekat/sep/Bank2"
+    "last_opened_file_path": "F:/Nevena/faks/master/SEP/projekat/sep/PSP-MQ"
   }
 }]]></component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
@@ -54,13 +54,8 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/com/vivo_psp/PSP_MQ/controllers/MessageController.java</url>
-          <line>98</line>
-          <option name="timeStamp" value="1" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/vivo_psp/PSP_MQ/controllers/MessageController.java</url>
-          <line>48</line>
-          <option name="timeStamp" value="6" />
+          <line>100</line>
+          <option name="timeStamp" value="11" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

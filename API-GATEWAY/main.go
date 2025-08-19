@@ -53,17 +53,14 @@ func proxy(path, target string) http.HandlerFunc {
 
 		var requestBody io.Reader
 
-		bodyBytes, err := io.ReadAll(r.Body)
-		if err != nil {
-			http.Error(w, "Failed to read request body", http.StatusBadRequest)
-			return
-		}
-
+		log.Println("PROXY")
 		if r.Method == http.MethodPost || r.Method == http.MethodPut || r.Method == http.MethodPatch {
 			switch path {
 			case "/card", "/bank1", "/bank1ValidateRequest":
+				log.Println("BANK1VALIDATEREQUEST")
 				var requestDto RequestDto
 				if err := json.NewDecoder(r.Body).Decode(&requestDto); err != nil {
+					log.Println("First if")
 					http.Error(w, "Invalid request body", http.StatusBadRequest)
 					return
 				}
@@ -74,10 +71,18 @@ func proxy(path, target string) http.HandlerFunc {
 					http.Error(w, "Failed to marshal request body", http.StatusInternalServerError)
 					return
 				}
+				log.Println("READ THE BODY")
 				requestBody = bytes.NewReader(marshaled)
 				break
 			default:
 				//pass the raw body
+				bodyBytes, err := io.ReadAll(r.Body)
+				if err != nil {
+					http.Error(w, "Failed to read request body", http.StatusBadRequest)
+					return
+				}
+
+				log.Println("Passed raw body")
 				requestBody = bytes.NewReader(bodyBytes)
 			}
 		}

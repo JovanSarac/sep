@@ -1,6 +1,7 @@
 package com.example.PSP.configs;
 
 import com.example.PSP.dtos.PaymentDataDto;
+import com.example.PSP.dtos.RequestPaymentDto;
 import com.example.PSP.dtos.SubscriptionDto;
 import com.example.PSP.dtos.SubscriptionRequest;
 import com.example.PSP.models.SubscriptionMessage;
@@ -51,7 +52,7 @@ public class MessageListener {
     }
 
     @RabbitListener(queues = MQConfig.QUEUE_REQUEST)
-    public PaymentDataDto subscriptionListener(RequestMessage message){
+    public String subscriptionListener(RequestMessage message){
         String url = "http://localhost:8090/api/psp/requests/sendRequest/" + message.getSessionId();
 
         HttpHeaders headers = new HttpHeaders();
@@ -60,8 +61,8 @@ public class MessageListener {
         var requestEntity = new HttpEntity<>(null, headers);
 
         try {
-            ResponseEntity<PaymentDataDto> response = restTemplate.exchange(
-                    url, HttpMethod.GET, requestEntity, PaymentDataDto.class);
+            ResponseEntity<String> response = restTemplate.exchange(
+                    url, HttpMethod.GET, requestEntity, String.class);
 
             return response.getBody();
         } catch (HttpClientErrorException e) {

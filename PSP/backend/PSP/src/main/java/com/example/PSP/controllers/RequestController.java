@@ -84,7 +84,7 @@ public class RequestController {
 
     @GetMapping("/sendRequest/{sessionId}")
     @PreAuthorize("permitAll()")
-    public ResponseEntity<RequestPaymentDto> sendRequest(@PathVariable Long sessionId) {
+    public RequestPaymentDto sendRequest(@PathVariable Long sessionId) {
         logger.info("Processing car payment request..");
         //formira se objekat request
         //ocekuje se rezultat da bude objekat koji ce imati payment_url i payment_id
@@ -111,6 +111,7 @@ public class RequestController {
 
         HttpHeaders headers = new HttpHeaders();
         headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+        headers.setContentType(MediaType.APPLICATION_JSON);
         RequestDto requestDto = sessionService.createRequestBySession(sessionId);
         HttpEntity<RequestDto> entity = new HttpEntity<RequestDto>(requestDto, headers);
 
@@ -119,7 +120,7 @@ public class RequestController {
 
         //restTemplate.exchange("http://localhost:8080/bank1", HttpMethod.POST, entity, String.class).getBody();
         //return ResponseEntity.ok("{\"message\": \"Uspesno\"}");
-        return ResponseEntity.ok(requestPaymentDto);
+        return requestPaymentDto;
     }
 
     @RabbitListener(queues = MQConfig.QUEUE_APIKEY_RESPONSE)

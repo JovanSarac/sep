@@ -12,4 +12,8 @@ import lombok.NoArgsConstructor;
 public class PaymentDataDto {
     public Long paymentId;
     public String paymentUrl;
+    public Double amount;
+    public String successUrl;
+    public String failedUrl;
+    public String errorUrl;
 }
