@@ -28,11 +28,11 @@ public class UserController {
 
     @GetMapping("/user/{id}")
     @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
-    public ResponseEntity<UserInfoDto> getUserInfoById(@PathVariable Long id) {
+    public UserInfoDto getUserInfoById(@PathVariable Long id) {
         UserInfoDto user = userService.getUserInfoById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + id));
 
-        return ResponseEntity.ok(user);
+        return user;
     }
 
     @GetMapping("/admin/users")

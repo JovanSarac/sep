@@ -1,9 +1,6 @@
 package com.example.PSP.configs;
 
-import com.example.PSP.dtos.PaymentDataDto;
-import com.example.PSP.dtos.RequestPaymentDto;
-import com.example.PSP.dtos.SubscriptionDto;
-import com.example.PSP.dtos.SubscriptionRequest;
+import com.example.PSP.dtos.*;
 import com.example.PSP.models.SubscriptionMessage;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,6 +53,26 @@ public class MessageListener {
         String url = message.getTypeOfCardPayment().equals("card") ?
                 "http://localhost:8090/api/psp/requests/sendRequest/" + message.getSessionId()
                 : "http://localhost:8090/api/psp/requests/sendRequestQRCode/" + message.getSessionId();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", message.getJWTToken());
+
+        var requestEntity = new HttpEntity<>(null, headers);
+
+        try {
+            ResponseEntity<String> response = restTemplate.exchange(
+                    url, HttpMethod.GET, requestEntity, String.class);
+
+            return response.getBody();
+        } catch (HttpClientErrorException e) {
+            System.out.println("Error calling endpoint: " + e.getMessage());
+            return null;
+        }
+    }
+
+    @RabbitListener(queues = MQConfig.QUEUE_USER_INFO)
+    public String getUserInfoByIdListener(UserInfoMessage message){
+        String url = "http://localhost:8090/api/user/" + message.getUserId();
 
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", message.getJWTToken());

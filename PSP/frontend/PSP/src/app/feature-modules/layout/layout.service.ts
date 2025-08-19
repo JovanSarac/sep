@@ -19,7 +19,8 @@ export class LayoutService {
   ) { }
 
   getUserInfoById(id: number): Observable<UserInfo> {
-    return this.http.get<UserInfo>(environment.apiHost + 'user/' + id);
+    //return this.http.get<UserInfo>(environment.apiHost + 'user/' + id);
+    return this.http.get<UserInfo>(environment.rabbitMQ + 'user/' + id);
   }
 
   getSesstionById(id:number): Observable<PaymentService[]>{

@@ -27,6 +27,10 @@ public class MQConfig {
     public static final String EXCHANGE_APIKEY_RESPONSE = "exchange_apiKey_response";
     public static final String ROUTING_KEY_APIKEY_RESPONSE = "routing_key_apiKey_response";
 
+    public static final String QUEUE_USER_INFO = "queue_user_info";
+    public static final String EXCHANGE_USER_INFO = "exchange_user_info";
+    public static final String ROUTING_KEY_USER_INFO = "routing_key_user_info";
+
     @Bean
     public Queue queue(){
         return new Queue(QUEUE_SUBSCRIPTION);
@@ -79,6 +83,24 @@ public class MQConfig {
                 .bind(queueApiKeyResponse)
                 .to(exchangeApiKeyResponse)
                 .with(ROUTING_KEY_APIKEY_RESPONSE);
+    }
+
+    @Bean
+    public Queue queueUserInfo(){
+        return new Queue(QUEUE_USER_INFO);
+    }
+
+    @Bean
+    public TopicExchange exchangeUserInfo(){
+        return new TopicExchange(EXCHANGE_USER_INFO);
+    }
+
+    @Bean
+    public Binding bindingUserInfo(Queue queueUserInfo, TopicExchange exchangeUserInfo){
+        return BindingBuilder
+                .bind(queueUserInfo)
+                .to(exchangeUserInfo)
+                .with(ROUTING_KEY_USER_INFO);
     }
 
     @Bean

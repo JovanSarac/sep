@@ -1,13 +1,12 @@
 package com.vivo_psp.PSP_MQ.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.vivo_psp.PSP_MQ.dtos.PaymentDataDto;
-import com.vivo_psp.PSP_MQ.dtos.SubscriptionDto;
-import com.vivo_psp.PSP_MQ.dtos.SubscriptionRequest;
+import com.vivo_psp.PSP_MQ.dtos.*;
 import com.vivo_psp.PSP_MQ.models.ApiKeyMessage;
 import com.vivo_psp.PSP_MQ.models.RequestMessage;
 import com.vivo_psp.PSP_MQ.models.SubscriptionMessage;
 import com.vivo_psp.PSP_MQ.configs.MQConfig;
+import com.vivo_psp.PSP_MQ.models.UserInfoMessage;
 import org.springframework.amqp.rabbit.AsyncRabbitTemplate;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -104,7 +103,7 @@ public class MessageController {
                     PaymentDataDto dto = objectMapper.readValue((String) response, PaymentDataDto.class);
                     return ResponseEntity.ok(dto);
                 } else {
-                    PaymentDataDto dto = objectMapper.readValue((String) response, PaymentDataDto.class);
+                    RequestQRCodePaymentDto dto = objectMapper.readValue((String) response, RequestQRCodePaymentDto.class);
                     return ResponseEntity.ok(dto);
                 }
             }
@@ -125,5 +124,30 @@ public class MessageController {
                 MQConfig.ROUTING_KEY_APIKEY_REQUEST, message);
 
         return "Message published";
+    }
+
+    @GetMapping("/user/{id}")
+    public ResponseEntity<UserInfoDto> getUserInfoById(@RequestHeader Map<String, String> headers, @PathVariable Long id){
+        UserInfoMessage message = new UserInfoMessage(
+                UUID.randomUUID().toString(),
+                headers.get("authorization"),
+                new Date(),
+                id);
+
+        try{
+            Object response = asyncRabbitTemplate.convertSendAndReceive(
+                    MQConfig.EXCHANGE_USER_INFO,
+                    MQConfig.ROUTING_KEY_USER_INFO,
+                    message).get();
+
+            if (response instanceof String) {
+                UserInfoDto dto = objectMapper.readValue((String) response, UserInfoDto.class);
+                return ResponseEntity.ok(dto);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }
 }
