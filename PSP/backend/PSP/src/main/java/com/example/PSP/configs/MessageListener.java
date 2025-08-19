@@ -134,7 +134,9 @@ public class MessageListener {
 
     @RabbitListener(queues = MQConfig.QUEUE_SUBSRIPTION)
     public String subscriptionListener(UserInfoMessage message){
-        String url = "http://localhost:8090/api/user_active_subscription/" + message.getUserId();
+        String url = message.getUserType().equals("user") ?
+                "http://localhost:8090/api/user_active_subscription/" + message.getUserId()
+                : "http://localhost:8090/api/user_subscription/" + message.getUserId();
 
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", message.getJWTToken());

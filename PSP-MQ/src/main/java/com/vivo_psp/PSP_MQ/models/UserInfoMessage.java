@@ -7,6 +7,7 @@ public class UserInfoMessage {
     private String JWTToken;
     private Date messageDate;
     private Long userId;
+    private String userType;
 
     public UserInfoMessage() {
     }
@@ -16,6 +17,14 @@ public class UserInfoMessage {
         this.JWTToken = JWTToken;
         this.messageDate = messageDate;
         this.userId = userId;
+    }
+
+    public UserInfoMessage(String messageId, String JWTToken, Date messageDate, Long userId, String userType) {
+        this.messageId = messageId;
+        this.JWTToken = JWTToken;
+        this.messageDate = messageDate;
+        this.userId = userId;
+        this.userType = userType;
     }
 
     public String getMessageId() {
@@ -48,5 +57,13 @@ public class UserInfoMessage {
 
     public void setUserId(Long userId) {
         this.userId = userId;
+    }
+
+    public String getUserType() {
+        return userType;
+    }
+
+    public void setUserType(String userType) {
+        this.userType = userType;
     }
 }

@@ -12,6 +12,7 @@ import { ApiKeyDto } from './model/api-key.model';
   providedIn: 'root'
 })
 export class PaymentsService {
+  userType: string = '';
 
   constructor(
     private http: HttpClient
@@ -27,12 +28,15 @@ export class PaymentsService {
   }
 
   getSubscriptionsForUser(userId: number): Observable<SubscriptionDto[]> {
+    this.userType = 'user';
     //return this.http.get<SubscriptionDto[]>(environment.apiHost + 'user_active_subscription/' + userId);
-    return this.http.get<SubscriptionDto[]>(environment.rabbitMQ + 'userActiveSubscription/' + userId);
+    return this.http.get<SubscriptionDto[]>(environment.rabbitMQ + 'userActiveSubscription/' + userId + '/' + this.userType);
   }
 
   getSubscriptionsForUserAdmin(userId: number): Observable<SubscriptionDto[]> {
-    return this.http.get<SubscriptionDto[]>(environment.apiHost + 'user_subscription/' + userId);
+    this.userType = 'user';
+    //return this.http.get<SubscriptionDto[]>(environment.apiHost + 'user_subscription/' + userId);
+    return this.http.get<SubscriptionDto[]>(environment.rabbitMQ + 'userActiveSubscription/' + userId + '/' + this.userType);
   }
 
   updateSubscription(subscriptionDTO: SubscriptionDto): Observable<any> {

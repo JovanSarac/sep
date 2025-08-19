@@ -216,14 +216,16 @@ public class MessageController {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }
 
-    @GetMapping("/userActiveSubscription/{id}")
+    @GetMapping("/userActiveSubscription/{id}/{userType}")
     public ResponseEntity<List<SubscriptionDto>> publishGetUserActiveSubscription(@RequestHeader Map<String, String> headers,
-                                                         @PathVariable Long id){
+                                                         @PathVariable Long id,
+                                                         @PathVariable String userType){
         UserInfoMessage message = new UserInfoMessage(
                 UUID.randomUUID().toString(),
                 headers.get("authorization"),
                 new Date(),
-                id);
+                id,
+                userType);
 
         try{
             Object response = asyncRabbitTemplate.convertSendAndReceive(
