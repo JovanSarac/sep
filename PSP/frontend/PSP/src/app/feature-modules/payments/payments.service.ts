@@ -27,7 +27,8 @@ export class PaymentsService {
   }
 
   getSubscriptionsForUser(userId: number): Observable<SubscriptionDto[]> {
-    return this.http.get<SubscriptionDto[]>(environment.apiHost + 'user_active_subscription/' + userId);
+    //return this.http.get<SubscriptionDto[]>(environment.apiHost + 'user_active_subscription/' + userId);
+    return this.http.get<SubscriptionDto[]>(environment.rabbitMQ + 'userActiveSubscription/' + userId);
   }
 
   getSubscriptionsForUserAdmin(userId: number): Observable<SubscriptionDto[]> {

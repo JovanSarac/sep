@@ -91,7 +91,7 @@ public class MessageListener {
     }
 
     @RabbitListener(queues = MQConfig.QUEUE_PSP_SERVICES_BY_SESSION)
-    public String sessionChannel(SessionMessage message){
+    public String sessionListener(SessionMessage message){
         String url = message.getTpyeOfOutput().equals("PSPServices") ?
                 "http://localhost:8090/api/active_pspservices_bysession/" + message.getSessionId()
                 : "http://localhost:8090/api/session/" + message.getSessionId();
@@ -113,8 +113,28 @@ public class MessageListener {
     }
 
     @RabbitListener(queues = MQConfig.QUEUE_PSP_SERVICES)
-    public String pspServicesChannel(DefaultMessage message){
+    public String pspServicesListener(DefaultMessage message){
         String url = "http://localhost:8090/api/user/active_payment_services";
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", message.getJWTToken());
+
+        var requestEntity = new HttpEntity<>(null, headers);
+
+        try {
+            ResponseEntity<String> response = restTemplate.exchange(
+                    url, HttpMethod.GET, requestEntity, String.class);
+
+            return response.getBody();
+        } catch (HttpClientErrorException e) {
+            System.out.println("Error calling endpoint: " + e.getMessage());
+            return null;
+        }
+    }
+
+    @RabbitListener(queues = MQConfig.QUEUE_SUBSRIPTION)
+    public String subscriptionListener(UserInfoMessage message){
+        String url = "http://localhost:8090/api/user_active_subscription/" + message.getUserId();
 
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", message.getJWTToken());

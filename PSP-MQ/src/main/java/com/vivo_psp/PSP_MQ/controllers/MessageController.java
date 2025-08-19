@@ -126,7 +126,7 @@ public class MessageController {
     }
 
     @GetMapping("/user/{id}")
-    public ResponseEntity<UserInfoDto> getUserInfoById(@RequestHeader Map<String, String> headers, @PathVariable Long id){
+    public ResponseEntity<UserInfoDto> publishGetUserInfoById(@RequestHeader Map<String, String> headers, @PathVariable Long id){
         UserInfoMessage message = new UserInfoMessage(
                 UUID.randomUUID().toString(),
                 headers.get("authorization"),
@@ -151,7 +151,7 @@ public class MessageController {
     }
 
     @GetMapping("/session/{id}/{typeOfOutput}")
-    public ResponseEntity<?> getActivePSPServicesBySessionId(@RequestHeader Map<String, String> headers,
+    public ResponseEntity<?> publishGetActivePSPServicesBySessionId(@RequestHeader Map<String, String> headers,
                                                                             @PathVariable Long id,
                                                                             @PathVariable String typeOfOutput){
         SessionMessage message = new SessionMessage(
@@ -188,7 +188,7 @@ public class MessageController {
     }
 
     @GetMapping("/activePaymentServices")
-    public ResponseEntity<?> getActivePSPServices(@RequestHeader Map<String, String> headers){
+    public ResponseEntity<?> publishGetActivePSPServices(@RequestHeader Map<String, String> headers){
         DefaultMessage message = new DefaultMessage(
                 UUID.randomUUID().toString(),
                 headers.get("authorization"),
@@ -204,6 +204,37 @@ public class MessageController {
                 List<PSPService> dto = objectMapper.readValue(
                         (String) response,
                         new TypeReference<List<PSPService>>() {
+                        }
+                );
+
+                return ResponseEntity.ok(dto);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+    }
+
+    @GetMapping("/userActiveSubscription/{id}")
+    public ResponseEntity<List<SubscriptionDto>> publishGetUserActiveSubscription(@RequestHeader Map<String, String> headers,
+                                                         @PathVariable Long id){
+        UserInfoMessage message = new UserInfoMessage(
+                UUID.randomUUID().toString(),
+                headers.get("authorization"),
+                new Date(),
+                id);
+
+        try{
+            Object response = asyncRabbitTemplate.convertSendAndReceive(
+                    MQConfig.EXCHANGE_SUBSRIPTION,
+                    MQConfig.ROUTING_KEY_SUBSRIPTION,
+                    message).get();
+
+            if (response instanceof String) {
+                List<SubscriptionDto> dto = objectMapper.readValue(
+                        (String) response,
+                        new TypeReference<List<SubscriptionDto>>() {
                         }
                 );
 
