@@ -29,6 +29,10 @@ public class MQConfig {
     public static final String EXCHANGE_USER_INFO = "exchange_user_info";
     public static final String ROUTING_KEY_USER_INFO = "routing_key_user_info";
 
+    public static final String QUEUE_PSP_SERVICES_BY_SESSION = "queue_psp_services_by_session";
+    public static final String EXCHANGE_PSP_SERVICES_BY_SESSION = "exchange_psp_services_by_session";
+    public static final String ROUTING_KEY_PSP_SERVICES_BY_SESSION = "routing_key_psp_services_by_session";
+
     @Bean
     public Queue queue(){
         return new Queue(QUEUE_SUBSCRIPTION);
@@ -99,6 +103,24 @@ public class MQConfig {
                 .bind(queueUserInfo)
                 .to(exchangeUserInfo)
                 .with(ROUTING_KEY_USER_INFO);
+    }
+
+    @Bean
+    public Queue queuePspServicesBySession(){
+        return new Queue(QUEUE_PSP_SERVICES_BY_SESSION);
+    }
+
+    @Bean
+    public TopicExchange exchangePspServicesBySession(){
+        return new TopicExchange(EXCHANGE_PSP_SERVICES_BY_SESSION);
+    }
+
+    @Bean
+    public Binding bindingPspServicesBySession(Queue queuePspServicesBySession, TopicExchange exchangePspServicesBySession){
+        return BindingBuilder
+                .bind(queuePspServicesBySession)
+                .to(exchangePspServicesBySession)
+                .with(ROUTING_KEY_PSP_SERVICES_BY_SESSION);
     }
 
     @Bean

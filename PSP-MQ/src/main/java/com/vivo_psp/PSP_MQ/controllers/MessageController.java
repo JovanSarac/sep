@@ -1,12 +1,10 @@
 package com.vivo_psp.PSP_MQ.controllers;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vivo_psp.PSP_MQ.dtos.*;
-import com.vivo_psp.PSP_MQ.models.ApiKeyMessage;
-import com.vivo_psp.PSP_MQ.models.RequestMessage;
-import com.vivo_psp.PSP_MQ.models.SubscriptionMessage;
+import com.vivo_psp.PSP_MQ.models.*;
 import com.vivo_psp.PSP_MQ.configs.MQConfig;
-import com.vivo_psp.PSP_MQ.models.UserInfoMessage;
 import org.springframework.amqp.rabbit.AsyncRabbitTemplate;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
@@ -142,6 +141,37 @@ public class MessageController {
 
             if (response instanceof String) {
                 UserInfoDto dto = objectMapper.readValue((String) response, UserInfoDto.class);
+                return ResponseEntity.ok(dto);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+    }
+
+    @GetMapping("/active_pspservices_bysession/{id}")
+    public ResponseEntity<List<PSPService>> getActivePSPServicesBySessionId(@RequestHeader Map<String, String> headers,
+                                                                            @PathVariable Long id){
+        //UserInfoMessage has the same parameters needed for this
+        //so it will be used instead of creating a new class
+        UserInfoMessage message = new UserInfoMessage(
+                UUID.randomUUID().toString(),
+                headers.get("authorization"),
+                new Date(),
+                id);
+
+        try{
+            Object response = asyncRabbitTemplate.convertSendAndReceive(
+                    MQConfig.EXCHANGE_PSP_SERVICES_BY_SESSION,
+                    MQConfig.ROUTING_KEY_PSP_SERVICES_BY_SESSION,
+                    message).get();
+
+            if (response instanceof String) {
+                List<PSPService> dto = objectMapper.readValue(
+                        (String) response,
+                        new TypeReference<List<PSPService>>() {}
+                );
                 return ResponseEntity.ok(dto);
             }
         } catch (Exception e) {
