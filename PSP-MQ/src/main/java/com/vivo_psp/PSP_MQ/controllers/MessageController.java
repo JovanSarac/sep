@@ -248,4 +248,33 @@ public class MessageController {
 
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }
+
+    @GetMapping("/allUsers")
+    public ResponseEntity<List<UserInfoDto>> publishGetAllUsers(@RequestHeader Map<String, String> headers){
+        DefaultMessage message = new DefaultMessage(
+                UUID.randomUUID().toString(),
+                headers.get("authorization"),
+                new Date());
+
+        try{
+            Object response = asyncRabbitTemplate.convertSendAndReceive(
+                    MQConfig.EXCHANGE_ADMIN,
+                    MQConfig.ROUTING_KEY_ADMIN,
+                    message).get();
+
+            if (response instanceof String) {
+                List<UserInfoDto> dto = objectMapper.readValue(
+                        (String) response,
+                        new TypeReference<List<UserInfoDto>>() {
+                        }
+                );
+
+                return ResponseEntity.ok(dto);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+    }
 }

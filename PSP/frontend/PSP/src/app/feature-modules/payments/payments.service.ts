@@ -48,7 +48,8 @@ export class PaymentsService {
   }*/
 
   getAllUsersForAdmin():Observable<UserInfo[]>{
-    return this.http.get<UserInfo[]>(environment.apiHost + 'admin/users');
+    //return this.http.get<UserInfo[]>(environment.apiHost + 'admin/users');
+    return this.http.get<UserInfo[]>(environment.rabbitMQ + 'allUsers');
   }
 
   saveApiKey(apiKey: ApiKeyDto):Observable<String>{
