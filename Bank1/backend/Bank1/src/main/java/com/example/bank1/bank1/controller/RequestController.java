@@ -32,7 +32,7 @@ public class RequestController {
         PaymentDataDto paymentDataDto = new PaymentDataDto();
         if (validData) {
             paymentDataDto.paymentId = -1L;
-            paymentDataDto.paymentUrl = "http://localhost:4202/";
+            paymentDataDto.paymentUrl = "https://localhost:4202/";
             return ResponseEntity.ok(paymentDataDto);
         }
         return (ResponseEntity<PaymentDataDto>) ResponseEntity.badRequest();
@@ -48,7 +48,7 @@ public class RequestController {
         PaymentDataQRDto paymentDataQRDto = new PaymentDataQRDto();
         if (validData) {
             paymentDataQRDto.paymentId = -2L;
-            paymentDataQRDto.paymentUrl = "http://localhost:4202/qrCode";
+            paymentDataQRDto.paymentUrl = "https://localhost:4202/qrCode";
             //za sada su zakucane vrednosti za racun primaoca
             //treba dodati da se vuku podaci iz baze
 

@@ -31,7 +31,7 @@ public class ResponseController {
         Request request = requestService.findByAcquirerOrderId(bankResponse.acquirerOrderId);
 
         String url = requestService.isBank1(request.getPAN()) ?
-                "http://localhost:8091/api/bank1/transactions/PCCRequest" : "http://localhost:8092/api/bank2/transactions/PCCResponse";
+                "https://localhost:8091/api/bank1/transactions/PCCRequest" : "https://localhost:8092/api/bank2/transactions/PCCResponse";
 
         HttpHeaders headers = new HttpHeaders();
         var requestEntity = new HttpEntity<>(bankResponse, headers);

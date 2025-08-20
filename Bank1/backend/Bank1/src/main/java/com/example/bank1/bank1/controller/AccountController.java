@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/bank1/accounts")
-public class AccountController {
+public class    AccountController {
     @Autowired
     private AccountService accountService;
     @Autowired

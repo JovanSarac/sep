@@ -60,11 +60,11 @@ public class SessionService {
         //timestamp
         requestDto.timestamp = new Date().getTime();
         //successUrl vrv ce sve biti url fronta
-        requestDto.successUrl = "http://localhost:4200/transaction-status/success";
+        requestDto.successUrl = "https://localhost:4200/transaction-status/success";
         //failedUrl
-        requestDto.failedUrl = "http://localhost:4200/transaction-status/failed";
+        requestDto.failedUrl = "https://localhost:4200/transaction-status/failed";
         //errorUrl
-        requestDto.errorUrl = "http://localhost:4200/transaction-status/error";
+        requestDto.errorUrl = "https://localhost:4200/transaction-status/error";
         return requestDto;
     }
 }

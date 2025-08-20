@@ -18,6 +18,10 @@
 
 /Bank1/backend/Bank1/src/main/resources/bank1.p12
 /Bank1/backend/Bank1/src/main/resources/truststore.jks
+/Bank1/frontend/Bank1/bank1-fe.crt
+/Bank1/frontend/Bank1/bank1-fe.key
+/Bank1/frontend/Bank1/certificate.conf
+
 
 /PCC/src/main/resources/pcc.p12
 /PCC/src/main/resources/truststore.jks

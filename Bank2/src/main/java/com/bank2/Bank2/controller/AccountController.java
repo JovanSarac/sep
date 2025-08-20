@@ -21,7 +21,7 @@ public class AccountController {
     @Autowired
     private UserRepository userRepository;
 
-    @CrossOrigin(origins = "http://localhost:4202")
+    @CrossOrigin(origins = "https://localhost:4202")
     @PostMapping("/validateData")
     public ResponseEntity<?> validateData(@org.jetbrains.annotations.NotNull @RequestBody RequestDto requestDto) {
         Account account = accountService.getAccountByPAN(requestDto.PAN);

@@ -208,7 +208,7 @@ public class AccountService {
 
                     //poziv pcc-a
                     //mozda staviti da ova metoda bude u qr controlleru
-                    String url = "http://localhost:8094/api/pcc/requests/bank2ToBank1";
+                    String url = "https://localhost:8094/api/pcc/requests/bank2ToBank1";
                     HttpHeaders headers = new HttpHeaders();
                     var requestEntity = new HttpEntity<>(new AnswerPCCDto(
                             "uspesno",
@@ -253,7 +253,7 @@ public class AccountService {
 
                 //poziv pcc-a
                 //TODO ovde isto mozda staviti da bude poziv ka qr controlleru
-                String url = "http://localhost:8094/api/pcc/requests/bank2ToBank1";
+                String url = "https://localhost:8094/api/pcc/requests/bank2ToBank1";
                 HttpHeaders headers = new HttpHeaders();
                 var requestEntity = new HttpEntity<>(new AnswerPCCDto(
                         "uspesno",
@@ -318,7 +318,7 @@ public class AccountService {
                     logger.info("New transaction saved with id " + savedTransaction.getId());
 
                     //poziv pcc-a
-                    String url = "http://localhost:8094/api/pcc/requests/bank2ToBank1";
+                    String url = "https://localhost:8094/api/pcc/requests/bank2ToBank1";
                     HttpHeaders headers = new HttpHeaders();
                     var requestEntity = new HttpEntity<>(new AnswerPCCDto(
                             "uspesno",
@@ -363,7 +363,7 @@ public class AccountService {
                 logger.info("New transaction saved with id " + savedTransaction.getId());
 
                 //poziv pcc-a
-                String url = "http://localhost:8094/api/pcc/requests/bank2ToBank1";
+                String url = "https://localhost:8094/api/pcc/requests/bank2ToBank1";
                 HttpHeaders headers = new HttpHeaders();
                 var requestEntity = new HttpEntity<>(new AnswerPCCDto(
                         "uspesno",

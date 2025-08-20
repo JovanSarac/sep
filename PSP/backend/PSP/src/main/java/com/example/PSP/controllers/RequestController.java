@@ -50,7 +50,7 @@ public class RequestController {
     @PreAuthorize("permitAll()")
     public RequestQRCodePaymentDto sendRequestQRCode(@PathVariable Long sessionId) {
         logger.info("Processing the QR code request..");
-        String url = "http://localhost:9000/publishApiKeyRequest";
+        String url = "https://localhost:9000/publishApiKeyRequest";
         HttpHeaders headersMQ = new HttpHeaders();
         var requestEntity = new HttpEntity<>(-2, headersMQ);
         var method = HttpMethod.POST;
@@ -92,7 +92,7 @@ public class RequestController {
         //mora prvo create subscription da se uradi
 
         //provera apiKey-a pre redirect-a
-        String url = "http://localhost:9000/publishApiKeyRequest";
+        String url = "https://localhost:9000/publishApiKeyRequest";
         HttpHeaders headersMQ = new HttpHeaders();
         var requestEntity = new HttpEntity<>(-1, headersMQ);
         var method = HttpMethod.POST;

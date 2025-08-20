@@ -65,7 +65,7 @@ func validateRequest(w http.ResponseWriter, r *http.Request) {
 
 	fmt.Println("Request DTO: ", requestDto)
 
-	resp, err := http.Post(fmt.Sprintf("http://localhost:8091/api/bank1/requests/validateRequest"), "application/json", bytes.NewBuffer(body))
+	resp, err := http.Post(fmt.Sprintf("https://localhost:8091/api/bank1/requests/validateRequest"), "application/json", bytes.NewBuffer(body))
 	fmt.Println("BILO STA")
 	if err != nil {
 		fmt.Println("Error making HTTP request:", err)

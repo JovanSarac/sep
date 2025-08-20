@@ -20,10 +20,8 @@ import java.util.stream.Collectors;
 
 @Service
 public class AccountService {
-    @Bean
-    public RestTemplate restTemplate() {
-        return new RestTemplate();
-    }
+    @Autowired
+    public RestTemplate restTemplate;
     @Autowired
     private AccountRepository accountRepository;
     @Autowired
@@ -132,13 +130,13 @@ public class AccountService {
         Transaction savedTransaction = transactionRepository.save(reserveTransaction);
         logger.info("Saved new transaction with id " + savedTransaction.getId());
 
-        String url = "http://localhost:8094/api/pcc/qrCodeRequests/checkAndRoute";
+        String url = "https://localhost:8094/api/pcc/qrCodeRequests/checkAndRoute";
         HttpHeaders headers = new HttpHeaders();
         var requestEntity = new HttpEntity<>(pccqrCodeRequestDto, headers);
         var method = HttpMethod.POST;
 
         try {
-            String response = restTemplate().exchange(url, method, requestEntity, String.class).getBody();
+            String response = restTemplate.exchange(url, method, requestEntity, String.class).getBody();
         } catch (HttpClientErrorException e) {
             System.out.println("Error calling endpoint: " + e.getMessage());
         }
@@ -174,13 +172,13 @@ public class AccountService {
 
         logger.info("New transaction saved with id " + savedTransaction.getId());
 
-        String url = "http://localhost:8094/api/pcc/requests/checkAndRoute";
+        String url = "https://localhost:8094/api/pcc/requests/checkAndRoute";
         HttpHeaders headers = new HttpHeaders();
         var requestEntity = new HttpEntity<>(pccRequestDto, headers);
         var method = HttpMethod.POST;
 
         try {
-            String response = restTemplate().exchange(url, method, requestEntity, String.class).getBody();
+            String response = restTemplate.exchange(url, method, requestEntity, String.class).getBody();
         } catch (HttpClientErrorException e) {
             System.out.println("Error calling endpoint: " + e.getMessage());
         }
@@ -221,7 +219,7 @@ public class AccountService {
                     logger.info("New transaction saved with id " + savedTransaction.getId());
 
                     //poziv pcc-a
-                    String url = "http://localhost:8094/api/pcc/requests/checkAndRouteBank1";
+                    String url = "https://localhost:8094/api/pcc/requests/checkAndRouteBank1";
                     HttpHeaders headers = new HttpHeaders();
                     var requestEntity = new HttpEntity<>(new AnswerPCCDto(
                             "uspesno",
@@ -232,7 +230,7 @@ public class AccountService {
                     var method = HttpMethod.POST;
 
                     try {
-                        String response = restTemplate().exchange(url, method, requestEntity, String.class).getBody();
+                        String response = restTemplate.exchange(url, method, requestEntity, String.class).getBody();
                     } catch (HttpClientErrorException e) {
                         System.out.println("Error calling endpoint: " + e.getMessage());
                     }
@@ -265,7 +263,7 @@ public class AccountService {
                 logger.info("New transaction saved with id " + savedTransaction.getId());
 
                 //poziv pcc-a
-                String url = "http://localhost:8094/api/pcc/requests/checkAndRouteBank1";
+                String url = "https://localhost:8094/api/pcc/requests/checkAndRouteBank1";
                 HttpHeaders headers = new HttpHeaders();
                 var requestEntity = new HttpEntity<>(new AnswerPCCDto(
                         "uspesno",
@@ -276,7 +274,7 @@ public class AccountService {
                 var method = HttpMethod.POST;
 
                 try {
-                    String response = restTemplate().exchange(url, method, requestEntity, String.class).getBody();
+                    String response = restTemplate.exchange(url, method, requestEntity, String.class).getBody();
                 } catch (HttpClientErrorException e) {
                     System.out.println("Error calling endpoint: " + e.getMessage());
                 }
@@ -324,7 +322,7 @@ public class AccountService {
                         logger.info("New transaction saved with id " + savedTransaction.getId());
 
                         //poziv pcc-a
-                        String url = "http://localhost:8094/api/pcc/requests/checkAndRouteBank1";
+                        String url = "https://localhost:8094/api/pcc/requests/checkAndRouteBank1";
                         HttpHeaders headers = new HttpHeaders();
                         var requestEntity = new HttpEntity<>(new AnswerPCCDto(
                                 "uspesno",
@@ -335,7 +333,7 @@ public class AccountService {
                         var method = HttpMethod.POST;
 
                         try {
-                            String response = restTemplate().exchange(url, method, requestEntity, String.class).getBody();
+                            String response = restTemplate.exchange(url, method, requestEntity, String.class).getBody();
                         } catch (HttpClientErrorException e) {
                             System.out.println("Error calling endpoint: " + e.getMessage());
                         }
@@ -369,7 +367,7 @@ public class AccountService {
                     logger.info("New transaction saved with id " + savedTransaction.getId());
 
                     //poziv pcc-a
-                    String url = "http://localhost:8094/api/pcc/requests/checkAndRouteBank1";
+                    String url = "https://localhost:8094/api/pcc/requests/checkAndRouteBank1";
                     HttpHeaders headers = new HttpHeaders();
                     var requestEntity = new HttpEntity<>(new AnswerPCCDto(
                             "uspesno",
@@ -380,7 +378,7 @@ public class AccountService {
                     var method = HttpMethod.POST;
 
                     try {
-                        String response = restTemplate().exchange(url, method, requestEntity, String.class).getBody();
+                        String response = restTemplate.exchange(url, method, requestEntity, String.class).getBody();
                     } catch (HttpClientErrorException e) {
                         System.out.println("Error calling endpoint: " + e.getMessage());
                     }

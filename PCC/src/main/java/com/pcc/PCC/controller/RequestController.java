@@ -23,10 +23,8 @@ import org.springframework.web.client.RestTemplate;
 @RequiredArgsConstructor
 @RequestMapping("/api/pcc/requests")
 public class RequestController {
-    @Bean
-    public RestTemplate restTemplate() {
-        return new RestTemplate();
-    }
+    @Autowired
+    public RestTemplate restTemplate;
     @Autowired
     private RequestService requestService;
 
@@ -44,8 +42,8 @@ public class RequestController {
         RequestDto request = requestService.create(requestDto);
 
         String url = requestService.isBank1(requestDto.PAN) ?
-                "http://localhost:8091/api/bank1/transactions/PCCRequest"
-                :"http://localhost:8092/api/bank2/transactions/PCCRequest";
+                "https://localhost:8091/api/bank1/transactions/PCCRequest"
+                :"https://localhost:8092/api/bank2/transactions/PCCRequest";
 
         HttpHeaders headers = new HttpHeaders();
         var requestEntity = new HttpEntity<>(requestService.isBank1(requestDto.PAN) ?
@@ -53,7 +51,7 @@ public class RequestController {
         var method = HttpMethod.POST;
 
         try {
-            String response = restTemplate().exchange(url, method, requestEntity, String.class).getBody();
+            String response = restTemplate.exchange(url, method, requestEntity, String.class).getBody();
         } catch (HttpClientErrorException e) {
             System.out.println("Error calling endpoint: " + e.getMessage());
         }
@@ -63,23 +61,23 @@ public class RequestController {
 
     @PostMapping("/checkAndRouteBank1")
     public ResponseEntity<String> checkAndRouteBank1(@RequestBody BankResponse bankResponse){
-        String url = "http://localhost:8091/api/bank1/transactions/PCCRequest";
+        String url = "https://localhost:8091/api/bank1/transactions/PCCRequest";
 
         HttpHeaders headers = new HttpHeaders();
         var requestEntity = new HttpEntity<>(bankResponse, headers);
         var method = HttpMethod.POST;
 
         try {
-            String response = restTemplate().exchange(url, method, requestEntity, String.class).getBody();
+            String response = restTemplate.exchange(url, method, requestEntity, String.class).getBody();
 
             bankResponse.transactionResult = "uspesno";
-            String url1 = "http://localhost:8091/api/bank1/transactions/PCCIssuer";
+            String url1 = "https://localhost:8091/api/bank1/transactions/PCCIssuer";
             HttpHeaders headers1 = new HttpHeaders();
             var requestEntity1 = new HttpEntity<>(bankResponse, headers1);
             var method1 = HttpMethod.POST;
 
             try{
-                String response1 = restTemplate().exchange(url1, method1, requestEntity1, String.class).getBody();
+                String response1 = restTemplate.exchange(url1, method1, requestEntity1, String.class).getBody();
             }
             catch (HttpClientErrorException e) {
                 System.out.println("Error calling endpoint: " + e.getMessage());
@@ -96,7 +94,7 @@ public class RequestController {
 
     @PostMapping("/bank2ToBank1")
     public ResponseEntity<String> bank2ToBank1(@RequestBody BankResponse bankResponse){
-        String url = "http://localhost:8091/api/bank1/transactions/PCCBank2ToBank1";
+        String url = "https://localhost:8091/api/bank1/transactions/PCCBank2ToBank1";
 
         HttpHeaders headers = new HttpHeaders();
         var requestEntity = new HttpEntity<>(bankResponse, headers);
@@ -104,20 +102,20 @@ public class RequestController {
 
         try {
             bankResponse.transactionResult = "uspesno";
-            String response = restTemplate().exchange(url, method, requestEntity, String.class).getBody();
+            String response = restTemplate.exchange(url, method, requestEntity, String.class).getBody();
         } catch (HttpClientErrorException e) {
             bankResponse.transactionResult = "neuspesno";
             System.out.println("Error calling endpoint: " + e.getMessage());
         }
 
 
-        String url1 = "http://localhost:8092/api/bank2/transactions/PCCResponse";
+        String url1 = "https://localhost:8092/api/bank2/transactions/PCCResponse";
         HttpHeaders headers1 = new HttpHeaders();
         var requestEntity1 = new HttpEntity<>(bankResponse, headers1);
         var method1 = HttpMethod.POST;
 
         try{
-            String response1 = restTemplate().exchange(url1, method1, requestEntity1, String.class).getBody();
+            String response1 = restTemplate.exchange(url1, method1, requestEntity1, String.class).getBody();
         }
         catch (HttpClientErrorException e) {
             System.out.println("Error calling endpoint: " + e.getMessage());
