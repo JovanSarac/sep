@@ -1,9 +1,22 @@
 package com.example.PSP.configs;
 
 
+import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
+import org.apache.hc.client5.http.impl.classic.HttpClients;
+import org.apache.hc.client5.http.impl.io.PoolingHttpClientConnectionManagerBuilder;
+import org.apache.hc.client5.http.io.HttpClientConnectionManager;
+import org.apache.hc.client5.http.ssl.NoopHostnameVerifier;
+import org.apache.hc.client5.http.ssl.SSLConnectionSocketFactory;
+import org.apache.hc.core5.ssl.SSLContextBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.client.ClientHttpRequestFactory;
+import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.web.client.RestTemplate;
+
+import javax.net.ssl.SSLContext;
+import java.io.FileInputStream;
+import java.security.KeyStore;
 
 @Configuration
 public class AppConfig {
@@ -14,14 +27,14 @@ public class AppConfig {
         sslContextBuilder.loadTrustMaterial((chain, authType) -> true); // trust all initially
 
         // Load your custom PSP truststore
-        KeyStore trustStore = KeyStore.getInstance(KeyStore.getDefaultType());
+        KeyStore customTrustStore = KeyStore.getInstance(KeyStore.getDefaultType());
         try (FileInputStream in = new FileInputStream(
                 "F:/Nevena/faks/master/SEP/projekat/sep/PSP/backend/PSP/src/main/resources/truststore.jks")) {
-            trustStore.load(in, "truststorepassword".toCharArray());
+            customTrustStore.load(in, "truststorepassword".toCharArray());
         }
 
         // Add it to the builder, combining both
-        sslContextBuilder.loadTrustMaterial(trustStore, null);
+        sslContextBuilder.loadTrustMaterial(customTrustStore, null);
 
         SSLContext sslContext = sslContextBuilder.build();
 

@@ -15,3 +15,12 @@
 
 /PSP-MQ/src/main/resources/psp-mq.p12
 /PSP-MQ/src/main/resources/truststore.jks
+
+/Bank1/backend/Bank1/src/main/resources/bank1.p12
+/Bank1/backend/Bank1/src/main/resources/truststore.jks
+
+/PCC/src/main/resources/pcc.p12
+/PCC/src/main/resources/truststore.jks
+
+/Bank2/src/main/resources/bank2.p12
+/Bank2/src/main/resources/truststore.jks
