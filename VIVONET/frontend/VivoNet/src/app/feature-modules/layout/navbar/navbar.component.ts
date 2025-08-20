@@ -12,7 +12,7 @@ import { User } from 'src/app/infrastructure/auth/model/user.model';
 export class NavbarComponent implements OnInit, OnDestroy {
 
   selectedType: string = 'personal';
-  startUrl: string = 'http://localhost:4200/';
+  startUrl: string = 'https://localhost:4200/';
   cartItems: any[] = [];
   cartCount: number = 0;
   user!: User;
