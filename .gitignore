@@ -1,2 +1,12 @@
 # Ignore all files in /monitoring/logs
 /monitoring/logs/*
+
+/VIVONET/backend/VIVONET/src/main/resources/vivonet.p12
+/PSP/frontend/PSP/vivonet-fe.crt
+/PSP/frontend/PSP/vivonet-fe.key
+/PSP/frontend/PSP/certificate.conf
+
+/PSP/backend/PSP/src/main/resources/psp.p12
+/PSP/frontend/PSP/psp-fe.crt
+/PSP/frontend/PSP/psp-fe.key
+/PSP/frontend/PSP/certificate.conf
