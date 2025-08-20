@@ -28,8 +28,8 @@ public class MessageListener {
                     true : false;
 
         String url = isCreate ?
-                "http://localhost:8090/api/user/create_subscription"
-                : "http://localhost:8090/api/user/update_subscription";
+                "https://localhost:8090/api/user/create_subscription"
+                : "https://localhost:8090/api/user/update_subscription";
 
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", message.getJWTToken());
@@ -51,8 +51,8 @@ public class MessageListener {
     @RabbitListener(queues = MQConfig.QUEUE_REQUEST)
     public String subscriptionListener(RequestMessage message){
         String url = message.getTypeOfCardPayment().equals("card") ?
-                "http://localhost:8090/api/psp/requests/sendRequest/" + message.getSessionId()
-                : "http://localhost:8090/api/psp/requests/sendRequestQRCode/" + message.getSessionId();
+                "https://localhost:8090/api/psp/requests/sendRequest/" + message.getSessionId()
+                : "https://localhost:8090/api/psp/requests/sendRequestQRCode/" + message.getSessionId();
 
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", message.getJWTToken());
@@ -72,7 +72,7 @@ public class MessageListener {
 
     @RabbitListener(queues = MQConfig.QUEUE_USER_INFO)
     public String getUserInfoByIdListener(UserInfoMessage message){
-        String url = "http://localhost:8090/api/user/" + message.getUserId();
+        String url = "https://localhost:8090/api/user/" + message.getUserId();
 
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", message.getJWTToken());
@@ -93,8 +93,8 @@ public class MessageListener {
     @RabbitListener(queues = MQConfig.QUEUE_PSP_SERVICES_BY_SESSION)
     public String sessionListener(SessionMessage message){
         String url = message.getTpyeOfOutput().equals("PSPServices") ?
-                "http://localhost:8090/api/active_pspservices_bysession/" + message.getSessionId()
-                : "http://localhost:8090/api/session/" + message.getSessionId();
+                "https://localhost:8090/api/active_pspservices_bysession/" + message.getSessionId()
+                : "https://localhost:8090/api/session/" + message.getSessionId();
 
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", message.getJWTToken());
@@ -114,7 +114,7 @@ public class MessageListener {
 
     @RabbitListener(queues = MQConfig.QUEUE_PSP_SERVICES)
     public String pspServicesListener(DefaultMessage message){
-        String url = "http://localhost:8090/api/user/active_payment_services";
+        String url = "https://localhost:8090/api/user/active_payment_services";
 
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", message.getJWTToken());
@@ -135,8 +135,8 @@ public class MessageListener {
     @RabbitListener(queues = MQConfig.QUEUE_SUBSRIPTION)
     public String subscriptionListener(UserInfoMessage message){
         String url = message.getUserType().equals("user") ?
-                "http://localhost:8090/api/user_active_subscription/" + message.getUserId()
-                : "http://localhost:8090/api/user_subscription/" + message.getUserId();
+                "https://localhost:8090/api/user_active_subscription/" + message.getUserId()
+                : "https://localhost:8090/api/user_subscription/" + message.getUserId();
 
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", message.getJWTToken());
@@ -156,7 +156,7 @@ public class MessageListener {
 
     @RabbitListener(queues = MQConfig.QUEUE_ADMIN)
     public String getAllUsersListener(UserInfoMessage message){
-        String url = "http://localhost:8090/api/admin/users";
+        String url = "https://localhost:8090/api/admin/users";
 
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", message.getJWTToken());

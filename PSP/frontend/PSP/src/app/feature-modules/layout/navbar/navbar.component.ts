@@ -10,7 +10,7 @@ import { User } from 'src/app/infrastructure/auth/model/user.model';
 })
 export class NavbarComponent implements OnInit {
 
-  startUrl: string = 'http://localhost:4201/';
+  startUrl: string = 'https://localhost:4201/';
   cartItems: any[] = [];
   cartCount: number = 0;
   selectedTab : string = '/';

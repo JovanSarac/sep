@@ -2,11 +2,16 @@
 /monitoring/logs/*
 
 /VIVONET/backend/VIVONET/src/main/resources/vivonet.p12
-/PSP/frontend/PSP/vivonet-fe.crt
-/PSP/frontend/PSP/vivonet-fe.key
-/PSP/frontend/PSP/certificate.conf
+/VIVONET/backend/VIVONET/src/main/resources/truststore.jks
+/VIVONET/frontend/VivoNet/vivonet-fe.crt
+/VIVONET/frontend/VivoNet/vivonet-fe.key
+/VIVONET/frontend/VivoNet/certificate.conf
 
 /PSP/backend/PSP/src/main/resources/psp.p12
+/PSP/backend/PSP/src/main/resources/truststore.jks
 /PSP/frontend/PSP/psp-fe.crt
 /PSP/frontend/PSP/psp-fe.key
 /PSP/frontend/PSP/certificate.conf
+
+/PSP-MQ/src/main/resources/psp-mq.p12
+/PSP-MQ/src/main/resources/truststore.jks

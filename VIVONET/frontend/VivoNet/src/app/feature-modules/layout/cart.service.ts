@@ -48,7 +48,7 @@ export class CartService {
   }
 
   checkingWebShopServices(checkoutData: any): Observable<string> {
-    return this.http.post<string>('http://localhost:8090/api/checking_webshop_services', checkoutData, {
+    return this.http.post<string>('https://localhost:8090/api/checking_webshop_services', checkoutData, {
       responseType: 'text' as 'json', // Angular očekuje JSON, ali specificiramo tekst
     });
   }

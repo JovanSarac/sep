@@ -62,7 +62,7 @@ public class CheckoutDataController {
         );
 
 
-        String redirectUrl = "http://localhost:4201/available-service/" + session.getId();
+        String redirectUrl = "https://localhost:4201/available-service/" + session.getId();
 
         return ResponseEntity.ok(redirectUrl);
     }
