@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"log"
 	"net/http"
 
 	"github.com/google/uuid"
@@ -39,9 +40,52 @@ type RequestDto struct {
 	ErrorUrl         string    `json:"errorUrl"`
 }
 
+func registerWithConsul(serviceName string, port int) {
+	consulURL := "http://localhost:8500/v1/agent/service/register"
+
+	data := map[string]interface{}{
+		"Name":    serviceName,
+		"Address": "localhost",
+		"Port":    port,
+		"Check": map[string]interface{}{
+			"HTTP":     fmt.Sprintf("http://localhost:%d/health", port),
+			"Interval": "10s",
+		},
+	}
+
+	body, _ := json.Marshal(data)
+	req, err := http.NewRequest(http.MethodPut, consulURL, bytes.NewReader(body))
+	if err != nil {
+		log.Fatalf("Failed to create request: %v", err)
+	}
+	req.Header.Set("Content-Type", "application/json")
+
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	if err != nil {
+		log.Fatalf("Failed to register service: %v", err)
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		bodyBytes, _ := io.ReadAll(resp.Body)
+		log.Fatalf("Failed to register service: %s", string(bodyBytes))
+	}
+
+	log.Printf("Registered %s with Consul", serviceName)
+}
+
 func main() {
 	fmt.Println("QRCodePayment microservice is running on :8083")
 	http.HandleFunc("/bank1QRCodeValidateRequest", validateRequest)
+
+	http.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte("OK"))
+	})
+
+	registerWithConsul("qrCode", 8083)
+
 	http.ListenAndServe(":8083", nil)
 }
 

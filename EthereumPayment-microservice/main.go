@@ -1,11 +1,14 @@
 package main
 
 import (
+	"bytes"
 	"context"
 	"encoding/base64"
 	"encoding/json"
 	"ethereum-payment-microservice/models"
+	"fmt"
 	"html"
+	"io"
 	"log"
 	"net/http"
 	"os"
@@ -65,6 +68,41 @@ func initTracer() func() {
 
 var tracer = otel.Tracer("eth-payment-service")
 
+func registerWithConsul(serviceName string, port int) {
+	consulURL := "http://localhost:8500/v1/agent/service/register"
+
+	data := map[string]interface{}{
+		"Name":    serviceName,
+		"Address": "localhost",
+		"Port":    port,
+		"Check": map[string]interface{}{
+			"HTTP":     fmt.Sprintf("http://localhost:%d/health", port),
+			"Interval": "10s",
+		},
+	}
+
+	body, _ := json.Marshal(data)
+	req, err := http.NewRequest(http.MethodPut, consulURL, bytes.NewReader(body))
+	if err != nil {
+		log.Fatalf("Failed to create request: %v", err)
+	}
+	req.Header.Set("Content-Type", "application/json")
+
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	if err != nil {
+		log.Fatalf("Failed to register service: %v", err)
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		bodyBytes, _ := io.ReadAll(resp.Body)
+		log.Fatalf("Failed to register service: %s", string(bodyBytes))
+	}
+
+	log.Printf("Registered %s with Consul", serviceName)
+}
+
 func main() {
 	logFilePath := "F:/Nevena/faks/master/SEP/projekat/sep/monitoring/logs/ethPayment.log"
 	logFile, err := os.OpenFile(logFilePath, os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
@@ -86,9 +124,16 @@ func main() {
 	http.HandleFunc("/eth", getWalletIds)
 	http.HandleFunc("/eth/saveTransaction", saveTransaction)
 
+	http.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte("OK"))
+	})
+
 	http.Handle("/metrics", promhttp.Handler())
 
 	log.Println("[EthPayment] EthService is running on :8084")
+	registerWithConsul("eth", 8084)
+
 	http.ListenAndServe(":8084", nil)
 }
 

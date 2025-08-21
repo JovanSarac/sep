@@ -3,6 +3,7 @@ package main
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"io"
 	"log"
 	"net/http"
@@ -23,16 +24,72 @@ type RequestDto struct {
 	ErrorUrl         string    `json:"errorUrl"`
 }
 
+func getServiceURL(serviceName string) (string, error) {
+	resp, err := http.Get("http://localhost:8500/v1/catalog/service/" + serviceName)
+	if err != nil {
+		return "", err
+	}
+	defer resp.Body.Close()
+
+	var services []struct {
+		ServiceAddress string
+		ServicePort    int
+	}
+	if err := json.NewDecoder(resp.Body).Decode(&services); err != nil {
+		return "", err
+	}
+
+	if len(services) == 0 {
+		return "", fmt.Errorf("service %s not found", serviceName)
+	}
+	return fmt.Sprintf("http://%s:%d", services[0].ServiceAddress, services[0].ServicePort), nil
+}
+
 func main() {
 
 	// register the handler function with the server
 
 	router := mux.NewRouter()
-	router.HandleFunc("/card", proxy("/card", "http://localhost:8082")).Methods("GET")
-	router.HandleFunc("/bank1ValidateRequest", proxy("/bank1ValidateRequest", "http://localhost:8082")).Methods("POST")
-	router.HandleFunc("/bank1QRCodeValidateRequest", proxy("/bank1QRCodeValidateRequest", "http://localhost:8083")).Methods("POST")
-	router.HandleFunc("/eth", proxy("/eth", "http://localhost:8084")).Methods("GET")
-	router.HandleFunc("/eth/saveTransaction", proxy("/eth/saveTransaction", "http://localhost:8084")).Methods("POST")
+	router.HandleFunc("/card", func(w http.ResponseWriter, r *http.Request) {
+		url, err := getServiceURL("card")
+		if err != nil {
+			http.Error(w, "Service unavailable", http.StatusServiceUnavailable)
+			return
+		}
+		proxy("/card", url)(w, r)
+	}).Methods("GET")
+	router.HandleFunc("/bank1ValidateRequest", func(w http.ResponseWriter, r *http.Request) {
+		url, err := getServiceURL("card")
+		if err != nil {
+			http.Error(w, "Service unavailable", http.StatusServiceUnavailable)
+			return
+		}
+		proxy("/bank1ValidateRequest", url)(w, r)
+	}).Methods("POST")
+	router.HandleFunc("/bank1QRCodeValidateRequest", func(w http.ResponseWriter, r *http.Request) {
+		url, err := getServiceURL("qrCode")
+		if err != nil {
+			http.Error(w, "Service unavailable", http.StatusServiceUnavailable)
+			return
+		}
+		proxy("/bank1QRCodeValidateRequest", url)(w, r)
+	}).Methods("POST")
+	router.HandleFunc("/eth", func(w http.ResponseWriter, r *http.Request) {
+		url, err := getServiceURL("eth")
+		if err != nil {
+			http.Error(w, "Service unavailable", http.StatusServiceUnavailable)
+			return
+		}
+		proxy("/eth", url)(w, r)
+	}).Methods("GET")
+	router.HandleFunc("/eth/saveTransaction", func(w http.ResponseWriter, r *http.Request) {
+		url, err := getServiceURL("eth")
+		if err != nil {
+			http.Error(w, "Service unavailable", http.StatusServiceUnavailable)
+			return
+		}
+		proxy("/eth/saveTransaction", url)(w, r)
+	}).Methods("POST")
 
 	c := cors.New(cors.Options{
 		AllowedOrigins:   []string{"*"},
