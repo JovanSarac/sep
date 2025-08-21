@@ -35,3 +35,7 @@
 /EthereumPayment Frontend/ethereum-payment/ethpayment-fe.crt
 /EthereumPayment Frontend/ethereum-payment/ethpayment-fe.key
 /EthereumPayment Frontend/ethereum-payment/certificate.conf
+
+/CardPayment-microservice/cardPayment.crt
+/CardPayment-microservice/cardPayment.key
+/CardPayment-microservice/certificate.conf
