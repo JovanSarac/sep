@@ -77,7 +77,7 @@ export class AvailableServicesComponent implements OnInit {
               itemNames: result.itemNames,
               totalPrice: result.totalPrice
             }
-            const paymentUrl = new URL("http://localhost:4203/" + this.sessionId);
+            const paymentUrl = new URL("https://localhost:4203/" + this.sessionId);
             paymentUrl.searchParams.append('itemNames', sessionDto.itemNames.join(','))
             paymentUrl.searchParams.append('amount', sessionDto.totalPrice.toString())
             window.location.href = paymentUrl.toString();

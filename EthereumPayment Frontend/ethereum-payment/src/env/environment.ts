@@ -1,7 +1,7 @@
 export const environment = {
     production: false,
-    pspHost: 'http://localhost:8090/api/',
-    apiGateway: 'http://localhost:8080/'
+    pspHost: 'https://localhost:8090/api/',
+    apiGateway: 'https://localhost:8080/'
 };
 
 

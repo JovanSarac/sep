@@ -41,7 +41,7 @@ func main() {
 		AllowCredentials: true,
 	})
 
-	log.Fatal(http.ListenAndServe(":8080", c.Handler(router)))
+	log.Fatal(http.ListenAndServeTLS(":8080", "apigateway.crt", "apigateway.key", c.Handler(router)))
 }
 
 func proxy(path, target string) http.HandlerFunc {
