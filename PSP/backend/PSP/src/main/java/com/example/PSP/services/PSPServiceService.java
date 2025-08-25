@@ -15,8 +15,6 @@ import java.util.List;
 public class PSPServiceService {
     @Autowired
     private final PSPServiceRepository _pspServiceRepository;
-    @Autowired
-    private DiscoveryClient discoveryClient;
 
     private static final Logger logger = LoggerFactory.getLogger(PSPServiceService.class);
 
@@ -26,22 +24,20 @@ public class PSPServiceService {
 
     public List<PSPService> getActiveServices() {
         logger.info("Retrieving all active PSP services");
-        List<String> registeredServices = discoveryClient.getServices()
-                .stream()
-                .filter(s -> !s.toUpperCase().equals("PSP") && !s.toLowerCase().equals("consul"))
-                .toList();
         List<PSPService> allPspServices = _pspServiceRepository.findAllActivePSPServices();
 
-        List<PSPService> activePspServices = new ArrayList<>();
+        return allPspServices;
+    }
 
-        for(var service : allPspServices){
-            for(var registeredService : registeredServices){
-                if(service.getName().toLowerCase().contains(registeredService.toLowerCase())){
-                    activePspServices.add(service);
-                }
-            }
-        }
+    public PSPService save(PSPService service){
+        return _pspServiceRepository.save(service);
+    }
 
-        return activePspServices;
+    public void removeById(Long id){
+        _pspServiceRepository.removeById(id);
+    }
+
+    public List<PSPService> findAll(){
+        return _pspServiceRepository.findAll();
     }
 }

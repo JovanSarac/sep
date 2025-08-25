@@ -2,6 +2,8 @@ package com.example.PSP.configs;
 
 import com.example.PSP.dtos.*;
 import com.example.PSP.models.SubscriptionMessage;
+import com.example.PSP.models.PSPService;
+import com.example.PSP.services.PSPServiceService;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
@@ -9,9 +11,11 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -21,6 +25,9 @@ public class MessageListener {
 
     @Autowired
     private RestTemplate restTemplate;
+
+    @Autowired
+    private PSPServiceService pspServiceService;
 
     @RabbitListener(queues = MQConfig.QUEUE_SUBSCRIPTION)
     public String subscriptionListener(SubscriptionMessage message){
@@ -171,6 +178,48 @@ public class MessageListener {
         } catch (HttpClientErrorException e) {
             System.out.println("Error calling endpoint: " + e.getMessage());
             return null;
+        }
+    }
+
+    @Transactional
+    @RabbitListener(queues = MQConfig.QUEUE_CONSUL)
+    public void saveNewPaymentService(NewPaymentServiceMessage message){
+        List<PSPService> activeServices = pspServiceService.findAll();
+
+        boolean serviceAlreadyExists = false;
+        for(var service : activeServices){
+            if(service.getName().toLowerCase().contains(message.getServiceName().toLowerCase())){
+                if(message.getType().equals("remove")){
+                    service.setActive(false);
+                    pspServiceService.save(service);
+                    return;
+                }
+
+                if(!service.getActive()){
+                    service.setActive(true);
+                    pspServiceService.save(service);
+                    return;
+                }
+
+                serviceAlreadyExists = true;
+                break;
+            }
+        }
+
+        if(!serviceAlreadyExists){
+            //add it to the db
+            List<String> supportedPaymentMethods = new ArrayList<>();
+            supportedPaymentMethods.add(message.getServiceName());
+
+            PSPService newService = new PSPService(
+                    message.getServiceName(),
+                    "New payment service",
+                    100.0,
+                    true,
+                    supportedPaymentMethods
+            );
+
+            pspServiceService.save(newService);
         }
     }
 }

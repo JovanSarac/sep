@@ -43,7 +43,9 @@ public class SessionController {
                 List<PSPService> pspServices = activeSubscriptionsForWebShop.stream()
                         .map(SubscriptionDto::getService)
                         .collect(Collectors.toList());
-                return ResponseEntity.ok(pspServices);
+                return ResponseEntity.ok(pspServices.stream()
+                        .filter(s -> s.getActive())
+                        .toList());
             } else {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Session not found");
             }

@@ -32,6 +32,14 @@ public class PSPService {
         this.supportedPaymentMethods = supportedPaymentMethods;
     }
 
+    public PSPService(String name, String description, Double monthlyFee, Boolean isActive, List<String> supportedPaymentMethods) {
+        this.name = name;
+        this.description = description;
+        this.monthlyFee = monthlyFee;
+        this.isActive = isActive;
+        this.supportedPaymentMethods = supportedPaymentMethods;
+    }
+
     public Long getId() {
         return id;
     }

@@ -13,4 +13,6 @@ public interface PSPServiceRepository extends JpaRepository<PSPService, Long> {
 
     @Query("SELECT pm FROM PSPService pm WHERE pm.isActive = true")
     List<PSPService> findAllActivePSPServices();
+    void removeById(Long id);
+    List<PSPService> findAll();
 }

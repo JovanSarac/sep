@@ -277,4 +277,18 @@ public class MessageController {
 
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }
+
+    @PostMapping("/newPaymentService/{type}")
+    public void publicNewPaymentService(@RequestHeader Map<String, String> headers,
+                                        @PathVariable String type,
+                                        @RequestBody String serviceName){
+        NewPaymentServiceMessage message = new NewPaymentServiceMessage(UUID.randomUUID().toString(),
+                headers.get("authorization"),
+                new Date(),
+                serviceName,
+                type);
+
+        template.convertAndSend(MQConfig.EXCHANGE_CONSUL,
+                MQConfig.ROUTING_KEY_CONSUL, message);
+    }
 }

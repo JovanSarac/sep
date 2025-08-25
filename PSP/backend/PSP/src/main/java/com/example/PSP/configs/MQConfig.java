@@ -47,6 +47,10 @@ public class MQConfig {
     public static final String EXCHANGE_ADMIN = "exchange_admin";
     public static final String ROUTING_KEY_ADMIN = "routing_key_admin";
 
+    public static final String QUEUE_CONSUL = "queue_consul";
+    public static final String EXCHANGE_CONSUL = "exchange_consul";
+    public static final String ROUTING_KEY_CONSUL = "routing_key_consul";
+
     @Bean
     public Queue queue(){
         return new Queue(QUEUE_SUBSCRIPTION);
@@ -189,6 +193,24 @@ public class MQConfig {
                 .bind(queueAdmin)
                 .to(exchangeAdmin)
                 .with(ROUTING_KEY_ADMIN);
+    }
+
+    @Bean
+    public Queue queueConsul(){
+        return new Queue(QUEUE_CONSUL);
+    }
+
+    @Bean
+    public TopicExchange exchangeConsul(){
+        return new TopicExchange(EXCHANGE_CONSUL);
+    }
+
+    @Bean
+    public Binding bindingConsul(Queue queueConsul, TopicExchange exchangeConsul){
+        return BindingBuilder
+                .bind(queueConsul)
+                .to(exchangeConsul)
+                .with(ROUTING_KEY_CONSUL);
     }
 
     @Bean
