@@ -187,7 +187,7 @@ public class MessageListener {
         List<PSPService> activeServices = pspServiceService.findAll();
 
         boolean serviceAlreadyExists = false;
-        for(var service : activeServices){
+         for(var service : activeServices){
             if(service.getName().toLowerCase().contains(message.getServiceName().toLowerCase())){
                 if(message.getType().equals("remove")){
                     service.setActive(false);

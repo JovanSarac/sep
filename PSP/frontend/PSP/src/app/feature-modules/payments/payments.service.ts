@@ -53,7 +53,7 @@ export class PaymentsService {
   }
 
   saveApiKey(apiKey: ApiKeyDto):Observable<String>{
-    return this.http.post<String>('http://localhost:8093/api/apiKey', apiKey, {
+    return this.http.post<String>('https://localhost:8093/api/apiKey', apiKey, {
       responseType: 'text' as 'json'})
   }
 }

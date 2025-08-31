@@ -9,7 +9,7 @@ import { Transaction } from '../model/transaction.model';
 @Component({
   selector: 'app-payment',
   standalone: true,
-  imports: [CommonModule, 
+  imports: [CommonModule,
     FormsModule],
   templateUrl: './payment.component.html',
   styleUrl: './payment.component.css'
@@ -49,7 +49,7 @@ export class PaymentComponent {
     }
   }
 
-  async getSenderAccount(): Promise<void>{
+  async getSenderAccount(): Promise<void> {
     if (!this.web3) {
       console.error("Web3 not initialized");
       return;
@@ -57,6 +57,11 @@ export class PaymentComponent {
 
     const acounts = await this.web3.eth.getAccounts();
     this.senderAccount = this.maskAddress(acounts[0]);
+
+    const address = acounts[0];
+    const balanceWei = await this.web3.eth.getBalance(address);
+    const balanceEth = this.web3.utils.fromWei(balanceWei, "ether");
+    console.log(`Balance: ${balanceEth} ETH`);
   }
 
   maskAddress(address: string): string {
@@ -76,19 +81,28 @@ export class PaymentComponent {
       const to = this.selectedWallet;
       // const from = acounts[0];
       // const to = "0x1537bB859bB64D4f148c885bFE5F1F68662b6BDf";
-      const value = this.web3.utils.toWei(this.amountETH, 'ether');
+      const value = this.web3.utils.toWei(this.amountETH.toString(), 'ether');
+
+      const gas = await this.web3.eth.estimateGas({
+        from,
+        to,
+        value
+      });
+
+      console.log("Estimated gas:", gas);
 
       const response = await this.web3.eth.sendTransaction({
         from,
         to,
-        value
-      })
+        value,
+        gas
+      });
 
       console.log(response);
       alert(`Transaction successful: ${response.transactionHash}`);
 
       const transaction: Transaction = {
-        id: 0,
+        id: Math.floor(Math.random() * 1_000_000_000),
         senderWalletId: from,
         receiverWalletId: to,
         amount: this.amountETH,
@@ -96,11 +110,11 @@ export class PaymentComponent {
       }
 
       this.paymentService.saveTransaction(transaction).subscribe({
-          next: () => alert(`Transaction saved: ${response.transactionHash}`),
-          error: (error: any) => console.log(error),
-          complete: (): any => {}
+        next: () => alert(`Transaction saved: ${response.transactionHash}`),
+        error: (error: any) => console.log(error),
+        complete: (): any => { }
       })
-      
+
     } catch (error: any) {
       console.error(error);
       alert(`Transaction failed: ${error.message || error}`);
@@ -117,14 +131,14 @@ export class PaymentComponent {
       this.paymentService.convertUsdToEth(this.amountUSD).subscribe({
         next: result => this.amountETH = result,
         error: (error: any) => console.log(error),
-        complete: (): any => {}
+        complete: (): any => { }
       });
     })
 
     this.paymentService.getWalletIds().subscribe({
-      next: (result) => { this.walletIds = result},
+      next: (result) => { this.walletIds = result },
       error: (error: any) => console.log(error),
-      complete: ():any => {}
+      complete: (): any => { }
     })
 
   }
