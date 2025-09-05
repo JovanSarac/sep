@@ -28,7 +28,7 @@ public class AppConfig {
         // Load your custom PSP truststore
         KeyStore customTrustStore = KeyStore.getInstance(KeyStore.getDefaultType());
         try (FileInputStream in = new FileInputStream(
-                "F:/Nevena/faks/master/SEP/projekat/sep/Bank1/backend/Bank1/src/main/resources/truststore.jks")) {
+                "D:/sep/Bank1/backend/Bank1/src/main/resources/truststore.jks")) {
             customTrustStore.load(in, "truststorepassword".toCharArray());
         }
 

@@ -28,16 +28,16 @@ import com.google.zxing.integration.android.IntentResult;
 import java.io.IOException;
 import java.util.UUID;
 
-import io.opentelemetry.api.common.AttributeKey;
-import io.opentelemetry.api.common.Attributes;
-import io.opentelemetry.api.trace.Span;
-import io.opentelemetry.api.trace.Tracer;
-import io.opentelemetry.context.Scope;
-import io.opentelemetry.exporter.otlp.trace.OtlpGrpcSpanExporter;
-import io.opentelemetry.sdk.OpenTelemetrySdk;
-import io.opentelemetry.sdk.resources.Resource;
-import io.opentelemetry.sdk.trace.SdkTracerProvider;
-import io.opentelemetry.sdk.trace.export.BatchSpanProcessor;
+//import io.opentelemetry.api.common.AttributeKey;
+//import io.opentelemetry.api.common.Attributes;
+//import io.opentelemetry.api.trace.Span;
+//import io.opentelemetry.api.trace.Tracer;
+//import io.opentelemetry.context.Scope;
+//import io.opentelemetry.exporter.otlp.trace.OtlpGrpcSpanExporter;
+//import io.opentelemetry.sdk.OpenTelemetrySdk;
+//import io.opentelemetry.sdk.resources.Resource;
+//import io.opentelemetry.sdk.trace.SdkTracerProvider;
+//import io.opentelemetry.sdk.trace.export.BatchSpanProcessor;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
     String qrPaymentId;
     Double paymentAmount;
     Integer paymentCode;
-    Tracer tracer;
+    //Tracer tracer;
 
     @SuppressLint("SimpleDateFormat")
     @Override
@@ -63,22 +63,22 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        OtlpGrpcSpanExporter spanExporter = OtlpGrpcSpanExporter.builder()
-                .setEndpoint("http://10.0.2.2:4317") // Android → Host
-                .build();
-
-        SdkTracerProvider tracerProvider = SdkTracerProvider.builder()
-                .addSpanProcessor(BatchSpanProcessor.builder(spanExporter).build())
-                .setResource(Resource.create(Attributes.of(AttributeKey.stringKey("service.name"), "MOBILEBANK")))
-                .build();
-
-        OpenTelemetrySdk openTelemetry = OpenTelemetrySdk.builder()
-                .setTracerProvider(tracerProvider)
-                .buildAndRegisterGlobal();
-
-        tracer = openTelemetry.getTracer("MOBILEBANK");
-
-        Span span = tracer.spanBuilder("MobileBankSpan").startSpan();
+//        OtlpGrpcSpanExporter spanExporter = OtlpGrpcSpanExporter.builder()
+//                .setEndpoint("http://10.0.2.2:4317") // Android → Host
+//                .build();
+//
+//        SdkTracerProvider tracerProvider = SdkTracerProvider.builder()
+//                .addSpanProcessor(BatchSpanProcessor.builder(spanExporter).build())
+//                .setResource(Resource.create(Attributes.of(AttributeKey.stringKey("service.name"), "MOBILEBANK")))
+//                .build();
+//
+//        OpenTelemetrySdk openTelemetry = OpenTelemetrySdk.builder()
+//                .setTracerProvider(tracerProvider)
+//                .buildAndRegisterGlobal();
+//
+//        tracer = openTelemetry.getTracer("MOBILEBANK");
+//
+//        Span span = tracer.spanBuilder("MobileBankSpan").startSpan();
 
         MobileBankUserDto mobileBankUserDto = SessionManager.getUser(this);
         if (mobileBankUserDto == null) {
@@ -99,7 +99,7 @@ public class MainActivity extends AppCompatActivity {
             finish();
         });
 
-        try (Scope scope = span.makeCurrent()) {
+        //try (Scope scope = span.makeCurrent()) {
             scan_btn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -182,15 +182,15 @@ public class MainActivity extends AppCompatActivity {
                             }
                         });
             });
-        } finally {
-            span.end();
-        }
+        //} finally {
+        //    span.end();
+        //}
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data){
-        Span span = tracer.spanBuilder("MobileBank2Span").startSpan();
-        try (Scope scope = span.makeCurrent()) {
+//        Span span = tracer.spanBuilder("MobileBank2Span").startSpan();
+//        try (Scope scope = span.makeCurrent()) {
             IntentResult intentResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
             if (intentResult != null) {
                 String contents = intentResult.getContents();
@@ -237,9 +237,9 @@ public class MainActivity extends AppCompatActivity {
             } else {
                 super.onActivityResult(requestCode, resultCode, data);
             }
-        } finally {
-            span.end();
-        }
+        //} finally {
+        //    span.end();
+        //}
     }
 
     @Override
