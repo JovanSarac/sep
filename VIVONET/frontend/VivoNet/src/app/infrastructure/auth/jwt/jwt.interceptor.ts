@@ -1,21 +1,34 @@
 import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { Observable } from "rxjs";
+import { catchError, Observable, throwError } from "rxjs";
 import { ACCESS_TOKEN } from '../../../shared/constants';
+import { Router } from "@angular/router";
 
 @Injectable()
 export class JwtInterceptor implements HttpInterceptor {
-  constructor() {}
+  constructor(private router: Router) {}
 
   intercept(
     request: HttpRequest<any>,
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
-    const accessTokenRequest = request.clone({
-      setHeaders: {
-        Authorization: `Bearer ` + localStorage.getItem(ACCESS_TOKEN),
-      },
-    });
-    return next.handle(accessTokenRequest);
+    const token = localStorage.getItem(ACCESS_TOKEN);
+     if (token) {
+      request = request.clone({
+        setHeaders: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+    }
+
+    return next.handle(request).pipe(
+    catchError(err => {
+      if (err.status === 401 || err.status === 403) {
+        this.router.navigate(['/login']);
+        localStorage.removeItem(ACCESS_TOKEN);
+      }
+      return throwError(() => err);
+    })
+  );
   }
 }

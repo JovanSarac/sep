@@ -7,6 +7,12 @@
     width: 100dvw;
 }
 
+.error-message {
+  color: red;
+  margin-top: 10px;
+  font-weight: 500;
+}
+
 .center-side{
     display: flex;
     flex-direction: column;
@@ -64,3 +70,4 @@ img{
     cursor: pointer;
     color: var(--secondary-hover-color);
 }
+

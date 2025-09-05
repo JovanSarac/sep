@@ -98,3 +98,9 @@
     max-width: 80%; 
     line-height: 1.7;
 }
+
+.error-message {
+  color: red;
+  margin-top: 10px;
+  font-weight: 500;
+}
