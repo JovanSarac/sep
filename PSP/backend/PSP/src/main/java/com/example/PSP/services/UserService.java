@@ -189,4 +189,14 @@ public class UserService {
         return null;
     }
 
+    public void updateUserRefreshToken(User user,String token){
+        var hashed = encoder.encode(token);
+        user.setRefreshToken(hashed);
+        userRepository.save(user);
+    }
+
+    public boolean validateRefresh(String token, User user){
+        return encoder.matches(token, user.getRefreshToken());
+    }
+
 }

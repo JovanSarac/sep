@@ -3,9 +3,14 @@ package com.example.PSP.controllers;
 import com.example.PSP.dtos.AccessToken;
 import com.example.PSP.dtos.CredentialDto;
 import com.example.PSP.dtos.RegistrationDto;
+import com.example.PSP.models.User;
 import com.example.PSP.security.jwt.JwtUtils;
+import com.example.PSP.security.jwt.TokenRefreshRequest;
 import com.example.PSP.security.services.UserDetailsImpl;
 import com.example.PSP.services.UserService;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
+import io.jsonwebtoken.JwtException;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import jakarta.validation.Valid;
@@ -14,6 +19,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.SimpleMailMessage;
@@ -29,6 +35,7 @@ import org.springframework.web.bind.annotation.*;
 import java.security.SecureRandom;
 import java.time.Instant;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 //for Angular Client (withCredentials)
@@ -62,14 +69,22 @@ public class AuthController {
             Authentication authentication = authenticationManager
                     .authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
 
-            userService. resetFailedAttempts(username);
+            userService.resetFailedAttempts(username);
             SecurityContextHolder.getContext().setAuthentication(authentication);
             UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+
             ResponseCookie jwtCookie = jwtUtils.generateJwtCookie(userDetails);
+            ResponseCookie refreshCookie = jwtUtils.generateRefreshToken(userDetails);
+
             String jwtSource = jwtCookie.toString().split("=")[1].split(";")[0];
+            String refreshSource = refreshCookie.toString().split("=")[1].split(";")[0];
+
+            var user = userService.getUserByUsername(loginRequest.getUsername());
+            userService.updateUserRefreshToken(user, refreshSource);
+
             logger.info("User " + loginRequest.getUsername() + " logged in successfully");
             return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, jwtSource)
-                    .body(new AccessToken(userDetails.getId(), jwtSource));
+                    .body(new AccessToken(userDetails.getId(), jwtSource, refreshSource));
         } catch (Exception ex) {
             userService.increaseFailedAttempts(username);
             return ResponseEntity.status(401).body("Invalid username or password");
@@ -134,10 +149,46 @@ public class AuthController {
         }
 
         UserDetailsImpl userDetails = UserDetailsImpl.build(user);
+
         ResponseCookie jwtCookie = jwtUtils.generateJwtCookie(userDetails);
+        ResponseCookie refreshCookie = jwtUtils.generateRefreshToken(userDetails);
+
         String jwtSource = jwtCookie.toString().split("=")[1].split(";")[0];
+        String refreshSource = refreshCookie.toString().split("=")[1].split(";")[0];
+
+        userService.updateUserRefreshToken(user, refreshSource);
+
         logger.info("User " + loginRequest.getUsername() + " logged in successfully");
         return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, jwtSource)
-                .body(new AccessToken(userDetails.getId(), jwtSource));
+                .body(new AccessToken(userDetails.getId(), jwtSource, refreshSource));
+    }
+
+    @PostMapping("/refresh")
+    public ResponseEntity<?> refreshToken(@Valid @RequestBody TokenRefreshRequest request) {
+        String requestToken = request.getRefreshToken();
+
+        try {
+            if(!jwtUtils.validateJwtToken(requestToken)){
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid refresh token");
+            }
+
+            Long id = jwtUtils.getUserIdFromJwtToken(requestToken);
+            // Check DB for valid refresh token
+            User user = userService.getUserById(id);
+            if(user == null){
+                throw new RuntimeException("Refresh token not found");
+            }
+
+            if(!userService.validateRefresh(requestToken,user)){
+                throw new RuntimeException("Refresh token has expired please log in");
+            }
+
+            ResponseCookie newAccessToken = jwtUtils.generateJwtCookie(UserDetailsImpl.build(user));
+            String accessSource = newAccessToken.toString().split("=")[1].split(";")[0];
+
+            return ResponseEntity.ok(new AccessToken(user.getId(), accessSource, null));
+        } catch (JwtException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid refresh token");
+        }
     }
 }

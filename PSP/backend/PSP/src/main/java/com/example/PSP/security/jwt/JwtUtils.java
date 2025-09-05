@@ -49,6 +49,17 @@ public class JwtUtils {
         ResponseCookie cookie = ResponseCookie.from(jwtCookie, jwt).path("/api").maxAge(15* 60).httpOnly(true).build();
         return cookie;
     }
+
+    public ResponseCookie generateRefreshToken(UserDetailsImpl userPrincipal) {
+        String authority = userPrincipal.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .findFirst()
+                .orElse(null); // This assumes there's always at least one authority
+        String jwt = generateTokenFrom(userPrincipal.getId(), authority, userPrincipal.getUsername());
+        ResponseCookie cookie = ResponseCookie.from(jwtCookie, jwt).path("/api").maxAge(60* 60).httpOnly(true).build();
+        return cookie;
+    }
+
     public ResponseCookie getCleanJwtCookie() {
         ResponseCookie cookie = ResponseCookie.from(jwtCookie, null).path("/api").build();
         return cookie;
@@ -61,6 +72,7 @@ public class JwtUtils {
     private Key key() {
         return Keys.hmacShaKeyFor(Decoders.BASE64.decode(jwtSecret));
     }
+
     public boolean validateJwtToken(String authToken) {
         try {
             Claims claims = Jwts.parserBuilder().setSigningKey(key()).build().parseClaimsJws(authToken).getBody();

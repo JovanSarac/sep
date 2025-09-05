@@ -38,6 +38,7 @@ public class User {
     private Long lockTime;
     private String tempCode;
     private Long codeTimestamp;
+    private String refreshToken;
 
     public User(){
         super();
@@ -58,6 +59,15 @@ public class User {
         this.failedAttempts = 0;
         this.tempCode = null;
         this.codeTimestamp = null;
+        this.refreshToken = null;
+    }
+
+    public String getRefreshToken() {
+        return refreshToken;
+    }
+
+    public void setRefreshToken(String refreshToken) {
+        this.refreshToken = refreshToken;
     }
 
     public String getTempCode() {
