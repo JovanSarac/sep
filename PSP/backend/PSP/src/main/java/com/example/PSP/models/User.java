@@ -36,6 +36,8 @@ public class User {
     private Boolean accountNonLocked;
     private Integer failedAttempts;
     private Long lockTime;
+    private String tempCode;
+    private Long codeTimestamp;
 
     public User(){
         super();
@@ -54,6 +56,24 @@ public class User {
         this.enabled = true;
         this.accountNonLocked = true;
         this.failedAttempts = 0;
+        this.tempCode = null;
+        this.codeTimestamp = null;
+    }
+
+    public String getTempCode() {
+        return tempCode;
+    }
+
+    public void setTempCode(String tempCode) {
+        this.tempCode = tempCode;
+    }
+
+    public Long getCodeTimestamp() {
+        return codeTimestamp;
+    }
+
+    public void setCodeTimestamp(Long codeTimestamp) {
+        this.codeTimestamp = codeTimestamp;
     }
 
     public Long getId() {

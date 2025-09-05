@@ -5,13 +5,16 @@ import com.example.PSP.dtos.RegistrationDto;
 import com.example.PSP.exceptions.ResourceNotFoundException;
 import com.example.PSP.models.User;
 import com.example.PSP.repositories.UserRepository;
+import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AccountExpiredException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.example.PSP.dtos.UserInfoDto;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -151,6 +154,39 @@ public class UserService {
             }
         }
         return false;
+    }
+
+    public User getUserByUsername(String username){
+        return userRepository.findByUsername(username)
+                .orElseThrow(()->new ResourceNotFoundException("User not found"));
+    }
+
+    public void updateUserCode(String code, User user){
+        long utcMillis = Instant.now().toEpochMilli();
+        String hashed = encoder.encode(code);
+        user.setTempCode(hashed);
+        user.setCodeTimestamp(utcMillis);
+        userRepository.save(user);
+    }
+
+    @Transactional
+    public User validateCode(CredentialDto dto){
+        var user = this.getUserByUsername(dto.getUsername());
+
+        long utcMillis = Instant.now().toEpochMilli();
+        Long timestamp = user.getCodeTimestamp();
+        if(timestamp == null || utcMillis - timestamp > 20*60*1000){//20 mins
+            throw new AccountExpiredException("Token has expired");
+        }
+
+        var code = dto.getPassword();
+        if(encoder.matches(code,user.getTempCode())){
+            user.setTempCode(null);
+            user.setCodeTimestamp(null);
+            userRepository.save(user);
+            return user;
+        }
+        return null;
     }
 
 }

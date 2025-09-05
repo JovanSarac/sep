@@ -6,20 +6,28 @@ import com.example.PSP.dtos.RegistrationDto;
 import com.example.PSP.security.jwt.JwtUtils;
 import com.example.PSP.security.services.UserDetailsImpl;
 import com.example.PSP.services.UserService;
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.MimeMessage;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.security.authentication.AccountExpiredException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.password.PasswordEncoder;
+
 import org.springframework.web.bind.annotation.*;
 
+import java.security.SecureRandom;
+import java.time.Instant;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -35,6 +43,11 @@ public class AuthController {
     JwtUtils jwtUtils;
     @Autowired
     private UserService userService;
+    @Autowired
+    private JavaMailSender mailSender;
+
+    @Value("${spring.mail.username}")
+    private String fromEmail;
 
     private static final Logger logger = LoggerFactory.getLogger(AuthController.class);
 
@@ -77,5 +90,54 @@ public class AuthController {
         ResponseCookie cookie = jwtUtils.getCleanJwtCookie();
         return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, cookie.toString())
                 .body("You've been signed out!");
+    }
+
+    private static final SecureRandom random = new SecureRandom();
+
+    public static String generateEightDigitCode() {
+        int number = 10000000 + random.nextInt(90000000);
+        return String.valueOf(number);// ensures 8 digits
+    }
+
+    @PostMapping("/send/code")
+    public ResponseEntity<?> sendCodeUser(@Valid @RequestBody CredentialDto loginRequest) throws MessagingException {
+        if (userService.isAccountLocked(loginRequest.getUsername())) {
+            return ResponseEntity.status(423).body("Account is locked. Try again later");
+        }
+
+        var user = userService.getUserByUsername(loginRequest.getUsername());
+        var email = user.getEmail();
+
+
+        var code = generateEightDigitCode();
+        userService.updateUserCode(code, user);
+
+        MimeMessage message = mailSender.createMimeMessage();
+        message.setFrom(fromEmail);
+        message.setRecipients(MimeMessage.RecipientType.TO, email);
+        message.setSubject("APP CODE");
+        message.setText(code);
+        mailSender.send(message);
+
+        return ResponseEntity.ok().body("OK");
+    }
+
+    @PostMapping("/login/code")
+    public ResponseEntity<?> loginCodeUser(@Valid @RequestBody CredentialDto loginRequest) throws MessagingException {
+        if (userService.isAccountLocked(loginRequest.getUsername())) {
+            return ResponseEntity.status(423).body("Account is locked. Try again later");
+        }
+
+        var user = userService.validateCode(loginRequest);
+        if(user==null){
+            return ResponseEntity.badRequest().body("Code has expired");
+        }
+
+        UserDetailsImpl userDetails = UserDetailsImpl.build(user);
+        ResponseCookie jwtCookie = jwtUtils.generateJwtCookie(userDetails);
+        String jwtSource = jwtCookie.toString().split("=")[1].split(";")[0];
+        logger.info("User " + loginRequest.getUsername() + " logged in successfully");
+        return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, jwtSource)
+                .body(new AccessToken(userDetails.getId(), jwtSource));
     }
 }
