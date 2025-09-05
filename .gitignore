@@ -1,41 +1,41 @@
 # Ignore all files in /monitoring/logs
 /monitoring/logs/*
 
-/VIVONET/backend/VIVONET/src/main/resources/vivonet.p12
-/VIVONET/backend/VIVONET/src/main/resources/truststore.jks
-/VIVONET/frontend/VivoNet/vivonet-fe.crt
-/VIVONET/frontend/VivoNet/vivonet-fe.key
-/VIVONET/frontend/VivoNet/certificate.conf
+# /VIVONET/backend/VIVONET/src/main/resources/vivonet.p12
+# /VIVONET/backend/VIVONET/src/main/resources/truststore.jks
+# /VIVONET/frontend/VivoNet/vivonet-fe.crt
+# /VIVONET/frontend/VivoNet/vivonet-fe.key
+# /VIVONET/frontend/VivoNet/certificate.conf
 
-/PSP/backend/PSP/src/main/resources/psp.p12
-/PSP/backend/PSP/src/main/resources/truststore.jks
-/PSP/frontend/PSP/psp-fe.crt
-/PSP/frontend/PSP/psp-fe.key
-/PSP/frontend/PSP/certificate.conf
+# /PSP/backend/PSP/src/main/resources/psp.p12
+# /PSP/backend/PSP/src/main/resources/truststore.jks
+# /PSP/frontend/PSP/psp-fe.crt
+# /PSP/frontend/PSP/psp-fe.key
+# /PSP/frontend/PSP/certificate.conf
 
-/PSP-MQ/src/main/resources/psp-mq.p12
-/PSP-MQ/src/main/resources/truststore.jks
+# /PSP-MQ/src/main/resources/psp-mq.p12
+# /PSP-MQ/src/main/resources/truststore.jks
 
-/Bank1/backend/Bank1/src/main/resources/bank1.p12
-/Bank1/backend/Bank1/src/main/resources/truststore.jks
-/Bank1/frontend/Bank1/bank1-fe.crt
-/Bank1/frontend/Bank1/bank1-fe.key
-/Bank1/frontend/Bank1/certificate.conf
+# /Bank1/backend/Bank1/src/main/resources/bank1.p12
+# /Bank1/backend/Bank1/src/main/resources/truststore.jks
+# /Bank1/frontend/Bank1/bank1-fe.crt
+# /Bank1/frontend/Bank1/bank1-fe.key
+# /Bank1/frontend/Bank1/certificate.conf
 
-/PCC/src/main/resources/pcc.p12
-/PCC/src/main/resources/truststore.jks
+# /PCC/src/main/resources/pcc.p12
+# /PCC/src/main/resources/truststore.jks
 
-/Bank2/src/main/resources/bank2.p12
-/Bank2/src/main/resources/truststore.jks
+# /Bank2/src/main/resources/bank2.p12
+# /Bank2/src/main/resources/truststore.jks
 
-/API-GATEWAY/certificate.conf
-/API-GATEWAY/apigateway.crt
-/API-GATEWAY/apigateway.key
+# /API-GATEWAY/certificate.conf
+# /API-GATEWAY/apigateway.crt
+# /API-GATEWAY/apigateway.key
 
-/EthereumPayment Frontend/ethereum-payment/ethpayment-fe.crt
-/EthereumPayment Frontend/ethereum-payment/ethpayment-fe.key
-/EthereumPayment Frontend/ethereum-payment/certificate.conf
+# /EthereumPayment Frontend/ethereum-payment/ethpayment-fe.crt
+# /EthereumPayment Frontend/ethereum-payment/ethpayment-fe.key
+# /EthereumPayment Frontend/ethereum-payment/certificate.conf
 
-/CardPayment-microservice/cardPayment.crt
-/CardPayment-microservice/cardPayment.key
-/CardPayment-microservice/certificate.conf
+# /CardPayment-microservice/cardPayment.crt
+# /CardPayment-microservice/cardPayment.key
+# /CardPayment-microservice/certificate.conf
