@@ -33,7 +33,7 @@ public class AuthTokenFilter extends OncePerRequestFilter {
                 accessToken = authorizationHeader.substring(7);
             }
 
-            if (accessToken != "" && jwtUtils.validateJwtToken(accessToken)) {
+            if (!accessToken.isEmpty() && jwtUtils.validateJwtToken(accessToken)) {
                 Long userId = jwtUtils.getUserIdFromJwtToken(accessToken);
                 UserDetails userDetails = userDetailsService.loadUserById(userId);
 

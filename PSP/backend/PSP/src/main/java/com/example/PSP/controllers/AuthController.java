@@ -173,7 +173,7 @@ public class AuthController {
             }
 
             Long id = jwtUtils.getUserIdFromJwtToken(requestToken);
-            // Check DB for valid refresh token
+
             User user = userService.getUserById(id);
             if(user == null){
                 throw new RuntimeException("Refresh token not found");

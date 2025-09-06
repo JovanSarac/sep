@@ -14,7 +14,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.example.PSP.dtos.UserInfoDto;
 
+import java.security.MessageDigest;
 import java.time.Instant;
+import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -189,14 +191,25 @@ public class UserService {
         return null;
     }
 
+    public String hashRefreshToken(String token) {
+        try {
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            byte[] hash = digest.digest(token.getBytes());
+            return Base64.getEncoder().encodeToString(hash);
+        } catch (Exception e) {
+            throw new RuntimeException("Error hashing token", e);
+        }
+    }
+
     public void updateUserRefreshToken(User user,String token){
-        var hashed = encoder.encode(token);
+        var hashed = hashRefreshToken(token);
         user.setRefreshToken(hashed);
         userRepository.save(user);
     }
 
     public boolean validateRefresh(String token, User user){
-        return encoder.matches(token, user.getRefreshToken());
+        var hashed = hashRefreshToken(token);
+        return hashed.equals(user.getRefreshToken());
     }
 
 }

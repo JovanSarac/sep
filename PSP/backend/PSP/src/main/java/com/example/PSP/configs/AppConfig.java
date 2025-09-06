@@ -50,5 +50,27 @@ public class AppConfig {
 
         ClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory(httpClient);
         return new RestTemplate(requestFactory);
+
+//        SSLContext sslContext = SSLContextBuilder.create()
+//                .loadTrustMaterial((chain, authType) -> true) // Trust all certs
+//                .build();
+//
+//        // No hostname verification
+//        SSLConnectionSocketFactory sslConFactory = new SSLConnectionSocketFactory(
+//                sslContext, NoopHostnameVerifier.INSTANCE);
+//
+//        // Connection manager using the SSL context
+//        HttpClientConnectionManager cm = PoolingHttpClientConnectionManagerBuilder.create()
+//                .setSSLSocketFactory(sslConFactory)
+//                .build();
+//
+//        // Create HttpClient with the above connection manager
+//        CloseableHttpClient httpClient = HttpClients.custom()
+//                .setConnectionManager(cm)
+//                .build();
+//
+//        // Use the custom HttpClient in RestTemplate
+//        ClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory(httpClient);
+//        return new RestTemplate(requestFactory);
     }
 }
