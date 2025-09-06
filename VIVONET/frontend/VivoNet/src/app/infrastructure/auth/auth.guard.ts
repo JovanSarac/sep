@@ -4,9 +4,10 @@ import {
   UrlTree,
   Router,
 } from '@angular/router';
-import { Observable } from 'rxjs';
+import { catchError, map, Observable, of } from 'rxjs';
 import { AuthService } from './auth.service';
 import { User } from './model/user.model';
+import { REFRESH_TOKEN } from 'src/app/shared/constants';
 
 @Injectable({
   providedIn: 'root',
@@ -28,10 +29,26 @@ export class AuthGuard implements CanActivate {
       //this.router.navigate(['login']);
       return false;
     }
+    
     if (this.authService.isLoggedIn()) {
       return true;
     } else {
-      this.router.navigate(['login']);
+      const refresh = localStorage.getItem(REFRESH_TOKEN)
+      console.log(refresh)
+      if(refresh){
+        return this.authService.refreshToken(refresh).pipe(
+          map(() => true), // refresh succeeded → allow navigation
+          catchError(() => {
+            // refresh failed → redirect to login
+            localStorage.removeItem('ACCESS_TOKEN');
+            localStorage.removeItem('REFRESH_TOKEN');
+            this.router.navigate(['login']);
+            return of(false)
+          })
+        );
+      }
+
+      
       return false;
     }
   }
