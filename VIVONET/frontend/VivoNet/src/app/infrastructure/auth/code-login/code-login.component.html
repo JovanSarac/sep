@@ -1,0 +1,33 @@
+<div class="full-page">
+    <div class="center-side">
+        <h1>
+            <span>
+                <img src="../../../../assets/images/logo.png" alt="">
+            </span>
+            WePay
+        </h1>
+        <form [formGroup]="loginForm" class="login-form">
+            <xp-input
+                style="width: 100%;"
+                [control]="loginForm.controls.code"
+                inputType="text"
+                inputId="code"
+                label="Code:"
+                [customErrorMessages]="{ required: 'Code is required!' }"
+                [wrongRedBorder]="wrongCredential"
+                >
+            </xp-input>
+            
+                <xp-primary-button
+                    style="width: 100%; margin-top: 5%;"
+                    buttonId="login-button"
+                    buttonType="button"
+                    textValue="Log in"
+                    (click)="login()"
+                >
+                </xp-primary-button>
+
+        </form>
+    </div>
+     
+</div>

@@ -21,6 +21,7 @@ export class JwtInterceptor implements HttpInterceptor {
         },
       });
     }
+    console.log(token)
     console.log("interceptor")
     return next.handle(request).pipe(
       catchError(err => {

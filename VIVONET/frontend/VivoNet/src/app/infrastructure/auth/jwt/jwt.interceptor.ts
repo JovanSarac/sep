@@ -1,12 +1,13 @@
 import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { catchError, Observable, throwError } from "rxjs";
-import { ACCESS_TOKEN } from '../../../shared/constants';
+import { catchError, Observable, switchMap, throwError } from "rxjs";
+import { ACCESS_TOKEN, REFRESH_TOKEN } from '../../../shared/constants';
 import { Router } from "@angular/router";
+import { AuthService } from "../auth.service";
 
 @Injectable()
 export class JwtInterceptor implements HttpInterceptor {
-  constructor(private router: Router) {}
+  constructor(private router: Router, private authService: AuthService) {}
 
   intercept(
     request: HttpRequest<any>,
@@ -20,15 +21,52 @@ export class JwtInterceptor implements HttpInterceptor {
         },
       });
     }
-
+    console.log(token)
+    console.log("interceptor")
     return next.handle(request).pipe(
-    catchError(err => {
-      if (err.status === 401 || err.status === 403) {
-        this.router.navigate(['/login']);
+      catchError(err => {
+        console.log("catch")
+        if(err.status === 401){
+          console.log("401")
+          return this.handleRefreshToken(request, next);
+        }
+        else if (err.status === 403) {
+          console.log("403")
+          this.router.navigate(['/login']);
+          localStorage.removeItem(ACCESS_TOKEN);
+        }
+        console.log("other",err.status)
+        return throwError(() => err);
+      })
+    );
+  }
+
+  private handleRefreshToken(req: HttpRequest<any>, next: HttpHandler) {
+    const refreshToken = localStorage.getItem(REFRESH_TOKEN);
+    if (!refreshToken) {
+      // no refresh token, log out
+      return throwError(() => new Error('No refresh token'));
+    }
+
+    return this.authService.refreshToken(refreshToken).pipe(
+      switchMap(res => {
+        // Save new access token
+        localStorage.setItem(ACCESS_TOKEN, res.accessToken);
+
+        // Retry original request with new token
+        const clonedReq = req.clone({
+          setHeaders: { Authorization: `Bearer ${res.accessToken}` }
+        });
+
+        return next.handle(clonedReq);
+      }),
+      catchError(err => {
+        // Refresh failed → log out
         localStorage.removeItem(ACCESS_TOKEN);
-      }
-      return throwError(() => err);
-    })
-  );
+        localStorage.removeItem(REFRESH_TOKEN);
+        this.router.navigate(['/login']);
+        return throwError(() => err);
+      })
+    );
   }
 }

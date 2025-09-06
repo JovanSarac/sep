@@ -27,6 +27,8 @@ public class JwtUtils {
     private String jwtSecret;
     @Value("${vivonet.app.jwtExpirationMs}")
     private int jwtExpirationMs;
+    @Value("${vivonet.app.jwtRefreshExpirationMs}")
+    private int jwtRefreshExpirationMs;
     @Value("${vivonet.app.jwtCookieName}")
     private String jwtCookie;
     @Autowired
@@ -49,6 +51,17 @@ public class JwtUtils {
         ResponseCookie cookie = ResponseCookie.from(jwtCookie, jwt).path("/api").maxAge(15* 60).httpOnly(true).build();
         return cookie;
     }
+
+    public ResponseCookie generateRefreshToken(UserDetailsImpl userPrincipal) {
+        String authority = userPrincipal.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .findFirst()
+                .orElse(null); // This assumes there's always at least one authority
+        String jwt = generateRefreshTokenFrom(userPrincipal.getId(), authority, userPrincipal.getUsername());
+        ResponseCookie cookie = ResponseCookie.from(jwtCookie, jwt).path("/api").maxAge(6000* 60).httpOnly(true).build();
+        return cookie;
+    }
+
     public ResponseCookie getCleanJwtCookie() {
         ResponseCookie cookie = ResponseCookie.from(jwtCookie, null).path("/api").build();
         return cookie;
@@ -94,6 +107,17 @@ public class JwtUtils {
                 .claim("lastActivity", now.getTime())
                 .setIssuedAt(new Date())
                 .setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))
+                .signWith(key(), SignatureAlgorithm.HS256)
+                .compact();
+    }
+
+    public String generateRefreshTokenFrom(Long id, String role, String username) {
+        return Jwts.builder()
+                .claim("id", id)
+                .claim("role", role)
+                .claim("username", username)
+                .setIssuedAt(new Date())
+                .setExpiration(new Date((new Date()).getTime() + jwtRefreshExpirationMs))
                 .signWith(key(), SignatureAlgorithm.HS256)
                 .compact();
     }

@@ -64,4 +64,41 @@ export class LoginComponent{
     });
   }
 
+  sendCode(){
+    this.wrongCredential = false;
+    this.errorMessage = ""
+    //this.markUsernameAsTouched();
+    const usernameControl = this.loginForm.get('username');
+
+    if (!usernameControl || usernameControl.invalid) {
+      // mark username as touched to show validation errors
+      usernameControl?.markAsTouched();
+      return; // stop form submission
+    }
+
+    const login: Login = {
+      username: this.loginForm.value.username!,
+      password: this.loginForm.value.password!
+    };
+
+    this.authService.sendCode(login).subscribe({
+      next: () => {
+        console.log("nav")
+        this.router.navigate(['/code']);
+      },
+      error: (err: any) => {
+        if (err.status === 401) {
+          this.errorMessage = "Invalid username";
+          this.wrongCredential = true;
+        } else if (err.status === 423) {
+          this.errorMessage = "Your account is locked due to too many failed login attempts. Try again later.";
+          this.wrongCredential = true;
+        } else {
+          this.errorMessage = "Unexpected error occurred.";
+          this.wrongCredential = true;
+        }
+      },
+    });
+  }
+
 }

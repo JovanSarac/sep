@@ -2,22 +2,30 @@ package com.example.VIVONET.controllers;
 
 import com.example.VIVONET.dtos.AccessToken;
 import com.example.VIVONET.dtos.CredentialDto;
+import com.example.VIVONET.dtos.GenericReposnse;
 import com.example.VIVONET.dtos.RegistrationDto;
+import com.example.VIVONET.models.User;
 import com.example.VIVONET.security.jwt.JwtUtils;
+import com.example.VIVONET.security.jwt.TokenRefreshRequest;
 import com.example.VIVONET.security.services.UserDetailsImpl;
 import com.example.VIVONET.services.UserService;
+import io.jsonwebtoken.JwtException;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.MessagingException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+
+import java.security.SecureRandom;
 
 //for Angular Client (withCredentials)
 //@CrossOrigin(origins = "http://localhost:4201", maxAge = 3600, allowCredentials="true")
@@ -48,12 +56,20 @@ public class AuthController {
 
             userService.resetFailedAttempts(username);
             SecurityContextHolder.getContext().setAuthentication(authentication);
+
             UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
             ResponseCookie jwtCookie = jwtUtils.generateJwtCookie(userDetails);
+            ResponseCookie refreshCookie = jwtUtils.generateRefreshToken(userDetails);
+
             String jwtSource = jwtCookie.toString().split("=")[1].split(";")[0];
+            String refreshSource = refreshCookie.toString().split("=")[1].split(";")[0];
+
+            var user = userService.getUserByUsername(loginRequest.getUsername());
+            userService.updateUserRefreshToken(user, refreshSource);
+
             logger.info("User " + loginRequest.getUsername() + " logged in successfully");
             return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, jwtSource)
-                    .body(new AccessToken(userDetails.getId(), jwtSource));
+                    .body(new AccessToken(userDetails.getId(), jwtSource, refreshSource));
 
         } catch (Exception ex) {
             userService.increaseFailedAttempts(username);
@@ -77,5 +93,90 @@ public class AuthController {
         ResponseCookie cookie = jwtUtils.getCleanJwtCookie();
         return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, cookie.toString())
                 .body("You've been signed out!");
+    }
+
+    private static final SecureRandom random = new SecureRandom();
+
+    public static String generateEightDigitCode() {
+        int number = 10000000 + random.nextInt(90000000);
+        return String.valueOf(number);// ensures 8 digits
+    }
+
+    @PostMapping("/send/code")
+    public ResponseEntity<?> sendCodeUser(@Valid @RequestBody CredentialDto loginRequest) throws MessagingException {
+        if (userService.isAccountLocked(loginRequest.getUsername())) {
+            return ResponseEntity.status(423).body("Account is locked. Try again later");
+        }
+
+        var user = userService.getUserByUsername(loginRequest.getUsername());
+        var email = user.getEmail();
+
+        var code = generateEightDigitCode();
+        userService.updateUserCode(code, user);
+//TODO uncomment this
+//        MimeMessage message = mailSender.createMimeMessage();
+//        message.setFrom(fromEmail);
+//        message.setRecipients(MimeMessage.RecipientType.TO, email);
+//        message.setSubject("APP CODE");
+//        message.setText(code);
+//        mailSender.send(message);
+
+        GenericReposnse resp = new GenericReposnse(true,"OK");
+        return ResponseEntity.ok().body(resp);
+    }
+
+    @PostMapping("/login/code")
+    public ResponseEntity<?> loginCodeUser(@Valid @RequestBody CredentialDto loginRequest) throws MessagingException {
+        if (userService.isAccountLocked(loginRequest.getUsername())) {
+            return ResponseEntity.status(423).body("Account is locked. Try again later");
+        }
+
+        var user = userService.validateCode(loginRequest);
+        if(user==null){
+            return ResponseEntity.badRequest().body("Code has expired");
+        }
+
+        UserDetailsImpl userDetails = UserDetailsImpl.build(user);
+
+        ResponseCookie jwtCookie = jwtUtils.generateJwtCookie(userDetails);
+        ResponseCookie refreshCookie = jwtUtils.generateRefreshToken(userDetails);
+
+        String jwtSource = jwtCookie.toString().split("=")[1].split(";")[0];
+        String refreshSource = refreshCookie.toString().split("=")[1].split(";")[0];
+
+        userService.updateUserRefreshToken(user, refreshSource);
+
+        logger.info("User " + loginRequest.getUsername() + " logged in successfully");
+        return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, jwtSource)
+                .body(new AccessToken(userDetails.getId(), jwtSource, refreshSource));
+    }
+
+    @PostMapping("/refresh")
+    public ResponseEntity<?> refreshToken(@Valid @RequestBody TokenRefreshRequest request) {
+        String requestToken = request.getRefreshToken();
+
+        try {
+            if(!jwtUtils.validateJwtToken(requestToken)){
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid refresh token");
+            }
+
+            Long id = jwtUtils.getUserIdFromJwtToken(requestToken);
+
+            User user = userService.getUserById(id);
+            if(user == null){
+                throw new RuntimeException("Refresh token not found");
+            }
+
+            if(!userService.validateRefresh(requestToken,user)){
+                throw new RuntimeException("Refresh token has expired please log in");
+            }
+
+            ResponseCookie newAccessToken = jwtUtils.generateJwtCookie(UserDetailsImpl.build(user));
+            String accessSource = newAccessToken.toString().split("=")[1].split(";")[0];
+
+            return ResponseEntity.ok(new AccessToken(user.getId(), accessSource, null));
+        } catch (JwtException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid refresh token");
+        }
     }
 }

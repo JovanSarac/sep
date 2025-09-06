@@ -1,16 +1,23 @@
 package com.example.VIVONET.services;
 
+import com.example.VIVONET.dtos.CredentialDto;
 import com.example.VIVONET.dtos.RegistrationDto;
 import com.example.VIVONET.dtos.UserInfoDto;
+import com.example.VIVONET.exceptions.ResourceNotFoundException;
 import com.example.VIVONET.models.User;
 import com.example.VIVONET.models.UserType;
 import com.example.VIVONET.repositories.UserRepository;
+import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AccountExpiredException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.security.MessageDigest;
+import java.time.Instant;
+import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -139,5 +146,59 @@ public class UserService {
             }
         }
         return false;
+    }
+
+    public User getUserByUsername(String username){
+        return userRepository.findByUsername(username)
+                .orElseThrow(()->new ResourceNotFoundException("User not found"));
+    }
+
+    public void updateUserCode(String code, User user){
+        long utcMillis = Instant.now().toEpochMilli();
+        String hashed = encoder.encode(code);
+        user.setTempCode(hashed);
+        user.setCodeTimestamp(utcMillis);
+        userRepository.save(user);
+    }
+
+    @Transactional
+    public User validateCode(CredentialDto dto){
+        var user = this.getUserByUsername(dto.getUsername());
+
+        long utcMillis = Instant.now().toEpochMilli();
+        Long timestamp = user.getCodeTimestamp();
+        if(timestamp == null || utcMillis - timestamp > 20*60*1000){//20 mins
+            throw new AccountExpiredException("Token has expired");
+        }
+
+        var code = dto.getPassword();
+        if(encoder.matches(code,user.getTempCode())){
+            user.setTempCode(null);
+            user.setCodeTimestamp(null);
+            userRepository.save(user);
+            return user;
+        }
+        return null;
+    }
+
+    public String hashRefreshToken(String token) {
+        try {
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            byte[] hash = digest.digest(token.getBytes());
+            return Base64.getEncoder().encodeToString(hash);
+        } catch (Exception e) {
+            throw new RuntimeException("Error hashing token", e);
+        }
+    }
+
+    public void updateUserRefreshToken(User user,String token){
+        var hashed = hashRefreshToken(token);
+        user.setRefreshToken(hashed);
+        userRepository.save(user);
+    }
+
+    public boolean validateRefresh(String token, User user){
+        var hashed = hashRefreshToken(token);
+        return hashed.equals(user.getRefreshToken());
     }
 }

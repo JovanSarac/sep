@@ -4,6 +4,7 @@ import com.example.VIVONET.dtos.VivonetServiceDto;
 import com.example.VIVONET.models.VivonetService;
 import com.example.VIVONET.services.VivonetServicesService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -57,6 +58,7 @@ public class VivonetServicesController {
 
     // Internet Services for Personal
     @GetMapping("/internet/personal")
+    @PreAuthorize("hasAnyRole('ROLE_BUSINESS_USER', 'ROLE_PERSONAL_USER', 'ROLE_ADMIN')")
     public List<VivonetServiceDto> getInternetServicesPersonal() {
         return vivonetServicesService.getInternetServicesPersonal();
     }

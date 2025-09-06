@@ -26,14 +26,24 @@
                 >
             </xp-input>
 
-            <xp-primary-button
-                style="width: 100%; margin-top: 5%;"
-                buttonId="login-button"
-                buttonType="button"
-                textValue="Log in"
-                (click)="login()"
-            >
-            </xp-primary-button>
+                <xp-primary-button
+                    style="width: 100%; margin-top: 5%;"
+                    buttonId="login-button"
+                    buttonType="button"
+                    textValue="Log in"
+                    (click)="login()"
+                >
+                </xp-primary-button>
+
+                <xp-secondary-button
+                    style="width: 100%; margin-top: 5%;"
+                    buttonId="code-button"
+                    buttonType="button"
+                    textValue="Code"
+                    (click)="sendCode()"
+                    >
+                </xp-secondary-button>
+                
             <div *ngIf="wrongCredential" class="error-message">
                 {{ errorMessage }}
             </div>

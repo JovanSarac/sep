@@ -9,10 +9,12 @@ import { InternetComponent } from './feature-modules/service-offerings/internet/
 import { TelevisionComponent } from './feature-modules/service-offerings/television/television.component';
 import { CartComponent } from './feature-modules/layout/cart/cart.component';
 import { TransactionStatusComponent } from './feature-modules/layout/transaction-status/transaction-status.component';
+import { CodeLoginComponent } from './infrastructure/auth/code-login/code-login.component';
 
 const routes: Routes = [
   {path: '', component:  HomeComponent},
   {path: 'login', component: LoginComponent},
+  {path: 'code', component: CodeLoginComponent},
   {path: 'registration', component: RegistrationComponent},
   {path: 'mobile-services', component: MobileComponent},
   {path: 'landline-services', component: LandlineComponent},
