@@ -2,6 +2,7 @@ package com.example.PSP.controllers;
 
 import com.example.PSP.dtos.AccessToken;
 import com.example.PSP.dtos.CredentialDto;
+import com.example.PSP.dtos.GenericReposnse;
 import com.example.PSP.dtos.RegistrationDto;
 import com.example.PSP.models.User;
 import com.example.PSP.security.jwt.JwtUtils;
@@ -123,18 +124,18 @@ public class AuthController {
         var user = userService.getUserByUsername(loginRequest.getUsername());
         var email = user.getEmail();
 
-
         var code = generateEightDigitCode();
         userService.updateUserCode(code, user);
+//TODO uncomment this
+//        MimeMessage message = mailSender.createMimeMessage();
+//        message.setFrom(fromEmail);
+//        message.setRecipients(MimeMessage.RecipientType.TO, email);
+//        message.setSubject("APP CODE");
+//        message.setText(code);
+//        mailSender.send(message);
 
-        MimeMessage message = mailSender.createMimeMessage();
-        message.setFrom(fromEmail);
-        message.setRecipients(MimeMessage.RecipientType.TO, email);
-        message.setSubject("APP CODE");
-        message.setText(code);
-        mailSender.send(message);
-
-        return ResponseEntity.ok().body("OK");
+        GenericReposnse resp = new GenericReposnse(true,"OK");
+        return ResponseEntity.ok().body(resp);
     }
 
     @PostMapping("/login/code")

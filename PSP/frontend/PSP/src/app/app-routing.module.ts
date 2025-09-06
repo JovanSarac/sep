@@ -8,10 +8,12 @@ import { AuthGuard } from './infrastructure/auth/auth.guard';
 import { ServicesComponent } from './feature-modules/payments/services/services.component';
 import { AdminDashboardComponent } from './feature-modules/payments/admin-dashboard/admin-dashboard.component';
 import { AvailableServicesComponent } from './feature-modules/layout/available-services/available-services.component';
+import { CodeLoginComponent } from './infrastructure/auth/code-login/code-login.component';
 
 const routes: Routes = [
   {path: '', component:  HomeComponent},
   {path: 'login', component: LoginComponent},
+  {path: 'code', component: CodeLoginComponent},
   {path: 'registration', component: RegistrationComponent},
   {path: 'my-profile', component: MyProfileComponent, canActivate:[AuthGuard]},
   {path: 'services', component: ServicesComponent, canActivate:[AuthGuard]},

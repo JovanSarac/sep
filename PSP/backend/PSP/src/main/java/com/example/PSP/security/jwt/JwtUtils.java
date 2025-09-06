@@ -28,6 +28,8 @@ public class JwtUtils {
     private String jwtSecret;
     @Value("${psp.app.jwtExpirationMs}")
     private int jwtExpirationMs;
+    @Value("${psp.app.jwtRefreshExpirationMs}")
+    private int jwtRefreshExpirationMs;
     @Value("${psp.app.jwtCookieName}")
     private String jwtCookie;
     @Autowired
@@ -46,7 +48,7 @@ public class JwtUtils {
                 .findFirst()
                 .orElse(null); // This assumes there's always at least one authority
         String jwt = generateTokenFrom(userPrincipal.getId(), authority, userPrincipal.getUsername());
-        ResponseCookie cookie = ResponseCookie.from(jwtCookie, jwt).path("/api").maxAge(15* 60).httpOnly(true).build();
+        ResponseCookie cookie = ResponseCookie.from(jwtCookie, jwt).path("/api").maxAge(15*60).httpOnly(true).build();
         return cookie;
     }
 
@@ -55,8 +57,8 @@ public class JwtUtils {
                 .map(GrantedAuthority::getAuthority)
                 .findFirst()
                 .orElse(null); // This assumes there's always at least one authority
-        String jwt = generateTokenFrom(userPrincipal.getId(), authority, userPrincipal.getUsername());
-        ResponseCookie cookie = ResponseCookie.from(jwtCookie, jwt).path("/api").maxAge(60* 60).httpOnly(true).build();
+        String jwt = generateRefreshTokenFrom(userPrincipal.getId(), authority, userPrincipal.getUsername());
+        ResponseCookie cookie = ResponseCookie.from(jwtCookie, jwt).path("/api").maxAge(6000* 60).httpOnly(true).build();
         return cookie;
     }
 
@@ -103,6 +105,17 @@ public class JwtUtils {
                 .claim("username", username)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))
+                .signWith(key(), SignatureAlgorithm.HS256)
+                .compact();
+    }
+
+    public String generateRefreshTokenFrom(Long id, String role, String username) {
+        return Jwts.builder()
+                .claim("id", id)
+                .claim("role", role)
+                .claim("username", username)
+                .setIssuedAt(new Date())
+                .setExpiration(new Date((new Date()).getTime() + jwtRefreshExpirationMs))
                 .signWith(key(), SignatureAlgorithm.HS256)
                 .compact();
     }

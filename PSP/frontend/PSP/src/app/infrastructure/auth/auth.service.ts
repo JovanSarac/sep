@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, tap } from 'rxjs';
+import { BehaviorSubject, catchError, Observable, switchMap, tap, throwError } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { TokenStorage } from './jwt/token.service';
@@ -9,6 +9,7 @@ import { Login } from './model/login.model';
 import { AuthenticationResponse } from './model/authentication-response.model';
 import { User } from './model/user.model';
 import { Registration } from './model/registration.model';
+import { ACCESS_TOKEN } from 'src/app/shared/constants';
 
 @Injectable({
   providedIn: 'root'
@@ -27,6 +28,7 @@ export class AuthService {
       .pipe(
         tap((authenticationResponse) => {
           this.tokenStorage.saveAccessToken(authenticationResponse.accessToken);
+          this.tokenStorage.saveRefreshToken(authenticationResponse.refreshToken);
           this.setUser();
         })
       );
@@ -66,7 +68,12 @@ export class AuthService {
 
   isLoggedIn(): boolean {
     const token = this.tokenStorage.getAccessToken();
-    return token != null && !this.jwtHelperService.isTokenExpired(token);
+
+    if (token && !this.jwtHelperService.isTokenExpired(token)) {
+      return true; 
+    }
+
+    return false; 
   }
 
   private setUser(): void {
@@ -78,5 +85,31 @@ export class AuthService {
       role: decodedToken.role,
     };
     this.user$.next(user);
+  }
+
+  sendCode(login: Login): Observable<any> {
+    return this.http.post(environment.apiHost + 'auth/send/code', login);
+  }
+
+  codeLogin(login: Login): Observable<AuthenticationResponse> {
+    return this.http.post<AuthenticationResponse>(environment.apiHost + 'auth/login/code', login).pipe(
+        tap((authenticationResponse) => {
+          this.tokenStorage.saveAccessToken(authenticationResponse.accessToken);
+          this.tokenStorage.saveRefreshToken(authenticationResponse.refreshToken);
+          this.setUser();
+        })
+      );
+  }
+
+  refreshToken(refreshToken: string): Observable<{ accessToken: string }> {
+    return this.http.post<{ accessToken: string }>(
+      environment.apiHost + 'auth/refresh',
+      { refreshToken }
+    ).pipe(
+        tap((authenticationResponse) => {
+          this.tokenStorage.saveAccessToken(authenticationResponse.accessToken);
+          this.setUser();
+        })
+      );
   }
 }
