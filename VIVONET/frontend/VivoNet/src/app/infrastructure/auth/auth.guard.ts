@@ -25,14 +25,17 @@ export class AuthGuard implements CanActivate {
     | UrlTree {
         
     const user: User = this.authService.user$.getValue();
+    console.log("guard")
     if (user.username === '') {
       //this.router.navigate(['login']);
       return false;
     }
     
     if (this.authService.isLoggedIn()) {
+      console.log("if")
       return true;
     } else {
+      console.log("else")
       const refresh = localStorage.getItem(REFRESH_TOKEN)
       console.log(refresh)
       if(refresh){

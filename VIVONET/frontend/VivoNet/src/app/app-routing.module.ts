@@ -14,7 +14,7 @@ import { CodeLoginComponent } from './infrastructure/auth/code-login/code-login.
 const routes: Routes = [
   {path: '', component:  HomeComponent},
   {path: 'login', component: LoginComponent},
-  {path: 'code', component: CodeLoginComponent},
+  {path: 'code/:username', component: CodeLoginComponent},
   {path: 'registration', component: RegistrationComponent},
   {path: 'mobile-services', component: MobileComponent},
   {path: 'landline-services', component: LandlineComponent},

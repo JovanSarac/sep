@@ -84,7 +84,7 @@ export class LoginComponent{
     this.authService.sendCode(login).subscribe({
       next: () => {
         console.log("nav")
-        this.router.navigate(['/code']);
+        this.router.navigate(['/code', login.username]);
       },
       error: (err: any) => {
         if (err.status === 401) {

@@ -13,7 +13,7 @@ import { CodeLoginComponent } from './infrastructure/auth/code-login/code-login.
 const routes: Routes = [
   {path: '', component:  HomeComponent},
   {path: 'login', component: LoginComponent},
-  {path: 'code', component: CodeLoginComponent},
+  {path: 'code/:username', component: CodeLoginComponent},
   {path: 'registration', component: RegistrationComponent},
   {path: 'my-profile', component: MyProfileComponent, canActivate:[AuthGuard]},
   {path: 'services', component: ServicesComponent, canActivate:[AuthGuard]},

@@ -49,6 +49,7 @@ export class AuthService {
 
   logout(): void {
     this.router.navigate(['']).then(_ => {
+      console.log('logout')
       this.tokenStorage.clear();
       this.user$.next({username: "", id: 0, role: "" });
       }
@@ -61,10 +62,10 @@ export class AuthService {
       return;
     }
     if (this.jwtHelperService.isTokenExpired(accessToken)) {
-      this.logout();
+      //this.logout();
       return;
     }
-    this.setUser();
+    //this.setUser();
   }
 
   isLoggedIn(): boolean {

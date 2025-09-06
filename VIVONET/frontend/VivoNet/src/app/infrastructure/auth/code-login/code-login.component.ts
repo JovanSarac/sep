@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../auth.service';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Login } from '../model/login.model';
 
@@ -9,15 +9,23 @@ import { Login } from '../model/login.model';
   templateUrl: './code-login.component.html',
   styleUrl: './code-login.component.css'
 })
-export class CodeLoginComponent {
+export class CodeLoginComponent implements OnInit {
   wrongCredential: boolean = false;
   errorMessage: string = ""
+  username: string = ""
 
   loginForm = new FormGroup({
     code: new FormControl('', Validators.required),
   });
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(private authService: AuthService, private router: Router, private route: ActivatedRoute) {}
+
+  ngOnInit() {
+    this.route.paramMap.subscribe(params => {
+      this.username = params.get('username') ?? '';
+      console.log(this.username);
+    });
+  }
 
  private markAllControlsAsTouched(): void {
     Object.values(this.loginForm.controls).forEach((control) => {
@@ -34,7 +42,7 @@ export class CodeLoginComponent {
     }
 
     const login: Login = {
-      username: "VivoNet"!,
+      username: this.username!,
       password: this.loginForm.value.code!
     };
 
