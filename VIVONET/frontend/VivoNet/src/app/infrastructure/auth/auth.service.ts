@@ -65,7 +65,7 @@ export class AuthService {
       //this.logout();
       return;
     }
-    //this.setUser();
+    this.setUser();
   }
 
   isLoggedIn(): boolean {
@@ -81,6 +81,7 @@ export class AuthService {
   private setUser(): void {
     const accessToken = this.tokenStorage.getAccessToken() || "";
     const decodedToken = this.jwtHelperService.decodeToken(accessToken);
+    console.log(+decodedToken.id)
     const user: User = {
       id: +decodedToken.id,
       username: decodedToken.username,
