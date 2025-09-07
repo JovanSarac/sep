@@ -63,7 +63,7 @@ export class AuthService {
       //this.logout();
       return;
     }
-    //this.setUser();
+    this.setUser();
   }
 
   isLoggedIn(): boolean {
