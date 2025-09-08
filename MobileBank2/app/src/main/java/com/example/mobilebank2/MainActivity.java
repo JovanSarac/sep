@@ -116,10 +116,10 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
 
-        RetrofitService retrofitBank1Service  = new RetrofitService("http://192.168.0.61:8091");
+        RetrofitService retrofitBank1Service  = new RetrofitService("https://192.168.100.222:8091");
         Bank1Api bank1Api = retrofitBank1Service.getRetrofit().create(Bank1Api.class);
 
-        RetrofitService retrofitBank2Service = new RetrofitService("http://192.168.0.61:8092");
+        RetrofitService retrofitBank2Service = new RetrofitService("https://192.168.100.222:8092");
         Bank2Api bank2Api = retrofitBank2Service.getRetrofit().create(Bank2Api.class);
 
             payBtn.setOnClickListener(v -> {

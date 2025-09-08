@@ -24,6 +24,10 @@ public class RetrofitService {
                 .connectTimeout(300, TimeUnit.SECONDS) // vreme za povezivanje
                 .readTimeout(300, TimeUnit.SECONDS)    // vreme čekanja odgovora
                 .writeTimeout(300, TimeUnit.SECONDS)   // vreme za slanje podataka
+                .hostnameVerifier((hostname, session) -> {
+                    // Allow connections to your specific IP
+                    return hostname.equals("192.168.100.222");
+                })
                 .build();
         retrofit = new Retrofit.Builder()
                 .baseUrl(baseUrl)
@@ -31,6 +35,51 @@ public class RetrofitService {
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .build();
     }
+//    private void initializeRetrofit() {
+//        Gson gson = new GsonBuilder()
+//                .setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ")
+//                .setLenient()
+//                .create();
+//
+//        OkHttpClient okHttpClient = new OkHttpClient.Builder()
+//                .connectTimeout(300, TimeUnit.SECONDS)
+//                .readTimeout(300, TimeUnit.SECONDS)
+//                .writeTimeout(300, TimeUnit.SECONDS)
+//                .hostnameVerifier((hostname, session) -> {
+//                    // Allow connections to any IP in your local network range
+//                    return hostname.startsWith("192.168.100.");
+//                })
+//                .build();
+//
+//        retrofit = new Retrofit.Builder()
+//                .baseUrl(baseUrl) // assuming you're passing baseUrl to constructor
+//                .client(okHttpClient)
+//                .addConverterFactory(GsonConverterFactory.create(gson))
+//                .build();
+//    }
+
+//    private void initializeRetrofit() {
+//        Gson gson = new GsonBuilder()
+//                .setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ")
+//                .setLenient()
+//                .create();
+//
+//        OkHttpClient okHttpClient = new OkHttpClient.Builder()
+//                .connectTimeout(300, TimeUnit.SECONDS)
+//                .readTimeout(300, TimeUnit.SECONDS)
+//                .writeTimeout(300, TimeUnit.SECONDS)
+//                .hostnameVerifier((hostname, session) -> {
+//                    // Allow connections to your specific IP
+//                    return hostname.equals("192.168.100.222");
+//                })
+//                .build();
+//
+//        retrofit = new Retrofit.Builder()
+//                .baseUrl("https://192.168.100.222:8091/")
+//                .client(okHttpClient)
+//                .addConverterFactory(GsonConverterFactory.create(gson))
+//                .build();
+//    }
 
     public Retrofit getRetrofit() {
         return retrofit;
