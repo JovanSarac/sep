@@ -24,10 +24,8 @@ import java.util.stream.Collectors;
 
 @Service
 public class AccountService {
-    @Bean
-    public RestTemplate restTemplate() {
-        return new RestTemplate();
-    }
+    @Autowired
+    public RestTemplate restTemplate;
     @Autowired
     private AccountRepository accountRepository;
     @Autowired
@@ -219,7 +217,7 @@ public class AccountService {
                     var method = HttpMethod.POST;
 
                     try {
-                        String response = restTemplate().exchange(url, method, requestEntity, String.class).getBody();
+                        String response = restTemplate.exchange(url, method, requestEntity, String.class).getBody();
                     } catch (HttpClientErrorException e) {
                         System.out.println("Error calling endpoint: " + e.getMessage());
                     }
@@ -264,7 +262,7 @@ public class AccountService {
                 var method = HttpMethod.POST;
 
                 try {
-                    String response = restTemplate().exchange(url, method, requestEntity, String.class).getBody();
+                    String response = restTemplate.exchange(url, method, requestEntity, String.class).getBody();
                 } catch (HttpClientErrorException e) {
                     System.out.println("Error calling endpoint: " + e.getMessage());
                 }
@@ -329,7 +327,7 @@ public class AccountService {
                     var method = HttpMethod.POST;
 
                     try {
-                        String response = restTemplate().exchange(url, method, requestEntity, String.class).getBody();
+                        String response = restTemplate.exchange(url, method, requestEntity, String.class).getBody();
                     } catch (HttpClientErrorException e) {
                         System.out.println("Error calling endpoint: " + e.getMessage());
                     }
@@ -374,7 +372,7 @@ public class AccountService {
                 var method = HttpMethod.POST;
 
                 try {
-                    String response = restTemplate().exchange(url, method, requestEntity, String.class).getBody();
+                    String response = restTemplate.exchange(url, method, requestEntity, String.class).getBody();
                 } catch (HttpClientErrorException e) {
                     System.out.println("Error calling endpoint: " + e.getMessage());
                 }

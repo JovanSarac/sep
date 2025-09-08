@@ -76,7 +76,14 @@ export class SubscriptionDialogComponent implements OnInit {
           paymentType: this.data.id
         }
 
-        this.service.saveApiKey(apiKey).subscribe({});
+        this.service.saveApiKey(apiKey).subscribe({
+          next: () => {
+            console.log("next");
+          },
+          error: (err) => {
+            console.error("nije next nego ", err);
+          }
+        });
 
         this.dialogRef.close(true);
       },

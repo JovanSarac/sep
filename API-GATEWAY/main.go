@@ -72,6 +72,8 @@ func main() {
 			http.Error(w, "Service unavailable", http.StatusServiceUnavailable)
 			return
 		}
+		log.Println("URL QR REQUEST")
+		log.Println(url)
 		proxy("/bank1QRCodeValidateRequest", url)(w, r)
 	}).Methods("POST")
 	router.HandleFunc("/eth", func(w http.ResponseWriter, r *http.Request) {
@@ -113,7 +115,7 @@ func proxy(path, target string) http.HandlerFunc {
 		log.Println("PROXY")
 		if r.Method == http.MethodPost || r.Method == http.MethodPut || r.Method == http.MethodPatch {
 			switch path {
-			case "/card", "/bank1", "/bank1ValidateRequest":
+			case "/card", "/bank1", "/bank1ValidateRequest", "/bank1QRCodeValidateRequest":
 				log.Println("BANK1VALIDATEREQUEST")
 				var requestDto RequestDto
 				if err := json.NewDecoder(r.Body).Decode(&requestDto); err != nil {
@@ -145,14 +147,20 @@ func proxy(path, target string) http.HandlerFunc {
 		}
 
 		targetURL := target + r.URL.Path
+		log.Println("TARGETURL")
+		log.Println(targetURL)
 		req, err := http.NewRequest(r.Method, targetURL, requestBody)
 		if err != nil {
+			log.Println("Prvi error")
+			log.Println(err)
 			http.Error(w, err.Error(), http.StatusBadGateway)
 			return
 		}
 
-		req.Header = r.Header.Clone()
+		log.Println("HEADER")
 
+		req.Header = r.Header.Clone()
+		log.Println(req.Header)
 		client := &http.Client{}
 		resp, err := client.Do(req)
 		if err != nil {
@@ -168,6 +176,7 @@ func proxy(path, target string) http.HandlerFunc {
 		}
 
 		w.WriteHeader(resp.StatusCode)
+		log.Println(resp)
 		io.Copy(w, resp.Body)
 	}
 }

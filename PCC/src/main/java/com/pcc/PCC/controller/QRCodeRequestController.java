@@ -22,10 +22,8 @@ import org.springframework.web.client.RestTemplate;
 @RequiredArgsConstructor
 @RequestMapping("/api/pcc/qrCodeRequests")
 public class QRCodeRequestController {
-    @Bean(name = "qrCodeRestTemplate")
-    public RestTemplate qrCodeRestTemplate() {
-        return new RestTemplate();
-    }
+    @Autowired
+    public RestTemplate qrCodeRestTemplate;
     @Autowired
     QRCodeRequestService qrCodeRequestService;
 
@@ -36,8 +34,8 @@ public class QRCodeRequestController {
         QRCodeRequestDto qrCodeRequest = qrCodeRequestService.create(qrCodeRequestDto);
 
         String url = qrCodeRequestService.isBank1(qrCodeRequestDto.buyerAccountNumber) ?
-                "http://localhost:8091/api/bank1/transactions/PCCRequestQRCode" //ovde treba vrv menjati header
-                :"http://localhost:8092/api/bank2/transactions/PCCRequestQRCode";
+                "https://localhost:8091/api/bank1/transactions/PCCRequestQRCode" //ovde treba vrv menjati header
+                :"https://localhost:8092/api/bank2/transactions/PCCRequestQRCode";
 
         HttpHeaders headers = new HttpHeaders();
         var requestEntity = new HttpEntity<>(qrCodeRequestService.isBank1(qrCodeRequestDto.buyerAccountNumber) ?
@@ -45,7 +43,7 @@ public class QRCodeRequestController {
         var method = HttpMethod.POST;
 
         try {
-            String response = qrCodeRestTemplate().exchange(url, method, requestEntity, String.class).getBody();
+            String response = qrCodeRestTemplate.exchange(url, method, requestEntity, String.class).getBody();
         } catch (HttpClientErrorException e) {
             System.out.println("Error calling endpoint: " + e.getMessage());
         }
