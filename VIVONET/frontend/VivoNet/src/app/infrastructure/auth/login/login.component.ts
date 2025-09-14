@@ -44,10 +44,7 @@ export class LoginComponent{
       },
       error: (err: any) => {
         if (err.status === 401) {
-          this.errorMessage = "Invalid username or password.";
-          this.wrongCredential = true;
-        } else if (err.status === 423) {
-          this.errorMessage = "Your account is locked due to too many failed login attempts. Try again later.";
+          this.errorMessage = "Invalid username or password or your account is locked.";
           this.wrongCredential = true;
         } else {
           this.errorMessage = "Unexpected error occurred.";

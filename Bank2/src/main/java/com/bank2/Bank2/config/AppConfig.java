@@ -1,5 +1,4 @@
-package com.example.PSP.configs;
-
+package com.bank2.Bank2.config;
 
 import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
 import org.apache.hc.client5.http.impl.classic.HttpClients;
@@ -29,7 +28,7 @@ public class AppConfig {
         // Load your custom PSP truststore
         KeyStore customTrustStore = KeyStore.getInstance(KeyStore.getDefaultType());
         try (FileInputStream in = new FileInputStream(
-                "D:/sep/PSP/backend/PSP/src/main/resources/truststore.jks")) {
+                "D:/sep/Bank2/src/main/resources/truststore.jks")) {
             customTrustStore.load(in, "truststorepassword".toCharArray());
         }
 
@@ -50,27 +49,5 @@ public class AppConfig {
 
         ClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory(httpClient);
         return new RestTemplate(requestFactory);
-
-//        SSLContext sslContext = SSLContextBuilder.create()
-//                .loadTrustMaterial((chain, authType) -> true) // Trust all certs
-//                .build();
-//
-//        // No hostname verification
-//        SSLConnectionSocketFactory sslConFactory = new SSLConnectionSocketFactory(
-//                sslContext, NoopHostnameVerifier.INSTANCE);
-//
-//        // Connection manager using the SSL context
-//        HttpClientConnectionManager cm = PoolingHttpClientConnectionManagerBuilder.create()
-//                .setSSLSocketFactory(sslConFactory)
-//                .build();
-//
-//        // Create HttpClient with the above connection manager
-//        CloseableHttpClient httpClient = HttpClients.custom()
-//                .setConnectionManager(cm)
-//                .build();
-//
-//        // Use the custom HttpClient in RestTemplate
-//        ClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory(httpClient);
-//        return new RestTemplate(requestFactory);
     }
 }

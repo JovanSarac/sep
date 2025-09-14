@@ -28,6 +28,7 @@ public class VivonetServicesController {
 
     // Mobile Services for Business
     @GetMapping("/mobile/business")
+    @PreAuthorize("hasAuthority('ROLE_BUSINESS_USER')")
     public List<VivonetServiceDto> getMobileServicesBussines() {
         return vivonetServicesService.getMobileServicesBussines();
     }
