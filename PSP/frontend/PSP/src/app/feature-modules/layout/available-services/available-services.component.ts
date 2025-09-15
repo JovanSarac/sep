@@ -16,6 +16,8 @@ export class AvailableServicesComponent implements OnInit {
   activePspServices: PaymentService[] = [];
   paymentData?: paymentDataDto;
   paymentQRData?: paymentQRDataDto;
+  isLoggedIn = false;
+  token: string | undefined;
 
   constructor(
     private route: ActivatedRoute,
@@ -23,6 +25,12 @@ export class AvailableServicesComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    console.log("On new page, ACCESS_TOKEN:", localStorage.getItem('access-token'));
+    localStorage.setItem('access-token', this.route.snapshot.queryParamMap.get('accessToken') || '');
+    localStorage.setItem('refresh-token', '');
+    const url = new URL(window.location.href);
+    url.searchParams.delete('accessToken');
+    window.history.replaceState({}, '', url.toString());
     this.sessionId = this.route.snapshot.paramMap.get('sessionId') || '';
     if (this.sessionId != '') {
       this.layoutServiceL.getSesstionById(Number(this.sessionId)).subscribe({

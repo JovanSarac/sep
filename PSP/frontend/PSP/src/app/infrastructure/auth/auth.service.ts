@@ -23,12 +23,13 @@ export class AuthService {
     private router: Router) { }
 
   login(login: Login): Observable<AuthenticationResponse> {
+    this.tokenStorage.clear();
     return this.http
       .post<AuthenticationResponse>(environment.apiHost + 'auth/login', login)
       .pipe(
         tap((authenticationResponse) => {
-          this.tokenStorage.saveAccessToken(authenticationResponse.accessToken);
-          this.tokenStorage.saveRefreshToken(authenticationResponse.refreshToken);
+          this.tokenStorage.saveAccessToken(authenticationResponse.access_token);
+          this.tokenStorage.saveRefreshToken(authenticationResponse.refresh_token);
           this.setUser();
         })
       );
@@ -80,6 +81,7 @@ export class AuthService {
     const accessToken = this.tokenStorage.getAccessToken() || "";
      const decodedToken = this.jwtHelperService.decodeToken(accessToken);
      console.log(+decodedToken.id)
+     console.log(decodedToken)
     const user: User = {
       id: +decodedToken.id,
       username: decodedToken.username,
@@ -95,8 +97,8 @@ export class AuthService {
   codeLogin(login: Login): Observable<AuthenticationResponse> {
     return this.http.post<AuthenticationResponse>(environment.apiHost + 'auth/login/code', login).pipe(
         tap((authenticationResponse) => {
-          this.tokenStorage.saveAccessToken(authenticationResponse.accessToken);
-          this.tokenStorage.saveRefreshToken(authenticationResponse.refreshToken);
+          this.tokenStorage.saveAccessToken(authenticationResponse.access_token);
+          this.tokenStorage.saveRefreshToken(authenticationResponse.refresh_token);
           this.setUser();
         })
       );

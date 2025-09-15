@@ -4,6 +4,7 @@ import { catchError, Observable, switchMap, throwError } from "rxjs";
 import { ACCESS_TOKEN, REFRESH_TOKEN } from '../../../shared/constants';
 import { Router } from "@angular/router";
 import { AuthService } from "../auth.service";
+import { TokenRefreshRequest } from "../model/tokenRefreshRequest.model";
 
 @Injectable()
 export class JwtInterceptor implements HttpInterceptor {
@@ -48,7 +49,8 @@ export class JwtInterceptor implements HttpInterceptor {
       return throwError(() => new Error('No refresh token'));
     }
 
-    return this.authService.refreshToken(refreshToken).pipe(
+    const tokenRequest: TokenRefreshRequest = { refreshToken };
+    return this.authService.refreshToken(tokenRequest).pipe(
       switchMap(res => {
         // Save new access token
         localStorage.setItem(ACCESS_TOKEN, res.accessToken);

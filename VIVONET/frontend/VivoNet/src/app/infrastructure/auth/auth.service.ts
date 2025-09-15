@@ -9,6 +9,7 @@ import { Login } from './model/login.model';
 import { AuthenticationResponse } from './model/authentication-response.model';
 import { User } from './model/user.model';
 import { Registration } from './model/registration.model';
+import { TokenRefreshRequest } from './model/tokenRefreshRequest.model';
 
 @Injectable({
   providedIn: 'root'
@@ -85,7 +86,7 @@ export class AuthService {
     console.log(+decodedToken.id)
     const user: User = {
       id: +decodedToken.id,
-      username: decodedToken.username,
+      username: decodedToken.preferred_username,
       role: decodedToken.role,
     };
     this.user$.next(user);
@@ -105,15 +106,21 @@ export class AuthService {
       );
   }
 
-  refreshToken(refreshToken: string): Observable<{ accessToken: string }> {
-    return this.http.post<{ accessToken: string }>(
-      environment.apiHost + 'auth/refresh',
-      { refreshToken }
-    ).pipe(
-        tap((authenticationResponse) => {
-          this.tokenStorage.saveAccessToken(authenticationResponse.accessToken);
-          this.setUser();
-        })
-      );
-  }
+  refreshToken(refreshToken: TokenRefreshRequest): Observable<any> {
+  return this.http.post<any>(
+    `${environment.apiHost}auth/refresh`,
+    refreshToken // ovo je body koji backend očekuje
+  ).pipe(
+    tap((res) => {
+      // Keycloak vraća `access_token` i `refresh_token` u JSON
+      if (res.access_token) {
+        this.tokenStorage.saveAccessToken(res.access_token);
+      }
+      if (res.refresh_token) {
+        this.tokenStorage.saveRefreshToken(res.refresh_token);
+      }
+      this.setUser(); // ako treba update user info
+    })
+  );
+}
 }

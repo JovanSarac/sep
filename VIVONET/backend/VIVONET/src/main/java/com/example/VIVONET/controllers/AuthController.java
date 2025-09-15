@@ -47,7 +47,7 @@ public class AuthController {
         String tokenUrl = "http://localhost:8080/realms/sep-realm/protocol/openid-connect/token";
 
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
-        params.add("client_id", "sep-vivonet-beckend");
+        params.add("client_id", "sep-vivonet-backend");
         params.add("client_secret", "Yg7DMUoa9UCZZjXEMLToWOyHzdj3Yjht");
         params.add("grant_type", "password");
         params.add("username", loginRequest.getUsername());
@@ -170,7 +170,7 @@ public class AuthController {
         String logoutUrl = "http://localhost:8080/realms/sep-realm/protocol/openid-connect/logout";
 
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
-        params.add("client_id", "sep-vivonet-beckend");
+        params.add("client_id", "sep-vivonet-backend");
         params.add("client_secret", "Yg7DMUoa9UCZZjXEMLToWOyHzdj3Yjht");
         params.add("refresh_token", request.getRefreshToken());
 
@@ -257,7 +257,7 @@ public class AuthController {
         String tokenUrl = "http://localhost:8080/realms/sep-realm/protocol/openid-connect/token";
 
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
-        params.add("client_id", "sep-vivonet-beckend");
+        params.add("client_id", "sep-vivonet-backend");
         params.add("client_secret", "Yg7DMUoa9UCZZjXEMLToWOyHzdj3Yjht");
         params.add("grant_type", "refresh_token");
         params.add("refresh_token", request.getRefreshToken());

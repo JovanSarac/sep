@@ -47,7 +47,7 @@ public class RequestController {
     private static final Logger logger = LoggerFactory.getLogger(RequestController.class);
 
     @GetMapping("/sendRequestQRCode/{sessionId}")
-    @PreAuthorize("permitAll()")
+    //@PreAuthorize("permitAll()")
     public RequestQRCodePaymentDto sendRequestQRCode(@PathVariable Long sessionId) {
         logger.info("Processing the QR code request..");
         String url = "https://localhost:9000/publishApiKeyRequest";
@@ -83,7 +83,7 @@ public class RequestController {
 
 
     @GetMapping("/sendRequest/{sessionId}")
-    @PreAuthorize("permitAll()")
+    //@PreAuthorize("permitAll()")
     public RequestPaymentDto sendRequest(@PathVariable Long sessionId) {
         logger.info("Processing car payment request..");
         //formira se objekat request
@@ -130,7 +130,7 @@ public class RequestController {
     }
 
     @GetMapping("/sendRequestCrypto")
-    @PreAuthorize("permitAll()")
+    //@PreAuthorize("permitAll()")
     public ResponseEntity<ArrayList<String>> sendRequestCrypto() {
         logger.info("Processing crypto request..");
         HttpHeaders headers = new HttpHeaders();

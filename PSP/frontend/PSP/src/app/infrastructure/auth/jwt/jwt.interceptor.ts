@@ -26,6 +26,7 @@ export class JwtInterceptor implements HttpInterceptor {
     return next.handle(request).pipe(
       catchError(err => {
         console.log("catch")
+        console.log(err)
         if(err.status === 401){
           console.log("401")
           return this.handleRefreshToken(request, next);

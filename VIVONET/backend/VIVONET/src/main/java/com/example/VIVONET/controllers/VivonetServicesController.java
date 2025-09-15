@@ -28,7 +28,7 @@ public class VivonetServicesController {
 
     // Mobile Services for Business
     @GetMapping("/mobile/business")
-    @PreAuthorize("hasAuthority('ROLE_BUSINESS_USER')")
+    //@PreAuthorize("hasAuthority('ROLE_BUSINESS_USER')")
     public List<VivonetServiceDto> getMobileServicesBussines() {
         return vivonetServicesService.getMobileServicesBussines();
     }
@@ -59,7 +59,7 @@ public class VivonetServicesController {
 
     // Internet Services for Personal
     @GetMapping("/internet/personal")
-    @PreAuthorize("hasAnyRole('ROLE_BUSINESS_USER', 'ROLE_PERSONAL_USER', 'ROLE_ADMIN')")
+    //@PreAuthorize("hasAnyRole('ROLE_BUSINESS_USER', 'ROLE_PERSONAL_USER', 'ROLE_ADMIN')")
     public List<VivonetServiceDto> getInternetServicesPersonal() {
         return vivonetServicesService.getInternetServicesPersonal();
     }

@@ -31,7 +31,7 @@ export class MyProfileComponent implements OnInit{
     this.authService.user$.subscribe((user) => {
       this.user = user;
     });
-
+    console.log(this.user.id)
     this.layoutService.getUserInfoById(this.user.id).subscribe({
       next: (result) =>{
         this.userInfo = result;
