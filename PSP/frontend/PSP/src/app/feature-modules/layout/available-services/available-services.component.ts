@@ -70,6 +70,14 @@ export class AvailableServicesComponent implements OnInit {
         })
         break;
       }
+      case -3: {
+        this.layoutServiceL.sendRequestPaypal(Number(this.sessionId)).subscribe({
+          next: (paypalData) => {
+            window.location.href = paypalData.approvalUrl;
+          }
+        })
+        break;
+      }
       case -4: {
         this.layoutServiceL.getSessionById(Number(this.sessionId)).subscribe({
           next: (result) => {

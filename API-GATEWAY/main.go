@@ -24,6 +24,18 @@ type RequestDto struct {
 	ErrorUrl         string    `json:"errorUrl"`
 }
 
+type PaypalRequestDto struct {
+	Amount     string `json:"amount"`
+	Currency   string `json:"currency"`
+	SuccessUrl string `json:"successUrl"`
+	CancelUrl  string `json:"cancelUrl"`
+}
+
+type PaypalResponseDto struct {
+	PaymentId   string `json:"paymentId"`
+	ApprovalUrl string `json:"approvalUrl"`
+}
+
 func getServiceURL(serviceName string) (string, error) {
 	resp, err := http.Get("http://localhost:8500/v1/catalog/service/" + serviceName)
 	if err != nil {
@@ -92,6 +104,14 @@ func main() {
 		}
 		proxy("/eth/saveTransaction", url)(w, r)
 	}).Methods("POST")
+	router.HandleFunc("/paypal/create-order", func(w http.ResponseWriter, r *http.Request) {
+		url, err := getServiceURL("paypal")
+		if err != nil {
+			http.Error(w, "PayPal service unavailable", http.StatusServiceUnavailable)
+			return
+		}
+		proxy("/paypal/create-order", url)(w, r)
+	}).Methods("POST")
 
 	c := cors.New(cors.Options{
 		AllowedOrigins:   []string{"*"},
@@ -131,6 +151,23 @@ func proxy(path, target string) http.HandlerFunc {
 					return
 				}
 				log.Println("READ THE BODY")
+				requestBody = bytes.NewReader(marshaled)
+				break
+			case "/paypal/create-order":
+				log.Println("PAYPAL CREATE ORDER")
+				w.Header().Set("Content-Type", "application/json")
+				var requestDto PaypalRequestDto
+				if err := json.NewDecoder(r.Body).Decode(&requestDto); err != nil {
+					http.Error(w, "Invalid PayPal request body", http.StatusBadRequest)
+					return
+				}
+				log.Printf("Parsed PaypalRequestDto: %+v\n", requestDto)
+
+				marshaled, err := json.Marshal(requestDto)
+				if err != nil {
+					http.Error(w, "Failed to marshal PayPal request body", http.StatusInternalServerError)
+					return
+				}
 				requestBody = bytes.NewReader(marshaled)
 				break
 			default:

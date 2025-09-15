@@ -7,6 +7,7 @@ import { PaymentService } from '../payments/model/payment_service.model';
 import { paymentDataDto } from './dto/paymentDataDto';
 import { paymentQRDataDto } from './dto/paymentQRDataDto';
 import { SessionDto } from './dto/sessionDto';
+import { PaypalPaymentDto } from './dto/paypalPaymentDto';
 
 @Injectable({
   providedIn: 'root'
@@ -46,5 +47,11 @@ export class LayoutService {
     //return this.http.get<SessionDto>(environment.apiHost + 'session/' + id);
     this.typeOfOutputSession = 'session'
     return this.http.get<SessionDto>(environment.rabbitMQ + 'session/' + id + '/' + this.typeOfOutputSession);
+  }
+
+  sendRequestPaypal(sessionId: number): Observable<PaypalPaymentDto> {
+    return this.http.get<PaypalPaymentDto>(
+      environment.rabbitMQ + 'publishSendRequestPaypal/' + sessionId
+    );
   }
 }

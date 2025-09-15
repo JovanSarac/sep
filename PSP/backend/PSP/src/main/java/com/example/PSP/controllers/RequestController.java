@@ -3,11 +3,9 @@ package com.example.PSP.controllers;
 import com.example.PSP.configs.ApiKeyResponseMessage;
 import com.example.PSP.configs.MQConfig;
 import com.example.PSP.configs.RequestMessage;
-import com.example.PSP.dtos.PaymentDataDto;
-import com.example.PSP.dtos.RequestDto;
-import com.example.PSP.dtos.RequestPaymentDto;
-import com.example.PSP.dtos.RequestQRCodePaymentDto;
+import com.example.PSP.dtos.*;
 import com.example.PSP.models.ApiKey;
+import com.example.PSP.models.Session;
 import com.example.PSP.services.ApiKeyService;
 import com.example.PSP.services.SessionService;
 import lombok.RequiredArgsConstructor;
@@ -18,10 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestTemplate;
@@ -141,5 +136,33 @@ public class RequestController {
         ArrayList<String> walletIds = response.getBody();
 
         return ResponseEntity.ok(walletIds);
+    }
+
+    @GetMapping("/sendRequestPaypal")
+    @PreAuthorize("permitAll()")
+    public ResponseEntity<PaypalPaymentDto> sendRequestPaypal(@RequestParam Long sessionId) {
+        logger.info("Processing PayPal request for sessionId: {}", sessionId);
+
+        Session sessionInfo = sessionService.getSessionById(sessionId);
+
+
+        PaypalRequestDto requestBody = new PaypalRequestDto();
+        requestBody.setAmount(sessionInfo.getCart().getTotalPrice().toString());
+        requestBody.setCurrency("USD");
+        requestBody.setSuccessUrl("https://localhost:4200/transaction-status/success");
+        requestBody.setCancelUrl("https://localhost:4200/transaction-status/cancel");
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<PaypalRequestDto> entity = new HttpEntity<>(requestBody, headers);
+
+        ResponseEntity<PaypalPaymentDto> response = restTemplate.exchange(
+                "https://localhost:8080/paypal/create-order",
+                HttpMethod.POST,
+                entity,
+                PaypalPaymentDto.class
+        );
+
+        return ResponseEntity.ok(response.getBody());
     }
 }

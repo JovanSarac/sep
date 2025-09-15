@@ -19,6 +19,10 @@ export class TransactionStatusComponent implements OnInit {
 
   ngOnInit(): void {
     this.status = this.route.snapshot.paramMap.get('status') || '';
+    this.route.queryParams.subscribe(params => {
+      console.log('PayPal token:', params['token']);
+      console.log('PayerID:', params['PayerID']);
+    });
     if(this.status != 'success' && this.status != 'failed' && this.status != 'error'){
       this.router.navigate(['/']);
     }

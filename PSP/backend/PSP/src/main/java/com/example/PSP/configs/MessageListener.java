@@ -222,4 +222,24 @@ public class MessageListener {
             pspServiceService.save(newService);
         }
     }
+
+    @RabbitListener(queues = MQConfig.QUEUE_PAYPAL)
+    public String paypalListener(PaypalMessage message) {
+        String url = "https://localhost:8090/api/psp/requests/sendRequestPaypal?sessionId=" + message.getSessionId();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", message.getJwtToken());
+
+        var requestEntity = new HttpEntity<>(null, headers);
+
+        try {
+            ResponseEntity<String> response = restTemplate.exchange(
+                    url, HttpMethod.GET, requestEntity, String.class);
+
+            return response.getBody();
+        } catch (HttpClientErrorException e) {
+            System.out.println("Error calling endpoint: " + e.getMessage());
+            return null;
+        }
+    }
 }
