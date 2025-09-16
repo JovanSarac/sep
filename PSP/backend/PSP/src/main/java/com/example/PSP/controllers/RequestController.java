@@ -21,9 +21,7 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.UUID;
+import java.util.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -165,4 +163,40 @@ public class RequestController {
 
         return ResponseEntity.ok(response.getBody());
     }
+
+    @PostMapping("/capturePaypalOrder")
+    @PreAuthorize("permitAll()")
+    public ResponseEntity<?> capturePaypalOrder(
+            @RequestBody PaypalCaptureRequestDto request) {
+
+        logger.info("Capturing PayPal order: {} for PayerID: {}", request.getOrderId(), request.getPayerId());
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        Map<String, String> requestBody = new HashMap<>();
+        requestBody.put("orderId", request.getOrderId());
+        requestBody.put("payerId", request.getPayerId());
+
+        HttpEntity<Map<String, String>> entity = new HttpEntity<>(requestBody, headers);
+
+        try {
+            ResponseEntity<PaypalCaptureDto> response = restTemplate.exchange(
+                    "https://localhost:8080/paypal/capture-order",
+                    HttpMethod.POST,
+                    entity,
+                    PaypalCaptureDto.class
+            );
+
+            // Ako treba snimi transakciju
+            // transactionService.savePaypalTransaction(request.getOrderId(), request.getPayerId(), response.getBody());
+
+            return ResponseEntity.ok(response.getBody());
+
+        } catch (Exception e) {
+            logger.error("Error capturing PayPal order: {}", e.getMessage(), e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+
 }

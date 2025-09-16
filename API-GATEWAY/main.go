@@ -113,6 +113,15 @@ func main() {
 		proxy("/paypal/create-order", url)(w, r)
 	}).Methods("POST")
 
+	router.HandleFunc("/paypal/capture-order", func(w http.ResponseWriter, r *http.Request) {
+		url, err := getServiceURL("paypal")
+		if err != nil {
+			http.Error(w, "PayPal service unavailable", http.StatusServiceUnavailable)
+			return
+		}
+		proxy("/paypal/capture-order", url)(w, r)
+	}).Methods("POST")
+
 	c := cors.New(cors.Options{
 		AllowedOrigins:   []string{"*"},
 		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
@@ -170,6 +179,27 @@ func proxy(path, target string) http.HandlerFunc {
 				}
 				requestBody = bytes.NewReader(marshaled)
 				break
+			case "/paypal/capture-order":
+				log.Println("PAYPAL CAPTURE ORDER")
+				w.Header().Set("Content-Type", "application/json")
+				var requestDto struct {
+					OrderID string `json:"orderId"`
+					PayerID string `json:"payerId"`
+				}
+				if err := json.NewDecoder(r.Body).Decode(&requestDto); err != nil {
+					http.Error(w, "Invalid PayPal capture request body", http.StatusBadRequest)
+					return
+				}
+				log.Printf("Parsed PaypalCaptureRequest: %+v\n", requestDto)
+
+				marshaled, err := json.Marshal(requestDto)
+				if err != nil {
+					http.Error(w, "Failed to marshal PayPal capture request body", http.StatusInternalServerError)
+					return
+				}
+				requestBody = bytes.NewReader(marshaled)
+				break
+
 			default:
 				//pass the raw body
 				bodyBytes, err := io.ReadAll(r.Body)

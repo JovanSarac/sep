@@ -208,13 +208,22 @@ func createOrderHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func captureOrderHandler(w http.ResponseWriter, r *http.Request) {
-	orderID := r.URL.Query().Get("orderId")
-	if orderID == "" {
+	type PaypalCaptureRequest struct {
+		OrderID string `json:"orderId"`
+		PayerID string `json:"payerId"`
+	}
+
+	var req PaypalCaptureRequest
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		http.Error(w, "invalid request body", http.StatusBadRequest)
+		return
+	}
+	if req.OrderID == "" {
 		http.Error(w, "orderId required", http.StatusBadRequest)
 		return
 	}
 
-	capture, err := paypalClient.CaptureOrder(context.Background(), orderID, paypal.CaptureOrderRequest{})
+	capture, err := paypalClient.CaptureOrder(context.Background(), req.OrderID, paypal.CaptureOrderRequest{})
 	if err != nil {
 		http.Error(w, fmt.Sprintf("capture error: %v", err), http.StatusInternalServerError)
 		return
