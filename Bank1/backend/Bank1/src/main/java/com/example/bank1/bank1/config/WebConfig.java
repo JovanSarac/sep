@@ -43,6 +43,18 @@ public class WebConfig {
 
         // Kreiranje custom authorities converter-a
         converter.setJwtGrantedAuthoritiesConverter(jwt -> {
+            Object audClaim = jwt.getClaim("aud");
+            boolean validAud = false;
+            if (audClaim instanceof String) {
+                validAud = "sep-psp-backend".equals(audClaim);
+            } else if (audClaim instanceof List) {
+                validAud = ((List<?>) audClaim).contains("sep-bank1-backend");
+            }
+
+            if (!validAud) {
+                throw new RuntimeException("Token not intended for this service");
+            }
+
             Map<String, Object> realmAccess = jwt.getClaim("realm_access");
             if (realmAccess == null) {
                 return Collections.emptyList();

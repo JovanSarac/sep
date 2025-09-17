@@ -9,8 +9,6 @@
       <change beforePath="$PROJECT_DIR$/../API-GATEWAY/apigateway.crt" beforeDir="false" afterPath="$PROJECT_DIR$/../API-GATEWAY/apigateway.crt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../API-GATEWAY/apigateway.key" beforeDir="false" afterPath="$PROJECT_DIR$/../API-GATEWAY/apigateway.key" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../API-GATEWAY/certificate.conf" beforeDir="false" afterPath="$PROJECT_DIR$/../API-GATEWAY/certificate.conf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../API-GATEWAY/go.mod" beforeDir="false" afterPath="$PROJECT_DIR$/../API-GATEWAY/go.mod" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../API-GATEWAY/go.sum" beforeDir="false" afterPath="$PROJECT_DIR$/../API-GATEWAY/go.sum" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../API-GATEWAY/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/../API-GATEWAY/main.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Bank1/backend/.idea/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/../Bank1/backend/.idea/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Bank1/backend/.idea/backend.iml" beforeDir="false" afterPath="$PROJECT_DIR$/../Bank1/backend/.idea/backend.iml" afterDir="false" />
@@ -482,8 +480,6 @@
       <change beforePath="$PROJECT_DIR$/../PSP/frontend/PSP/tsconfig.app.json" beforeDir="false" afterPath="$PROJECT_DIR$/../PSP/frontend/PSP/tsconfig.app.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../PSP/frontend/PSP/tsconfig.json" beforeDir="false" afterPath="$PROJECT_DIR$/../PSP/frontend/PSP/tsconfig.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../PSP/frontend/PSP/tsconfig.spec.json" beforeDir="false" afterPath="$PROJECT_DIR$/../PSP/frontend/PSP/tsconfig.spec.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../QRCodePayment-microservice/go.mod" beforeDir="false" afterPath="$PROJECT_DIR$/../QRCodePayment-microservice/go.mod" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../QRCodePayment-microservice/go.sum" beforeDir="false" afterPath="$PROJECT_DIR$/../QRCodePayment-microservice/go.sum" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../QRCodePayment-microservice/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/../QRCodePayment-microservice/main.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../VIVONET/backend/VIVONET/.gitattributes" beforeDir="false" afterPath="$PROJECT_DIR$/../VIVONET/backend/VIVONET/.gitattributes" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../VIVONET/backend/VIVONET/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/../VIVONET/backend/VIVONET/.gitignore" afterDir="false" />

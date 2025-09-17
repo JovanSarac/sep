@@ -123,6 +123,38 @@ func validateToken(r *http.Request) (*jwt.Token, error) {
 		return nil, fmt.Errorf("invalid token")
 	}
 
+	claims, ok := token.Claims.(jwt.MapClaims)
+	if !ok {
+		return nil, fmt.Errorf("invalid claims")
+	}
+
+	audClaim, ok := claims["aud"]
+	if !ok {
+		return nil, fmt.Errorf("missing aud claim")
+	}
+
+	validAud := false
+
+	switch v := audClaim.(type) {
+	case string:
+		if v == "sep-qr-payment-microservice" {
+			validAud = true
+		}
+	case []interface{}:
+		for _, a := range v {
+			if aStr, ok := a.(string); ok && aStr == "sep-qr-payment-microservice" {
+				validAud = true
+				break
+			}
+		}
+	default:
+		return nil, fmt.Errorf("invalid aud claim type")
+	}
+
+	if !validAud {
+		return nil, fmt.Errorf("token not intended for this service")
+	}
+
 	return token, nil
 }
 

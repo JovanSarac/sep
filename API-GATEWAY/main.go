@@ -42,9 +42,31 @@ func authMiddleware(next http.Handler) http.Handler {
 		token := strings.TrimPrefix(authHeader, "Bearer ")
 
 		ctx := r.Context()
-		_, err := verifier.Verify(ctx, token)
+		idToken, err := verifier.Verify(ctx, token)
 		if err != nil {
 			http.Error(w, "Invalid token", http.StatusUnauthorized)
+			return
+		}
+
+		var claims struct {
+			Aud []string `json:"aud"`
+		}
+
+		if err := idToken.Claims(&claims); err != nil {
+			http.Error(w, "Failed to parse claims", http.StatusUnauthorized)
+			return
+		}
+
+		validAud := false
+		for _, a := range claims.Aud {
+			if a == "sep-api-gateway" {
+				validAud = true
+				break
+			}
+		}
+
+		if !validAud {
+			http.Error(w, "Token not intended for this service", http.StatusForbidden)
 			return
 		}
 
