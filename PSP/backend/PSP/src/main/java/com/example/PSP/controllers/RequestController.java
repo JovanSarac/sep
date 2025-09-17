@@ -72,7 +72,7 @@ public class RequestController {
         RequestDto requestDto = sessionService.createRequestBySession(sessionId);
         HttpEntity<RequestDto> entity = new HttpEntity<RequestDto>(requestDto, headers);
 
-        ResponseEntity<RequestQRCodePaymentDto> response = restTemplate.exchange("https://localhost:8080/bank1QRCodeValidateRequest", HttpMethod.POST, entity, RequestQRCodePaymentDto.class);
+        ResponseEntity<RequestQRCodePaymentDto> response = restTemplate.exchange("https://localhost:9001/bank1QRCodeValidateRequest", HttpMethod.POST, entity, RequestQRCodePaymentDto.class);
         RequestQRCodePaymentDto requestPaymentQRDto = response.getBody();
 
         //ovde dodajem string za qr data, posle treba namestiti da se ti podaci uzimaju iz banke prodavca i da
@@ -115,7 +115,7 @@ public class RequestController {
         RequestDto requestDto = sessionService.createRequestBySession(sessionId);
         HttpEntity<RequestDto> entity = new HttpEntity<RequestDto>(requestDto, headers);
 
-        ResponseEntity<RequestPaymentDto> response = restTemplate.exchange("https://localhost:8080/bank1ValidateRequest", HttpMethod.POST, entity, RequestPaymentDto.class);
+        ResponseEntity<RequestPaymentDto> response = restTemplate.exchange("https://localhost:9001/bank1ValidateRequest", HttpMethod.POST, entity, RequestPaymentDto.class);
         RequestPaymentDto requestPaymentDto = response.getBody();
 
         //restTemplate.exchange("http://localhost:8080/bank1", HttpMethod.POST, entity, String.class).getBody();
@@ -137,7 +137,7 @@ public class RequestController {
         headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
         HttpEntity<Void> entity = new HttpEntity<>(headers);
 
-        ResponseEntity<ArrayList<String>> response = restTemplate.exchange("https://localhost:8080/eth", HttpMethod.GET, entity, new ParameterizedTypeReference<ArrayList<String>>() {});
+        ResponseEntity<ArrayList<String>> response = restTemplate.exchange("https://localhost:9001/eth", HttpMethod.GET, entity, new ParameterizedTypeReference<ArrayList<String>>() {});
         ArrayList<String> walletIds = response.getBody();
 
         return ResponseEntity.ok(walletIds);
