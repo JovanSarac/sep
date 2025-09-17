@@ -1,4 +1,4 @@
-import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, NgModule, APP_INITIALIZER } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -13,6 +13,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
 import { PaymentsModule } from './feature-modules/payments/payments.module';
 import { DatePipe } from '@angular/common';
+//import { initKeycloak } from './infrastructure/auth/keycloak-init';
 
 @NgModule({ declarations: [
         AppComponent
@@ -42,6 +43,11 @@ import { DatePipe } from '@angular/common';
             useClass: JwtInterceptor,
             multi: true,
         },
+        // {
+        //     provide: APP_INITIALIZER,
+        //     useFactory: initKeycloak,
+        //     multi: true
+        // },
         provideHttpClient(withInterceptorsFromDi()),
         
     ] })
