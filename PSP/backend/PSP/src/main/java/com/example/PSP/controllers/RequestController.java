@@ -18,10 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestTemplate;
@@ -48,8 +45,9 @@ public class RequestController {
 
     @GetMapping("/sendRequestQRCode/{sessionId}")
     //@PreAuthorize("permitAll()")
-    public RequestQRCodePaymentDto sendRequestQRCode(@PathVariable Long sessionId) {
+    public RequestQRCodePaymentDto sendRequestQRCode(@PathVariable Long sessionId, @RequestHeader("Authorization") String authorizationHeader) {
         logger.info("Processing the QR code request..");
+        String token = authorizationHeader.replace("Bearer ", "").trim();
         String url = "https://localhost:9000/publishApiKeyRequest";
         HttpHeaders headersMQ = new HttpHeaders();
         var requestEntity = new HttpEntity<>(-2, headersMQ);
@@ -69,6 +67,7 @@ public class RequestController {
 
         HttpHeaders headers = new HttpHeaders();
         headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+        headers.setBearerAuth(token);
         RequestDto requestDto = sessionService.createRequestBySession(sessionId);
         HttpEntity<RequestDto> entity = new HttpEntity<RequestDto>(requestDto, headers);
 

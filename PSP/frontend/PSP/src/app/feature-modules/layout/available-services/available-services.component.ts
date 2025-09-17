@@ -72,6 +72,7 @@ export class AvailableServicesComponent implements OnInit {
             paymentUrl.searchParams.append('errorUrl', this.paymentQRData.errorUrl);
             paymentUrl.searchParams.append('qrData', this.paymentQRData.qrData);
             paymentUrl.searchParams.append('qrPaymentId', this.paymentQRData.qrPaymentId);
+            paymentUrl.searchParams.append('accessToken', localStorage.getItem('access-token') || '');
             window.location.href = paymentUrl.toString();
             console.log("zahtev za banku uspesno prosledjen")
           }
