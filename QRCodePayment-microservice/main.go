@@ -2,11 +2,17 @@ package main
 
 import (
 	"bytes"
+	"context"
+	"crypto/tls"
 	"encoding/json"
 	"fmt"
 	"io"
 	"log"
 	"net/http"
+	"os"
+	"os/signal"
+	"syscall"
+	"time"
 
 	"github.com/google/uuid"
 )
@@ -73,20 +79,72 @@ func registerWithConsul(serviceName string, port int) {
 	}
 
 	log.Printf("Registered %s with Consul", serviceName)
+
+	//send notification to psp
+	url := "https://localhost:9000/newPaymentService/create"
+	serviceNameBody := serviceName
+
+	serviceReq, serviceErr := http.NewRequest("POST", url, bytes.NewBufferString(serviceNameBody))
+	if serviceErr != nil {
+		panic(serviceErr)
+	}
+
+	// Set headers (optional, but usually good)
+	serviceReq.Header.Set("Content-Type", "text/plain")
+
+	httpClient := &http.Client{
+		Transport: &http.Transport{
+			TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+		},
+	}
+
+	// Send request
+	serviceResp, err := httpClient.Do(serviceReq)
+	if err != nil {
+		panic(err)
+	}
+	defer serviceResp.Body.Close()
 }
 
 func main() {
-	fmt.Println("QRCodePayment microservice is running on :8083")
-	http.HandleFunc("/bank1QRCodeValidateRequest", validateRequest)
+	// Make a channel to receive signals
+	stop := make(chan os.Signal, 1)
+	signal.Notify(stop, syscall.SIGINT, syscall.SIGTERM)
 
+	// Set up routes
+	http.HandleFunc("/bank1QRCodeValidateRequest", validateRequest)
 	http.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)
 		w.Write([]byte("OK"))
 	})
 
-	registerWithConsul("qrCode", 8083)
+	fmt.Println("QRCodePayment microservice is running on :8083")
 
-	http.ListenAndServe(":8083", nil)
+	// Create server object
+	srv := &http.Server{Addr: ":8083"}
+
+	// Start HTTP server in a goroutine
+	go func() {
+		registerWithConsul("qrCode", 8083)
+
+		if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
+			log.Fatalf("ListenAndServe error: %v", err)
+		}
+	}()
+
+	// Wait until a shutdown signal is received
+	<-stop
+	fmt.Println("Shutting down...")
+
+	// Gracefully stop the HTTP server
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+	if err := srv.Shutdown(ctx); err != nil {
+		log.Printf("HTTP server shutdown error: %v", err)
+	}
+
+	// Notify PSP after shutdown
+	notifyPSP("qrCode")
 }
 
 func validateRequest(w http.ResponseWriter, r *http.Request) {
@@ -108,16 +166,16 @@ func validateRequest(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("Request DTO: ", requestDto)
 
 	resp, err := http.Post(fmt.Sprintf("https://localhost:8091/api/bank1/requests/validateRequestQRCode"), "application/json", bytes.NewBuffer(body))
-	fmt.Println("BILO STA")
 	if err != nil {
 		fmt.Println("Error making HTTP request:", err)
+		http.Error(w, "Failed to validate request", http.StatusInternalServerError)
 		return
 	}
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
 		fmt.Println("Unexpected status code:", resp.StatusCode)
-		fmt.Println(resp)
+		http.Error(w, "Validation failed", http.StatusInternalServerError)
 		return
 	}
 
@@ -140,10 +198,38 @@ func validateRequest(w http.ResponseWriter, r *http.Request) {
 	requestPaymentQRDto.QRData = paymentDataQR.QRData
 	requestPaymentQRDto.QrPaymentId = paymentDataQR.QrPaymentId
 
-	fmt.Println("PODACI")
-	fmt.Print(requestPaymentQRDto)
+	fmt.Println("Response data:", requestPaymentQRDto)
 
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(requestPaymentQRDto)
+}
+
+func notifyPSP(serviceName string) {
+	url := "https://localhost:9000/newPaymentService/remove"
+
+	req, err := http.NewRequest("POST", url, bytes.NewBufferString(serviceName))
+	if err != nil {
+		fmt.Println("Request build error:", err)
+		return
+	}
+	req.Header.Set("Content-Type", "text/plain")
+
+	client := &http.Client{
+		Transport: &http.Transport{
+			TLSClientConfig: &tls.Config{InsecureSkipVerify: true}, // only for dev
+		},
+		Timeout: 5 * time.Second, // don’t hang forever
+	}
+
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+	req = req.WithContext(ctx)
+
+	resp, err := client.Do(req)
+	if err != nil {
+		fmt.Println("Request error:", err)
+		return
+	}
+	defer resp.Body.Close()
 }
