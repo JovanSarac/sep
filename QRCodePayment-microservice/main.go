@@ -143,6 +143,7 @@ func main() {
 		log.Printf("HTTP server shutdown error: %v", err)
 	}
 
+	deregisterFromConsul("qrCode")
 	// Notify PSP after shutdown
 	notifyPSP("qrCode")
 }
@@ -232,4 +233,27 @@ func notifyPSP(serviceName string) {
 		return
 	}
 	defer resp.Body.Close()
+}
+
+func deregisterFromConsul(serviceName string) {
+	consulURL := fmt.Sprintf("http://localhost:8500/v1/agent/service/deregister/%s", serviceName)
+
+	req, err := http.NewRequest(http.MethodPut, consulURL, nil)
+	if err != nil {
+		log.Printf("[%s] Failed to create deregistration request: %v", serviceName, err)
+		return
+	}
+
+	client := &http.Client{Timeout: 5 * time.Second}
+	resp, err := client.Do(req)
+	if err != nil {
+		log.Printf("[%s] Failed to deregister from Consul: %v", serviceName, err)
+		return
+	}
+	defer resp.Body.Close()
+
+	log.Printf("[%s] Deregistered from Consul", serviceName)
+
+	// Wait a moment for Consul to process the deregistration
+	time.Sleep(1 * time.Second)
 }
