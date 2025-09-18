@@ -205,9 +205,9 @@ public class AuthController {
 
     @PostMapping("/send/code")
     public ResponseEntity<?> sendCodeUser(@Valid @RequestBody CredentialDto loginRequest) throws MessagingException {
-        if (userService.isAccountLocked(loginRequest.getUsername())) {
-            return ResponseEntity.status(423).body("Account is locked. Try again later");
-        }
+//        if (userService.isAccountLocked(loginRequest.getUsername())) {
+//            return ResponseEntity.status(423).body("Account is locked. Try again later");
+//        }
 
         var user = userService.getUserByUsername(loginRequest.getUsername());
         var email = user.getEmail();
@@ -228,9 +228,9 @@ public class AuthController {
 
     @PostMapping("/login/code")
     public ResponseEntity<?> loginCodeUser(@Valid @RequestBody CredentialDto loginRequest) throws MessagingException {
-        if (userService.isAccountLocked(loginRequest.getUsername())) {
-            return ResponseEntity.status(423).body("Account is locked. Try again later");
-        }
+//        if (userService.isAccountLocked(loginRequest.getUsername())) {
+//            return ResponseEntity.status(423).body("Account is locked. Try again later");
+//        }
 
         var user = userService.validateCode(loginRequest);
         if(user==null){
@@ -245,7 +245,7 @@ public class AuthController {
         String jwtSource = jwtCookie.toString().split("=")[1].split(";")[0];
         String refreshSource = refreshCookie.toString().split("=")[1].split(";")[0];
 
-        userService.updateUserRefreshToken(user, refreshSource);
+        //userService.updateUserRefreshToken(user, refreshSource);
 
         logger.info("User " + loginRequest.getUsername() + " logged in successfully");
         return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, jwtSource)

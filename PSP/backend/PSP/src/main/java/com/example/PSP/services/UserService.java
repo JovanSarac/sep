@@ -110,54 +110,6 @@ public class UserService {
         );
     }
 
-    public void increaseFailedAttempts(String username) {
-        Optional<User> userOpt = userRepository.findByUsername(username);
-        if (userOpt.isPresent()) {
-            User user = userOpt.get();
-            int attempts = user.getFailedAttempts() + 1;
-            user.setFailedAttempts(attempts);
-
-            if (attempts >= MAX_FAILED_ATTEMPTS) {
-                user.setAccountNonLocked(false);
-                user.setLockTime(System.currentTimeMillis());
-            }
-
-            userRepository.save(user);
-        }
-    }
-
-    public void resetFailedAttempts(String username) {
-        Optional<User> userOpt = userRepository.findByUsername(username);
-        userOpt.ifPresent(user -> {
-            user.setFailedAttempts(0);
-            user.setAccountNonLocked(true);
-            user.setLockTime(null);
-            userRepository.save(user);
-        });
-    }
-
-    public boolean isAccountLocked(String username) {
-        Optional<User> userOpt = userRepository.findByUsername(username);
-        if (userOpt.isPresent()) {
-            User user = userOpt.get();
-
-            if (!user.getAccountNonLocked()) {
-                long lockTime = user.getLockTime();
-                long now = System.currentTimeMillis();
-
-                if (now - lockTime >= LOCK_TIME_DURATION) {
-                    user.setAccountNonLocked(true);
-                    user.setFailedAttempts(0);
-                    user.setLockTime(null);
-                    userRepository.save(user);
-                    return false;
-                }
-                return true;
-            }
-        }
-        return false;
-    }
-
     public User getUserByUsername(String username){
         return userRepository.findByUsername(username)
                 .orElseThrow(()->new ResourceNotFoundException("User not found"));
@@ -200,16 +152,4 @@ public class UserService {
             throw new RuntimeException("Error hashing token", e);
         }
     }
-
-    public void updateUserRefreshToken(User user,String token){
-        var hashed = hashRefreshToken(token);
-        user.setRefreshToken(hashed);
-        userRepository.save(user);
-    }
-
-    public boolean validateRefresh(String token, User user){
-        var hashed = hashRefreshToken(token);
-        return hashed.equals(user.getRefreshToken());
-    }
-
 }
