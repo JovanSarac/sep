@@ -28,37 +28,42 @@ public class VivonetServicesController {
 
     // Mobile Services for Business
     @GetMapping("/mobile/business")
-    //@PreAuthorize("hasAuthority('ROLE_BUSINESS_USER')")
+    @PreAuthorize("hasAnyRole('ROLE_BUSINESS_USER', 'ROLE_ADMIN')")
     public List<VivonetServiceDto> getMobileServicesBussines() {
         return vivonetServicesService.getMobileServicesBussines();
     }
 
     // Mobile Services for Personal
     @GetMapping("/mobile/personal")
+    @PreAuthorize("hasAnyRole('ROLE_PERSONAL_USER', 'ROLE_ADMIN')")
     public List<VivonetServiceDto> getMobileServicesPersonal() {
         return vivonetServicesService.getMobileServicesPersonal();
     }
 
     // Landline Services for Business
     @GetMapping("/landline/business")
+    @PreAuthorize("hasAnyRole('ROLE_BUSINESS_USER', 'ROLE_ADMIN')")
     public List<VivonetServiceDto> getLandlineServicesBussines() {
         return vivonetServicesService.getLandlineServicesBussines();
     }
 
     // Landline Services for Personal
     @GetMapping("/landline/personal")
+    @PreAuthorize("hasAnyRole('ROLE_PERSONAL_USER', 'ROLE_ADMIN')")
     public List<VivonetServiceDto> getLandlineServicesPersonal() {
         return vivonetServicesService.getLandlineServicesPersonal();
     }
 
     // Internet Services for Business
     @GetMapping("/internet/business")
+    @PreAuthorize("hasAnyRole('ROLE_BUSINESS_USER', 'ROLE_ADMIN')")
     public List<VivonetServiceDto> getInternetServicesBussines() {
         return vivonetServicesService.getInternetServicesBussines();
     }
 
     // Internet Services for Personal
     @GetMapping("/internet/personal")
+    @PreAuthorize("hasAnyRole('ROLE_PERSONAL_USER', 'ROLE_ADMIN')")
     //@PreAuthorize("hasAnyRole('ROLE_BUSINESS_USER', 'ROLE_PERSONAL_USER', 'ROLE_ADMIN')")
     public List<VivonetServiceDto> getInternetServicesPersonal() {
         return vivonetServicesService.getInternetServicesPersonal();
@@ -66,12 +71,14 @@ public class VivonetServicesController {
 
     // TV Services for Business
     @GetMapping("/tv/business")
+    @PreAuthorize("hasAnyRole('ROLE_BUSINESS_USER', 'ROLE_ADMIN')")
     public List<VivonetServiceDto> getTVServicesBussines() {
         return vivonetServicesService.getTVServicesBussines();
     }
 
     // TV Services for Personal
     @GetMapping("/tv/personal")
+    @PreAuthorize("hasAnyRole('ROLE_PERSONAL_USER', 'ROLE_ADMIN')")
     public List<VivonetServiceDto> getTVServicesPersonal() {
         return vivonetServicesService.getTVServicesPersonal();
     }

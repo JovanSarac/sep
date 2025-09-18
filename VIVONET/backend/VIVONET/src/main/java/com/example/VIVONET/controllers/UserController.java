@@ -26,7 +26,7 @@ public class UserController {
 
 
     @GetMapping("/user/{id}")
-    //@PreAuthorize("hasAnyRole('ROLE_BUSINESS_USER', 'ROLE_PERSONAL_USER', 'ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('ROLE_BUSINESS_USER', 'ROLE_PERSONAL_USER', 'ROLE_ADMIN')")
     public ResponseEntity<UserInfoDto> getUserInfoById(@PathVariable Long id) {
         UserInfoDto user = userService.getUserInfoById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + id));
@@ -35,7 +35,7 @@ public class UserController {
     }
 
     @GetMapping("/admin/users")
-    //@PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<List<UserInfoDto>> getAllUsers() {
         List<UserInfoDto> users = userService.getAllUsers();
         return ResponseEntity.ok(users);

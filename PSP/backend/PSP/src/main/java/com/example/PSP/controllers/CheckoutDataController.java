@@ -37,6 +37,7 @@ public class CheckoutDataController {
         this.sessionService = sessionService;
         this.userService = userService;
     }
+
     @PostMapping("/checking_webshop_services")
     public ResponseEntity<?> checkingWebShopServices(@RequestBody CheckoutDataDto request, @RequestHeader(value = "Authorization", required = false) String authHeader) {
         logger.info("Authorization header received: {}", authHeader);

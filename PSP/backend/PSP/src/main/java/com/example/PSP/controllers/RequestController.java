@@ -44,7 +44,7 @@ public class RequestController {
     private static final Logger logger = LoggerFactory.getLogger(RequestController.class);
 
     @GetMapping("/sendRequestQRCode/{sessionId}")
-    //@PreAuthorize("permitAll()")
+    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN', 'ROLE_BUSINESS_USER', 'ROLE_PERSONAL_USER', 'ROLE_WEB_SHOP')")
     public RequestQRCodePaymentDto sendRequestQRCode(@PathVariable Long sessionId, @RequestHeader("Authorization") String authorizationHeader) {
         logger.info("Processing the QR code request..");
         String token = authorizationHeader.replace("Bearer ", "").trim();
@@ -82,7 +82,7 @@ public class RequestController {
 
 
     @GetMapping("/sendRequest/{sessionId}")
-    //@PreAuthorize("permitAll()")
+    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN', 'ROLE_BUSINESS_USER', 'ROLE_PERSONAL_USER', 'ROLE_WEB_SHOP')")
     public RequestPaymentDto sendRequest(@PathVariable Long sessionId) {
         logger.info("Processing car payment request..");
         //formira se objekat request
@@ -129,7 +129,7 @@ public class RequestController {
     }
 
     @GetMapping("/sendRequestCrypto")
-    //@PreAuthorize("permitAll()")
+    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN', 'ROLE_BUSINESS_USER', 'ROLE_PERSONAL_USER', 'ROLE_WEB_SHOP')")
     public ResponseEntity<ArrayList<String>> sendRequestCrypto() {
         logger.info("Processing crypto request..");
         HttpHeaders headers = new HttpHeaders();

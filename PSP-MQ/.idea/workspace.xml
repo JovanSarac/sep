@@ -627,7 +627,6 @@
       <change beforePath="$PROJECT_DIR$/../VIVONET/frontend/VivoNet/vivonet-fe.crt" beforeDir="false" afterPath="$PROJECT_DIR$/../VIVONET/frontend/VivoNet/vivonet-fe.crt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../VIVONET/frontend/VivoNet/vivonet-fe.key" beforeDir="false" afterPath="$PROJECT_DIR$/../VIVONET/frontend/VivoNet/vivonet-fe.key" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../monitoring/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/../monitoring/docker-compose.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../monitoring/grafana/grafana.db" beforeDir="false" afterPath="$PROJECT_DIR$/../monitoring/grafana/grafana.db" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../monitoring/grafana/lokiDashboard.json" beforeDir="false" afterPath="$PROJECT_DIR$/../monitoring/grafana/lokiDashboard.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../monitoring/grafana/prometheusDashboard.json" beforeDir="false" afterPath="$PROJECT_DIR$/../monitoring/grafana/prometheusDashboard.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../monitoring/otel-collector-config.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/../monitoring/otel-collector-config.yaml" afterDir="false" />
@@ -743,6 +742,11 @@
           <url>file://$PROJECT_DIR$/src/main/java/com/vivo_psp/PSP_MQ/controllers/MessageController.java</url>
           <line>86</line>
           <option name="timeStamp" value="18" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/vivo_psp/PSP_MQ/controllers/MessageController.java</url>
+          <line>99</line>
+          <option name="timeStamp" value="19" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
