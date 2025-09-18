@@ -51,10 +51,10 @@ func registerWithConsul(serviceName string, port int) {
 
 	data := map[string]interface{}{
 		"Name":    serviceName,
-		"Address": "localhost",
+		"Address": "host.docker.internal",
 		"Port":    port,
 		"Check": map[string]interface{}{
-			"HTTP":     fmt.Sprintf("http://localhost:%d/health", port),
+			"HTTP":     fmt.Sprintf("http://host.docker.internal:%d/health", port),
 			"Interval": "10s",
 		},
 	}

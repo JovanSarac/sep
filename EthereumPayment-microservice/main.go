@@ -77,10 +77,10 @@ func registerWithConsul(serviceName string, port int) {
 
 	data := map[string]interface{}{
 		"Name":    serviceName,
-		"Address": "localhost",
+		"Address": "host.docker.internal",
 		"Port":    port,
 		"Check": map[string]interface{}{
-			"HTTP":     fmt.Sprintf("http://localhost:%d/health", port),
+			"HTTP":     fmt.Sprintf("http://host.docker.internal:%d/health", port),
 			"Interval": "10s",
 		},
 	}
@@ -169,12 +169,15 @@ func main() {
 	// Start HTTP server in a goroutine (so main thread can catch signals)
 	go func() {
 		log.Println("[EthPayment] EthService is running on :8084")
-		registerWithConsul("eth", 8084)
 
 		if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
 			log.Fatalf("ListenAndServe error: %v", err)
 		}
 	}()
+
+	// Wait for server to start, then register
+	time.Sleep(2 * time.Second)
+	registerWithConsul("eth", 8084)
 
 	// Wait until a shutdown signal is received
 	<-stop
