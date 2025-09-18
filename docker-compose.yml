@@ -1,0 +1,42 @@
+version: '3.9'
+
+services:
+  db:
+    image: postgres:16
+    container_name: vivonet-db
+    environment:
+      POSTGRES_DB: vivonet
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: super
+    ports:
+      - "5432:5432"
+    volumes:
+      - vivonet-data:/var/lib/postgresql/data
+
+  backend:
+    build:
+      context: ./VIVONET/backend/VIVONET
+      dockerfile: Dockerfile
+    container_name: vivonet-backend
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/vivonet
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: super
+    ports:
+      - "8093:8093"
+    depends_on:
+      - db
+
+  frontend:
+    build:
+      context: ./VIVONET/frontend/VivoNet
+      dockerfile: Dockerfile
+    container_name: vivonet-frontend
+    ports:
+      - "4200:443"
+    depends_on:
+      - backend
+
+
+volumes:
+  vivonet-data:
