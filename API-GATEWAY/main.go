@@ -25,7 +25,7 @@ type RequestDto struct {
 }
 
 func getServiceURL(serviceName string) (string, error) {
-	resp, err := http.Get("http://localhost:8500/v1/catalog/service/" + serviceName)
+	resp, err := http.Get("http://localhost:8500/v1/catalog/service/" + serviceName + "?passing=true")
 	if err != nil {
 		return "", err
 	}
