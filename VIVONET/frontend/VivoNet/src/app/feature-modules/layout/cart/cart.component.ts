@@ -6,6 +6,8 @@ import { Route, Router } from '@angular/router';
 import { LayoutService } from '../layout.service';
 import { UserInfo } from '../model/userinfo';
 import { ToastrService } from 'ngx-toastr';
+import { KeycloakService } from 'src/app/services/keycloakservice';
+import { UserHelperService } from 'src/app/services/user-helper-service';
 
 @Component({
   selector: 'app-cart',
@@ -24,24 +26,37 @@ export class CartComponent implements OnInit{
     private authService: AuthService,
     private router: Router,
     private layoutService: LayoutService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private keycloakService: KeycloakService,
+    private userHelper: UserHelperService
   ) {}
 
   ngOnInit(): void {
-    this.authService.user$.subscribe((user) => {
-      this.user = user;
-      if(this.user.id != 0){
-        this.layoutService.getUserInfoById(this.user.id).subscribe({
-          next:(result)=>{
-            this.userInfo = result;
-          }
-        });
-      }
-    });
+    this.initializeUser();
     this.cartService.cartItems$.subscribe(items => {
       this.cartItems = items;
       this.calculateTotals();
     });
+  }
+
+  private initializeUser(): void {
+    const currentUser = this.userHelper.getCurrentUser();
+    
+    if (currentUser) {
+      this.user = currentUser;
+      
+      // Učitaj dodatne korisničke informacije
+      if(this.user.id != 0){
+        this.layoutService.getUserInfoById(this.user.id).subscribe({
+          next:(result)=>{
+            this.userInfo = result;
+          },
+          error: (error) => {
+            console.error('Error loading user info:', error);
+          }
+        });
+      }
+    }
   }
 
   calculateTotals(): void {

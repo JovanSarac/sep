@@ -3,13 +3,14 @@ import { AuthService } from '../auth.service';
 import { Router } from '@angular/router';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Login } from '../model/login.model';
+import { getKeycloak } from '../init/keycloak-init.factory';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
-export class LoginComponent{
+export class LoginComponent {
   wrongCredential: boolean = false;
   errorMessage: string = ""
 
@@ -19,8 +20,6 @@ export class LoginComponent{
   });
 
   constructor(private authService: AuthService, private router: Router) {}
-  
-
   goToRegistration(){
     this.router.navigate(['registration'])
   }

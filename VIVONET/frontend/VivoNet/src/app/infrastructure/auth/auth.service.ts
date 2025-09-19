@@ -58,6 +58,11 @@ export class AuthService {
     );
   }
 
+  saveToken(token: any): void {
+    this.tokenStorage.saveAccessToken(token.access_token);
+    this.tokenStorage.saveRefreshToken(token.refresh_token);
+  }
+
   checkIfUserExists(): void {
     const accessToken = this.tokenStorage.getAccessToken();
     if (accessToken == null) {

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { getKeycloak } from 'src/app/infrastructure/auth/init/keycloak-init.factory';
 
 @Component({
   selector: 'app-home',
@@ -31,6 +32,15 @@ export class HomeComponent implements OnInit {
   isFading: boolean = false;
 
   ngOnInit() {
+
+    const kc = getKeycloak();
+    const idTokenParsed = kc.idTokenParsed;
+    const accessToken = kc.token;
+    const username = kc.idTokenParsed?.['preferred_username']
+
+    console.log('id token parsed: ', idTokenParsed);
+    console.log('access token: ', accessToken)
+    console.log('username: ', username)
     window.scrollTo(0, 0);
     this.startSlider();
   }
