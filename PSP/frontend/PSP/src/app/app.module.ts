@@ -8,11 +8,13 @@ import { MaterialModule } from './infrastructure/material/material.module';
 import { AuthModule } from './infrastructure/auth/auth.module';
 import { SharedModule } from './shared/shared.module';
 import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
-import { JwtInterceptor } from './infrastructure/auth/jwt/jwt.interceptor';
+import { AuthInterceptor } from './infrastructure/auth/jwt/jwt.interceptor';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
 import { PaymentsModule } from './feature-modules/payments/payments.module';
 import { DatePipe } from '@angular/common';
+import { initKeycloak } from './infrastructure/auth/init/keycloak-init.factory';
+import { KeycloakAngularModule, KeycloakService } from 'keycloak-angular';
 //import { initKeycloak } from './infrastructure/auth/keycloak-init';
 
 @NgModule({ declarations: [
@@ -28,6 +30,7 @@ import { DatePipe } from '@angular/common';
         AuthModule,
         SharedModule,
         BrowserAnimationsModule,
+        KeycloakAngularModule,
         ToastrModule.forRoot({
             timeOut: 4000,
             extendedTimeOut: 1000,
@@ -39,8 +42,14 @@ import { DatePipe } from '@angular/common';
     providers: [
         DatePipe,
         {
+            provide: APP_INITIALIZER,
+            useFactory: initKeycloak,
+            multi: true,
+            deps: [KeycloakService],
+        },
+        {
             provide: HTTP_INTERCEPTORS,
-            useClass: JwtInterceptor,
+            useClass: AuthInterceptor,
             multi: true,
         },
         // {

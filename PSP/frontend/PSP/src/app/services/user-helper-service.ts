@@ -29,6 +29,9 @@ export class UserHelperService {
     const realmRoles = idToken?.realm_access?.roles;
     
     if (realmRoles && realmRoles.length > 0) {
+        if (realmRoles.includes('ROLE_WEB_SHOP')) {
+        return 'ROLE_WEB_SHOP';
+      }
       // Traži specifične uloge
       if (realmRoles.includes('ROLE_BUSINESS_USER')) {
         return 'ROLE_BUSINESS_USER';
@@ -39,9 +42,8 @@ export class UserHelperService {
       if (realmRoles.includes('ROLE_ADMIN')) {
         return 'ROLE_ADMIN';
       }
-      if (realmRoles.includes('ROLE_WEB_SHOP'))
-      {
-        return 'ROLE_WEB_SHOP';
+      if (realmRoles.includes('ROLE_USER')) {
+        return 'ROLE_USER';
       }
       
       const userRoles = realmRoles.filter((role: string) => 

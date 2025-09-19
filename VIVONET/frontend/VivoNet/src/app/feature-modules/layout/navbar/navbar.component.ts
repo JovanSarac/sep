@@ -61,15 +61,18 @@ export class NavbarComponent implements OnInit, OnDestroy {
       this.user = currentUser;
       
       // Učitaj dodatne korisničke informacije
-      if(this.user.id != 0){
-        this.layoutService.getUserInfoById(this.user.id).subscribe({
-          next:(result)=>{
-            this.userInfo = result;
-          },
-          error: (error) => {
-            console.error('Error loading user info:', error);
-          }
-        });
+      if (this.user.role == 'ROLE_ADMIN' || this.user.role == 'ROLE_PERSONAL_USER' || this.user.role == 'ROLE_BUSINESS_USER')
+      {
+        if(this.user.id != 0){
+          this.layoutService.getUserInfoById(this.user.id).subscribe({
+            next:(result)=>{
+              this.userInfo = result;
+            },
+            error: (error) => {
+              console.error('Error loading user info:', error);
+            }
+          });
+        }
       }
     }
   }

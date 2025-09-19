@@ -440,7 +440,7 @@
       <change beforePath="$PROJECT_DIR$/../PSP/frontend/PSP/src/app/feature-modules/payments/subscription-dialog/subscription-dialog.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/../PSP/frontend/PSP/src/app/feature-modules/payments/subscription-dialog/subscription-dialog.component.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../PSP/frontend/PSP/src/app/feature-modules/payments/subscription-dialog/subscription-dialog.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/../PSP/frontend/PSP/src/app/feature-modules/payments/subscription-dialog/subscription-dialog.component.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../PSP/frontend/PSP/src/app/feature-modules/payments/subscription-dialog/subscription-dialog.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../PSP/frontend/PSP/src/app/feature-modules/payments/subscription-dialog/subscription-dialog.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../PSP/frontend/PSP/src/app/infrastructure/auth/auth.guard.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../PSP/frontend/PSP/src/app/infrastructure/auth/auth.guard.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../PSP/frontend/PSP/src/app/infrastructure/auth/auth.guard.ts" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../PSP/frontend/PSP/src/app/infrastructure/auth/auth.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../PSP/frontend/PSP/src/app/infrastructure/auth/auth.module.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../PSP/frontend/PSP/src/app/infrastructure/auth/auth.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../PSP/frontend/PSP/src/app/infrastructure/auth/auth.service.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../PSP/frontend/PSP/src/app/infrastructure/auth/code-login/code-login.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/../PSP/frontend/PSP/src/app/infrastructure/auth/code-login/code-login.component.css" afterDir="false" />
@@ -449,7 +449,7 @@
       <change beforePath="$PROJECT_DIR$/../PSP/frontend/PSP/src/app/infrastructure/auth/code-login/code-login.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../PSP/frontend/PSP/src/app/infrastructure/auth/code-login/code-login.component.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../PSP/frontend/PSP/src/app/infrastructure/auth/jwt/jwt.interceptor.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../PSP/frontend/PSP/src/app/infrastructure/auth/jwt/jwt.interceptor.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../PSP/frontend/PSP/src/app/infrastructure/auth/jwt/token.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../PSP/frontend/PSP/src/app/infrastructure/auth/jwt/token.service.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../PSP/frontend/PSP/src/app/infrastructure/auth/keycloak-init.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../PSP/frontend/PSP/src/app/infrastructure/auth/keycloak-init.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../PSP/frontend/PSP/src/app/infrastructure/auth/keycloak-init.ts" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../PSP/frontend/PSP/src/app/infrastructure/auth/login/login.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/../PSP/frontend/PSP/src/app/infrastructure/auth/login/login.component.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../PSP/frontend/PSP/src/app/infrastructure/auth/login/login.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/../PSP/frontend/PSP/src/app/infrastructure/auth/login/login.component.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../PSP/frontend/PSP/src/app/infrastructure/auth/login/login.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../PSP/frontend/PSP/src/app/infrastructure/auth/login/login.component.ts" afterDir="false" />
@@ -585,13 +585,14 @@
       <change beforePath="$PROJECT_DIR$/../VIVONET/frontend/VivoNet/src/app/feature-modules/service-offerings/television/television.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/../VIVONET/frontend/VivoNet/src/app/feature-modules/service-offerings/television/television.component.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../VIVONET/frontend/VivoNet/src/app/feature-modules/service-offerings/television/television.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/../VIVONET/frontend/VivoNet/src/app/feature-modules/service-offerings/television/television.component.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../VIVONET/frontend/VivoNet/src/app/feature-modules/service-offerings/television/television.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../VIVONET/frontend/VivoNet/src/app/feature-modules/service-offerings/television/television.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../VIVONET/frontend/VivoNet/src/app/infrastructure/auth/auth.guard.ts" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../VIVONET/frontend/VivoNet/src/app/infrastructure/auth/auth.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../VIVONET/frontend/VivoNet/src/app/infrastructure/auth/auth.module.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../VIVONET/frontend/VivoNet/src/app/infrastructure/auth/auth.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../VIVONET/frontend/VivoNet/src/app/infrastructure/auth/auth.service.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../VIVONET/frontend/VivoNet/src/app/infrastructure/auth/code-login/code-login.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/../VIVONET/frontend/VivoNet/src/app/infrastructure/auth/code-login/code-login.component.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../VIVONET/frontend/VivoNet/src/app/infrastructure/auth/code-login/code-login.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/../VIVONET/frontend/VivoNet/src/app/infrastructure/auth/code-login/code-login.component.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../VIVONET/frontend/VivoNet/src/app/infrastructure/auth/code-login/code-login.component.spec.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../VIVONET/frontend/VivoNet/src/app/infrastructure/auth/code-login/code-login.component.spec.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../VIVONET/frontend/VivoNet/src/app/infrastructure/auth/code-login/code-login.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../VIVONET/frontend/VivoNet/src/app/infrastructure/auth/code-login/code-login.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../VIVONET/frontend/VivoNet/src/app/infrastructure/auth/guard/auth.guard.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../VIVONET/frontend/VivoNet/src/app/infrastructure/auth/guard/auth.guard.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../VIVONET/frontend/VivoNet/src/app/infrastructure/auth/init/keycloak-init.factory.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../VIVONET/frontend/VivoNet/src/app/infrastructure/auth/init/keycloak-init.factory.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../VIVONET/frontend/VivoNet/src/app/infrastructure/auth/jwt/jwt.interceptor.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../VIVONET/frontend/VivoNet/src/app/infrastructure/auth/jwt/jwt.interceptor.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../VIVONET/frontend/VivoNet/src/app/infrastructure/auth/jwt/token.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../VIVONET/frontend/VivoNet/src/app/infrastructure/auth/jwt/token.service.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../VIVONET/frontend/VivoNet/src/app/infrastructure/auth/login/login.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/../VIVONET/frontend/VivoNet/src/app/infrastructure/auth/login/login.component.css" afterDir="false" />
@@ -606,6 +607,8 @@
       <change beforePath="$PROJECT_DIR$/../VIVONET/frontend/VivoNet/src/app/infrastructure/auth/registration/registration.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/../VIVONET/frontend/VivoNet/src/app/infrastructure/auth/registration/registration.component.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../VIVONET/frontend/VivoNet/src/app/infrastructure/auth/registration/registration.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../VIVONET/frontend/VivoNet/src/app/infrastructure/auth/registration/registration.component.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../VIVONET/frontend/VivoNet/src/app/infrastructure/material/material.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../VIVONET/frontend/VivoNet/src/app/infrastructure/material/material.module.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../VIVONET/frontend/VivoNet/src/app/services/keycloakservice.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../VIVONET/frontend/VivoNet/src/app/services/keycloakservice.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../VIVONET/frontend/VivoNet/src/app/services/user-helper-service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../VIVONET/frontend/VivoNet/src/app/services/user-helper-service.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../VIVONET/frontend/VivoNet/src/app/shared/components/input/input.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/../VIVONET/frontend/VivoNet/src/app/shared/components/input/input.component.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../VIVONET/frontend/VivoNet/src/app/shared/components/input/input.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/../VIVONET/frontend/VivoNet/src/app/shared/components/input/input.component.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../VIVONET/frontend/VivoNet/src/app/shared/components/input/input.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../VIVONET/frontend/VivoNet/src/app/shared/components/input/input.component.ts" afterDir="false" />
@@ -617,6 +620,7 @@
       <change beforePath="$PROJECT_DIR$/../VIVONET/frontend/VivoNet/src/app/shared/components/secondary-button/secondary-button.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../VIVONET/frontend/VivoNet/src/app/shared/components/secondary-button/secondary-button.component.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../VIVONET/frontend/VivoNet/src/app/shared/constants.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../VIVONET/frontend/VivoNet/src/app/shared/constants.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../VIVONET/frontend/VivoNet/src/app/shared/shared.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../VIVONET/frontend/VivoNet/src/app/shared/shared.module.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../VIVONET/frontend/VivoNet/src/assets/silent-check-sso.html" beforeDir="false" afterPath="$PROJECT_DIR$/../VIVONET/frontend/VivoNet/src/assets/silent-check-sso.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../VIVONET/frontend/VivoNet/src/env/environment.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../VIVONET/frontend/VivoNet/src/env/environment.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../VIVONET/frontend/VivoNet/src/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/../VIVONET/frontend/VivoNet/src/index.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../VIVONET/frontend/VivoNet/src/main.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../VIVONET/frontend/VivoNet/src/main.ts" afterDir="false" />
@@ -748,6 +752,11 @@
           <url>file://$PROJECT_DIR$/src/main/java/com/vivo_psp/PSP_MQ/controllers/MessageController.java</url>
           <line>99</line>
           <option name="timeStamp" value="19" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/vivo_psp/PSP_MQ/controllers/MessageController.java</url>
+          <line>129</line>
+          <option name="timeStamp" value="20" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

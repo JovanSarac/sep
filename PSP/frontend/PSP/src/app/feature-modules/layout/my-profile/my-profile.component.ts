@@ -32,22 +32,22 @@ export class MyProfileComponent implements OnInit{
       this.user = user;
     });
     console.log(this.user.id)
-    this.layoutService.getUserInfoById(this.user.id).subscribe({
-      next: (result) =>{
-        this.userInfo = result;
-        if(this.user.role == 'ROLE_USER'){
-          this.paymentService.getSubscriptionsForUser(this.user.id).subscribe({
-            next:(result)=>{
-              this.subscriptions = result
-              console.log(this.subscriptions)
-            }
-          });
+    if (this.user.role == 'ROLE_WEB_SHOP')
+    {
+      this.layoutService.getUserInfoById(this.user.id).subscribe({
+        next: (result) =>{
+          this.userInfo = result;
+          if(this.user.role == 'ROLE_WEB_SHOP'){
+            this.paymentService.getSubscriptionsForUser(this.user.id).subscribe({
+              next:(result)=>{
+                this.subscriptions = result
+                console.log(this.subscriptions)
+              }
+            });
+          }
         }
-        
-      }
-    });
-
-    
+      });
+    }
   }
 
   changeTab(tab: string){

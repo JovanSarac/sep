@@ -39,7 +39,6 @@ export class AvailableServicesComponent implements OnInit {
         }
       })
     }
-
   }
 
   choosePaymentMethod(ps: any) {
