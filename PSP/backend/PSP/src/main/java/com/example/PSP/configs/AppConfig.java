@@ -10,12 +10,14 @@ import org.apache.hc.client5.http.ssl.SSLConnectionSocketFactory;
 import org.apache.hc.core5.ssl.SSLContextBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.web.client.RestTemplate;
 
 import javax.net.ssl.SSLContext;
 import java.io.FileInputStream;
+import java.io.InputStream;
 import java.security.KeyStore;
 
 @Configuration
@@ -27,9 +29,14 @@ public class AppConfig {
         sslContextBuilder.loadTrustMaterial((chain, authType) -> true); // trust all initially
 
         // Load your custom PSP truststore
-        KeyStore customTrustStore = KeyStore.getInstance(KeyStore.getDefaultType());
+        /*KeyStore customTrustStore = KeyStore.getInstance(KeyStore.getDefaultType());
         try (FileInputStream in = new FileInputStream(
                 "C:/Users/Korisnik/Desktop/SEP/sep/PSP/backend/PSP/src/main/resources/truststore.jks")) {
+            customTrustStore.load(in, "truststorepassword".toCharArray());
+        }*/
+
+        KeyStore customTrustStore = KeyStore.getInstance(KeyStore.getDefaultType());
+        try (InputStream in = new ClassPathResource("truststore.jks").getInputStream()) {
             customTrustStore.load(in, "truststorepassword".toCharArray());
         }
 

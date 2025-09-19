@@ -7,6 +7,7 @@ import (
 	"io"
 	"log"
 	"net/http"
+	"os"
 
 	"github.com/google/uuid"
 	"github.com/gorilla/mux"
@@ -36,8 +37,12 @@ type PaypalResponseDto struct {
 	ApprovalUrl string `json:"approvalUrl"`
 }
 
+var consulHost = getEnv("CONSUL_HOST", "localhost")
+var consulPort = getEnv("CONSUL_PORT", "8500")
+
 func getServiceURL(serviceName string) (string, error) {
-	resp, err := http.Get("http://localhost:8500/v1/catalog/service/" + serviceName)
+	url := fmt.Sprintf("http://%s:%s/v1/catalog/service/%s", consulHost, consulPort, serviceName)
+	resp, err := http.Get(url)
 	if err != nil {
 		return "", err
 	}
@@ -55,6 +60,13 @@ func getServiceURL(serviceName string) (string, error) {
 		return "", fmt.Errorf("service %s not found", serviceName)
 	}
 	return fmt.Sprintf("http://%s:%d", services[0].ServiceAddress, services[0].ServicePort), nil
+}
+
+func getEnv(key, fallback string) string {
+	if value, ok := os.LookupEnv(key); ok {
+		return value
+	}
+	return fallback
 }
 
 func main() {

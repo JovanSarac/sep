@@ -70,9 +70,14 @@ func registerWithConsul(name string, port int) {
 	}
 	consulURL := fmt.Sprintf("%s/v1/agent/service/register", consulAddr)
 
+	serviceAddr := os.Getenv("SERVICE_ADDRESS")
+	if serviceAddr == "" {
+		serviceAddr = "localhost"
+	}
+
 	data := map[string]interface{}{
 		"Name":    name,
-		"Address": "localhost",
+		"Address": serviceAddr,
 		"Port":    port,
 		"Check": map[string]interface{}{
 			"HTTP":     fmt.Sprintf("http://localhost:%d/health", port),

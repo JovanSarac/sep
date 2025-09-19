@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -36,6 +37,9 @@ public class RequestController {
     private ApiKeyService apiKeyService;
 
     private ApiKeyResponseMessage responseMessage;
+
+    @Value("${api.gateway.url}")
+    private String apiGatewayUrl;
 
     private static final Logger logger = LoggerFactory.getLogger(RequestController.class);
 
@@ -65,7 +69,7 @@ public class RequestController {
         RequestDto requestDto = sessionService.createRequestBySession(sessionId);
         HttpEntity<RequestDto> entity = new HttpEntity<RequestDto>(requestDto, headers);
 
-        ResponseEntity<RequestQRCodePaymentDto> response = restTemplate.exchange("https://localhost:8080/bank1QRCodeValidateRequest", HttpMethod.POST, entity, RequestQRCodePaymentDto.class);
+        ResponseEntity<RequestQRCodePaymentDto> response = restTemplate.exchange(apiGatewayUrl + "/bank1QRCodeValidateRequest", HttpMethod.POST, entity, RequestQRCodePaymentDto.class);
         RequestQRCodePaymentDto requestPaymentQRDto = response.getBody();
 
         //ovde dodajem string za qr data, posle treba namestiti da se ti podaci uzimaju iz banke prodavca i da
@@ -108,7 +112,7 @@ public class RequestController {
         RequestDto requestDto = sessionService.createRequestBySession(sessionId);
         HttpEntity<RequestDto> entity = new HttpEntity<RequestDto>(requestDto, headers);
 
-        ResponseEntity<RequestPaymentDto> response = restTemplate.exchange("https://localhost:8080/bank1ValidateRequest", HttpMethod.POST, entity, RequestPaymentDto.class);
+        ResponseEntity<RequestPaymentDto> response = restTemplate.exchange(apiGatewayUrl + "/bank1ValidateRequest", HttpMethod.POST, entity, RequestPaymentDto.class);
         RequestPaymentDto requestPaymentDto = response.getBody();
 
         //restTemplate.exchange("http://localhost:8080/bank1", HttpMethod.POST, entity, String.class).getBody();
@@ -130,7 +134,7 @@ public class RequestController {
         headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
         HttpEntity<Void> entity = new HttpEntity<>(headers);
 
-        ResponseEntity<ArrayList<String>> response = restTemplate.exchange("https://localhost:8080/eth", HttpMethod.GET, entity, new ParameterizedTypeReference<ArrayList<String>>() {});
+        ResponseEntity<ArrayList<String>> response = restTemplate.exchange(apiGatewayUrl  + "/eth", HttpMethod.GET, entity, new ParameterizedTypeReference<ArrayList<String>>() {});
         ArrayList<String> walletIds = response.getBody();
 
         return ResponseEntity.ok(walletIds);
@@ -155,7 +159,7 @@ public class RequestController {
         HttpEntity<PaypalRequestDto> entity = new HttpEntity<>(requestBody, headers);
 
         ResponseEntity<PaypalPaymentDto> response = restTemplate.exchange(
-                "https://localhost:8080/paypal/create-order",
+                apiGatewayUrl + "/paypal/create-order",
                 HttpMethod.POST,
                 entity,
                 PaypalPaymentDto.class
@@ -182,7 +186,7 @@ public class RequestController {
 
         try {
             ResponseEntity<PaypalCaptureDto> response = restTemplate.exchange(
-                    "https://localhost:8080/paypal/capture-order",
+                    apiGatewayUrl + "/paypal/capture-order",
                     HttpMethod.POST,
                     entity,
                     PaypalCaptureDto.class
