@@ -37,8 +37,10 @@ public class CheckoutDataController {
         this.sessionService = sessionService;
         this.userService = userService;
     }
+
     @PostMapping("/checking_webshop_services")
-    public ResponseEntity<?> checkingWebShopServices(@RequestBody CheckoutDataDto request) {
+    public ResponseEntity<?> checkingWebShopServices(@RequestBody CheckoutDataDto request, @RequestHeader(value = "Authorization", required = false) String authHeader) {
+        logger.info("Authorization header received: {}", authHeader);
         User user = userService.getUserById(request.getWebShopId());
         if(!user.getCompanyName().equals(request.getWebShopName()) || !user.getWebURL().equals(request.getWebShopUrl())){
             logger.error("The provided webshop details do not match our records. Please verify the webshop name and URL.");
@@ -62,7 +64,18 @@ public class CheckoutDataController {
         );
 
 
-        String redirectUrl = "https://localhost:4201/available-service/" + session.getId();
+        //String redirectUrl = "https://localhost:4201/available-service/" + session.getId();
+
+        String accessToken = "";
+        if (authHeader != null && authHeader.startsWith("Bearer ")) {
+            accessToken = authHeader.substring(7); // "Bearer ".length() = 7
+        } else if (authHeader != null) {
+            accessToken = authHeader; // Ako nema "Bearer " prefix
+        }
+
+
+        String redirectUrl = "https://localhost:4201/available-service/" + session.getId()
+                + "?accessToken=" + accessToken;
 
         return ResponseEntity.ok(redirectUrl);
     }

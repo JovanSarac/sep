@@ -2,16 +2,78 @@ package main
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"fmt"
 	"io"
 	"log"
 	"net/http"
+	"strings"
 
+	"github.com/coreos/go-oidc"
 	"github.com/google/uuid"
 	"github.com/gorilla/mux"
 	"github.com/rs/cors"
 )
+
+var verifier *oidc.IDTokenVerifier
+
+func initKeycloak() {
+	ctx := context.Background()
+	provider, err := oidc.NewProvider(ctx, "http://localhost:8080/realms/sep-realm")
+	if err != nil {
+		panic(err)
+	}
+
+	verifier = provider.Verifier(&oidc.Config{
+		ClientID: "sep-api-gateway",
+	})
+}
+
+func authMiddleware(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		authHeader := r.Header.Get("Authorization")
+		if authHeader == "" || !strings.HasPrefix(authHeader, "Bearer ") {
+			http.Error(w, "Missing or invalid Authorization header", http.StatusUnauthorized)
+			fmt.Sprintf("Invalid token " + authHeader)
+			return
+		}
+
+		token := strings.TrimPrefix(authHeader, "Bearer ")
+
+		ctx := r.Context()
+		idToken, err := verifier.Verify(ctx, token)
+		if err != nil {
+			http.Error(w, "Invalid token", http.StatusUnauthorized)
+			return
+		}
+
+		var claims struct {
+			Aud []string `json:"aud"`
+		}
+
+		if err := idToken.Claims(&claims); err != nil {
+			http.Error(w, "Failed to parse claims", http.StatusUnauthorized)
+			return
+		}
+
+		validAud := false
+		for _, a := range claims.Aud {
+			if a == "sep-api-gateway" {
+				validAud = true
+				break
+			}
+		}
+
+		if !validAud {
+			http.Error(w, "Token not intended for this service", http.StatusForbidden)
+			return
+		}
+
+		// token je validan → pusti dalje
+		next.ServeHTTP(w, r)
+	})
+}
 
 type RequestDto struct {
 	MerchantId       uuid.UUID `json:"merchantId"`
@@ -46,10 +108,12 @@ func getServiceURL(serviceName string) (string, error) {
 }
 
 func main() {
+	initKeycloak()
 
 	// register the handler function with the server
 
 	router := mux.NewRouter()
+	router.Use(authMiddleware)
 	router.HandleFunc("/card", func(w http.ResponseWriter, r *http.Request) {
 		url, err := getServiceURL("card")
 		if err != nil {
@@ -100,7 +164,8 @@ func main() {
 		AllowCredentials: true,
 	})
 
-	log.Fatal(http.ListenAndServeTLS(":8080", "apigateway.crt", "apigateway.key", c.Handler(router)))
+	//log.Fatal(http.ListenAndServeTLS(":8080", "apigateway.crt", "apigateway.key", c.Handler(router)))
+	log.Fatal(http.ListenAndServeTLS(":9001", "apigateway.crt", "apigateway.key", c.Handler(router)))
 }
 
 func proxy(path, target string) http.HandlerFunc {

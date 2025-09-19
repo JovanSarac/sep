@@ -10,18 +10,19 @@ import { TelevisionComponent } from './feature-modules/service-offerings/televis
 import { CartComponent } from './feature-modules/layout/cart/cart.component';
 import { TransactionStatusComponent } from './feature-modules/layout/transaction-status/transaction-status.component';
 import { CodeLoginComponent } from './infrastructure/auth/code-login/code-login.component';
+import { AuthGuard } from './infrastructure/auth/guard/auth.guard';
 
 const routes: Routes = [
   {path: '', component:  HomeComponent},
   {path: 'login', component: LoginComponent},
-  {path: 'code/:username', component: CodeLoginComponent},
+  {path: 'code/:username', component: CodeLoginComponent, canActivate: [AuthGuard]},
   {path: 'registration', component: RegistrationComponent},
-  {path: 'mobile-services', component: MobileComponent},
-  {path: 'landline-services', component: LandlineComponent},
-  {path: 'internet-services', component: InternetComponent},
-  {path: 'television-services', component: TelevisionComponent},
-  {path: 'cart', component: CartComponent},
-  {path: 'transaction-status/:status', component: TransactionStatusComponent}
+  {path: 'mobile-services', component: MobileComponent, canActivate: [AuthGuard]},
+  {path: 'landline-services', component: LandlineComponent, canActivate: [AuthGuard]},
+  {path: 'internet-services', component: InternetComponent, canActivate: [AuthGuard]},
+  {path: 'television-services', component: TelevisionComponent, canActivate: [AuthGuard]},
+  {path: 'cart', component: CartComponent, canActivate: [AuthGuard]},
+  {path: 'transaction-status/:status', component: TransactionStatusComponent, canActivate: [AuthGuard]}
 ];
 
 @NgModule({

@@ -11,11 +11,16 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
+	"strings"
 	"syscall"
 	"time"
 
+	"github.com/MicahParks/keyfunc"
+	"github.com/golang-jwt/jwt/v4"
 	"github.com/google/uuid"
 )
+
+var keycloakJWKS *keyfunc.JWKS
 
 type PaymentDataQR struct {
 	PaymentId   int64     `json:"paymentId"`
@@ -106,10 +111,88 @@ func registerWithConsul(serviceName string, port int) {
 	defer serviceResp.Body.Close()
 }
 
+func initKeycloak() {
+	jwksURL := "http://localhost:8080/realms/sep-realm/protocol/openid-connect/certs" // zameni sa tvojim Keycloak URL-om
+
+	// Kreiramo JWKS sa automatskim osvežavanjem svakih 10 minuta
+	options := keyfunc.Options{
+		RefreshInterval: time.Minute * 10,
+		RefreshErrorHandler: func(err error) {
+			fmt.Printf("Greška prilikom osvežavanja JWKS: %v\n", err)
+		},
+	}
+
+	var err error
+	keycloakJWKS, err = keyfunc.Get(jwksURL, options)
+	if err != nil {
+		panic(fmt.Sprintf("Ne mogu da učitam JWKS: %v", err))
+	}
+
+	fmt.Println("Keycloak JWKS učitan i inicijalizovan")
+}
+
+func validateToken(r *http.Request) (*jwt.Token, error) {
+	authHeader := r.Header.Get("Authorization")
+	if authHeader == "" {
+		return nil, fmt.Errorf("missing Authorization header")
+	}
+
+	parts := strings.Split(authHeader, " ")
+	if len(parts) != 2 || parts[0] != "Bearer" {
+		return nil, fmt.Errorf("invalid Authorization header format")
+	}
+
+	tokenString := parts[1]
+
+	token, err := jwt.Parse(tokenString, keycloakJWKS.Keyfunc)
+	if err != nil {
+		return nil, err
+	}
+
+	if !token.Valid {
+		return nil, fmt.Errorf("invalid token")
+	}
+
+	claims, ok := token.Claims.(jwt.MapClaims)
+	if !ok {
+		return nil, fmt.Errorf("invalid claims")
+	}
+
+	audClaim, ok := claims["aud"]
+	if !ok {
+		return nil, fmt.Errorf("missing aud claim")
+	}
+
+	validAud := false
+
+	switch v := audClaim.(type) {
+	case string:
+		if v == "sep-qr-payment-microservice" {
+			validAud = true
+		}
+	case []interface{}:
+		for _, a := range v {
+			if aStr, ok := a.(string); ok && aStr == "sep-qr-payment-microservice" {
+				validAud = true
+				break
+			}
+		}
+	default:
+		return nil, fmt.Errorf("invalid aud claim type")
+	}
+
+	if !validAud {
+		return nil, fmt.Errorf("token not intended for this service")
+	}
+
+	return token, nil
+}
+
 func main() {
 	// Make a channel to receive signals
 	stop := make(chan os.Signal, 1)
 	signal.Notify(stop, syscall.SIGINT, syscall.SIGTERM)
+	initKeycloak()
 
 	// Set up routes
 	http.HandleFunc("/bank1QRCodeValidateRequest", validateRequest)
@@ -149,6 +232,12 @@ func main() {
 }
 
 func validateRequest(w http.ResponseWriter, r *http.Request) {
+	_, err := validateToken(r)
+	if err != nil {
+		http.Error(w, "Unauthorized: "+err.Error(), http.StatusUnauthorized)
+		return
+	}
+
 	body, err := io.ReadAll(r.Body)
 	if err != nil {
 		http.Error(w, "Failed to read request body", http.StatusBadRequest)
@@ -166,7 +255,24 @@ func validateRequest(w http.ResponseWriter, r *http.Request) {
 
 	fmt.Println("Request DTO: ", requestDto)
 
-	resp, err := http.Post(fmt.Sprintf("https://localhost:8091/api/bank1/requests/validateRequestQRCode"), "application/json", bytes.NewBuffer(body))
+	token := r.Header.Get("Authorization")
+	req, err := http.NewRequest("POST",
+		"https://localhost:8091/api/bank1/requests/validateRequestQRCode",
+		bytes.NewBuffer(body),
+	)
+
+	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("Authorization", token)
+
+	if err != nil {
+		http.Error(w, "Failed to create request", http.StatusInternalServerError)
+		return
+	}
+
+	client := &http.Client{}
+	//resp, err := http.Post(fmt.Sprintf("https://localhost:8091/api/bank1/requests/validateRequestQRCode"), "application/json", bytes.NewBuffer(body))
+	resp, err := client.Do(req)
+	fmt.Println("BILO STA")
 	if err != nil {
 		fmt.Println("Error making HTTP request:", err)
 		http.Error(w, "Failed to validate request", http.StatusInternalServerError)

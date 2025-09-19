@@ -9,6 +9,8 @@ import com.example.bank1.bank1.service.QRPaymentRequestService;
 import com.example.bank1.bank1.service.RequestService;
 import lombok.RequiredArgsConstructor;
 import org.apache.coyote.Request;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -40,10 +42,12 @@ public class RequestController {
 
     //promeniti naziv ove metode dole
     @PostMapping("/validateRequestQRCode")
-    public ResponseEntity<PaymentDataQRDto> validateRequestQRCode(@RequestBody RequestDto requestDto) {
+    public ResponseEntity<PaymentDataQRDto> validateRequestQRCode(@RequestBody RequestDto requestDto, @RequestHeader(value = "Authorization", required = false) String authHeader) {
         //treba da se vrati payment_url i payment_id, ne url ce mozda da bude na koju se banku odnosi nmp jos
         //ovde proveri podatke u requestDto
         //i ako je sve dobro vrati ok
+        String token = authHeader;
+
         Boolean validData = requestService.checkRequestData(requestDto);
         PaymentDataQRDto paymentDataQRDto = new PaymentDataQRDto();
         if (validData) {

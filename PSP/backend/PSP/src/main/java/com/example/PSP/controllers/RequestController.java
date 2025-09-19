@@ -18,10 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestTemplate;
@@ -47,9 +44,10 @@ public class RequestController {
     private static final Logger logger = LoggerFactory.getLogger(RequestController.class);
 
     @GetMapping("/sendRequestQRCode/{sessionId}")
-    @PreAuthorize("permitAll()")
-    public RequestQRCodePaymentDto sendRequestQRCode(@PathVariable Long sessionId) {
+    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN', 'ROLE_BUSINESS_USER', 'ROLE_PERSONAL_USER', 'ROLE_WEB_SHOP')")
+    public RequestQRCodePaymentDto sendRequestQRCode(@PathVariable Long sessionId, @RequestHeader("Authorization") String authorizationHeader) {
         logger.info("Processing the QR code request..");
+        String token = authorizationHeader.replace("Bearer ", "").trim();
         String url = "https://localhost:9000/publishApiKeyRequest";
         HttpHeaders headersMQ = new HttpHeaders();
         var requestEntity = new HttpEntity<>(-2, headersMQ);
@@ -69,10 +67,11 @@ public class RequestController {
 
         HttpHeaders headers = new HttpHeaders();
         headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+        headers.setBearerAuth(token);
         RequestDto requestDto = sessionService.createRequestBySession(sessionId);
         HttpEntity<RequestDto> entity = new HttpEntity<RequestDto>(requestDto, headers);
 
-        ResponseEntity<RequestQRCodePaymentDto> response = restTemplate.exchange("https://localhost:8080/bank1QRCodeValidateRequest", HttpMethod.POST, entity, RequestQRCodePaymentDto.class);
+        ResponseEntity<RequestQRCodePaymentDto> response = restTemplate.exchange("https://localhost:9001/bank1QRCodeValidateRequest", HttpMethod.POST, entity, RequestQRCodePaymentDto.class);
         RequestQRCodePaymentDto requestPaymentQRDto = response.getBody();
 
         //ovde dodajem string za qr data, posle treba namestiti da se ti podaci uzimaju iz banke prodavca i da
@@ -83,7 +82,7 @@ public class RequestController {
 
 
     @GetMapping("/sendRequest/{sessionId}")
-    @PreAuthorize("permitAll()")
+    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN', 'ROLE_BUSINESS_USER', 'ROLE_PERSONAL_USER', 'ROLE_WEB_SHOP')")
     public RequestPaymentDto sendRequest(@PathVariable Long sessionId) {
         logger.info("Processing car payment request..");
         //formira se objekat request
@@ -115,7 +114,7 @@ public class RequestController {
         RequestDto requestDto = sessionService.createRequestBySession(sessionId);
         HttpEntity<RequestDto> entity = new HttpEntity<RequestDto>(requestDto, headers);
 
-        ResponseEntity<RequestPaymentDto> response = restTemplate.exchange("https://localhost:8080/bank1ValidateRequest", HttpMethod.POST, entity, RequestPaymentDto.class);
+        ResponseEntity<RequestPaymentDto> response = restTemplate.exchange("https://localhost:9001/bank1ValidateRequest", HttpMethod.POST, entity, RequestPaymentDto.class);
         RequestPaymentDto requestPaymentDto = response.getBody();
 
         //restTemplate.exchange("http://localhost:8080/bank1", HttpMethod.POST, entity, String.class).getBody();
@@ -130,14 +129,14 @@ public class RequestController {
     }
 
     @GetMapping("/sendRequestCrypto")
-    @PreAuthorize("permitAll()")
+    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN', 'ROLE_BUSINESS_USER', 'ROLE_PERSONAL_USER', 'ROLE_WEB_SHOP')")
     public ResponseEntity<ArrayList<String>> sendRequestCrypto() {
         logger.info("Processing crypto request..");
         HttpHeaders headers = new HttpHeaders();
         headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
         HttpEntity<Void> entity = new HttpEntity<>(headers);
 
-        ResponseEntity<ArrayList<String>> response = restTemplate.exchange("https://localhost:8080/eth", HttpMethod.GET, entity, new ParameterizedTypeReference<ArrayList<String>>() {});
+        ResponseEntity<ArrayList<String>> response = restTemplate.exchange("https://localhost:9001/eth", HttpMethod.GET, entity, new ParameterizedTypeReference<ArrayList<String>>() {});
         ArrayList<String> walletIds = response.getBody();
 
         return ResponseEntity.ok(walletIds);

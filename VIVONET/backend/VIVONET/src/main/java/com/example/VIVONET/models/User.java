@@ -27,12 +27,9 @@ public class User {
     public String username;
     public String password;
     private Boolean enabled;
-    private Boolean accountNonLocked;
-    private Integer failedAttempts;
     private Long lockTime;
     private String tempCode;
     private Long codeTimestamp;
-    private String refreshToken;
 
     @Enumerated(EnumType.STRING)
     private UserType userType;
@@ -48,12 +45,8 @@ public class User {
         this.username = username;
         this.password = password;
         this.userType = userType;
-        this.enabled = true;
-        this.accountNonLocked = true;
-        this.failedAttempts = 0;
         this.tempCode = null;
         this.codeTimestamp = null;
-        this.refreshToken = null;
     }
 
     public String getTempCode() {
@@ -70,14 +63,6 @@ public class User {
 
     public void setCodeTimestamp(Long codeTimestamp) {
         this.codeTimestamp = codeTimestamp;
-    }
-
-    public String getRefreshToken() {
-        return refreshToken;
-    }
-
-    public void setRefreshToken(String refreshToken) {
-        this.refreshToken = refreshToken;
     }
 
     public Long getId() {
@@ -134,22 +119,6 @@ public class User {
 
     public void setEnabled(Boolean enabled) {
         this.enabled = enabled;
-    }
-
-    public Boolean getAccountNonLocked() {
-        return accountNonLocked;
-    }
-
-    public void setAccountNonLocked(Boolean accountNonLocked) {
-        this.accountNonLocked = accountNonLocked;
-    }
-
-    public Integer getFailedAttempts() {
-        return failedAttempts;
-    }
-
-    public void setFailedAttempts(Integer failedAttempts) {
-        this.failedAttempts = failedAttempts;
     }
 
     public Long getLockTime() {
