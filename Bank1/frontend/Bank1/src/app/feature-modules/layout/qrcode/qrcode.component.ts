@@ -26,6 +26,8 @@ export class QrcodeComponent {
       const errorUrl = params.get('errorUrl');
       const qrData = params.get('qrData');
       const qrPaymentId = params.get('qrPaymentId');
+      localStorage.setItem('access-token', this.route.snapshot.queryParamMap.get('accessToken') || '');
+      localStorage.setItem('refresh-token', '');
 
       this.amount = amount ? Number(amount) : 0;
       this.successUrl = successUrl || '';
@@ -33,6 +35,17 @@ export class QrcodeComponent {
       this.errorUrl = errorUrl || '';
       this.qrData = qrData || '';
       this.qrPaymentId = qrPaymentId || '';
+
+      const url = new URL(window.location.href);
+      url.searchParams.delete('accessToken');
+      url.searchParams.delete('amount');
+      url.searchParams.delete('successUrl'); 
+      url.searchParams.delete('failedUrl'); 
+      url.searchParams.delete('errorUrl'); 
+      url.searchParams.delete('qrData'); 
+      url.searchParams.delete('qrPaymentId'); 
+      window.history.replaceState({}, '', url.toString());
+      
 
       if (this.qrPaymentId) {
         this.checkStatus();  // start polling

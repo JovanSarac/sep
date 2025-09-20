@@ -1,4 +1,4 @@
-import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
+import { APP_INITIALIZER, CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -8,10 +8,12 @@ import { MaterialModule } from './infrastructure/material/material.module';
 import { AuthModule } from './infrastructure/auth/auth.module';
 import { SharedModule } from './shared/shared.module';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
-import { JwtInterceptor } from './infrastructure/auth/jwt/jwt.interceptor';
+import { AuthInterceptor } from './infrastructure/auth/jwt/jwt.interceptor';
 import { ServiceOfferingsModule } from './feature-modules/service-offerings/service-offerings.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
+import { initKeycloak } from './infrastructure/auth/init/keycloak-init.factory';
+import { KeycloakAngularModule, KeycloakService } from 'keycloak-angular';
 
 @NgModule({
   declarations: [
@@ -28,6 +30,7 @@ import { ToastrModule } from 'ngx-toastr';
     ServiceOfferingsModule,
     BrowserAnimationsModule,
     HttpClientModule,
+    KeycloakAngularModule,
     ToastrModule.forRoot({
       timeOut: 4000,
       extendedTimeOut: 1000,
@@ -40,10 +43,21 @@ import { ToastrModule } from 'ngx-toastr';
   ],
   providers: [
     {
-      provide: HTTP_INTERCEPTORS,
-      useClass: JwtInterceptor,
+      provide: APP_INITIALIZER,
+      useFactory: initKeycloak,
       multi: true,
+      deps: [KeycloakService],
     },
+    // {
+    //   provide: HTTP_INTERCEPTORS,
+    //   useClass: JwtInterceptor,
+    //   multi: true,
+    // },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true
+    }
   ],
   bootstrap: [AppComponent]
 })

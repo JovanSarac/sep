@@ -8,6 +8,7 @@ import org.apache.hc.client5.http.io.HttpClientConnectionManager;
 import org.apache.hc.client5.http.ssl.NoopHostnameVerifier;
 import org.apache.hc.client5.http.ssl.SSLConnectionSocketFactory;
 import org.apache.hc.core5.ssl.SSLContextBuilder;
+import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
@@ -21,6 +22,7 @@ import java.io.InputStream;
 import java.security.KeyStore;
 
 @Configuration
+@EnableDiscoveryClient
 public class AppConfig {
     @Bean
     public RestTemplate restTemplate() throws Exception{
@@ -31,7 +33,7 @@ public class AppConfig {
         // Load your custom PSP truststore
         /*KeyStore customTrustStore = KeyStore.getInstance(KeyStore.getDefaultType());
         try (FileInputStream in = new FileInputStream(
-                "C:/Users/Korisnik/Desktop/SEP/sep/PSP/backend/PSP/src/main/resources/truststore.jks")) {
+                "D:/sep/PSP/backend/PSP/src/main/resources/truststore.jks")) {
             customTrustStore.load(in, "truststorepassword".toCharArray());
         }*/
 

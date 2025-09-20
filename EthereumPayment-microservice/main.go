@@ -11,6 +11,7 @@ import (
 	"html"
 	"io"
 	"log"
+	"net"
 	"net/http"
 	"os"
 	"os/signal"
@@ -44,10 +45,9 @@ func initDB() *gorm.DB {
 func initTracer() func() {
 	ctx := context.Background()
 
-	// Create OTLP HTTP exporter
 	exp, err := otlptracehttp.New(ctx,
 		otlptracehttp.WithEndpoint("localhost:4318"),
-		otlptracehttp.WithInsecure(), // Required unless using HTTPS
+		otlptracehttp.WithInsecure(),
 	)
 	if err != nil {
 		log.Fatalf("failed to create OTLP trace exporter: %v", err)
@@ -72,78 +72,222 @@ func initTracer() func() {
 
 var tracer = otel.Tracer("eth-payment-service")
 
-func registerWithConsul(serviceName string, port int) {
+// Find an available port starting from the base port
+func findAvailablePort(basePort int) (int, error) {
+	for port := basePort; port < basePort+10; port++ {
+		ln, err := net.Listen("tcp", fmt.Sprintf(":%d", port))
+		if err != nil {
+			continue // Port is in use, try next one
+		}
+		ln.Close()
+		return port, nil
+	}
+	return 0, fmt.Errorf("no available ports found in range %d-%d", basePort, basePort+10)
+}
+
+// Check if this is the first instance of the service
+func isFirstInstance(serviceName string) bool {
+	consulURL := fmt.Sprintf("http://localhost:8500/v1/health/service/%s?passing=true", serviceName)
+
+	client := &http.Client{Timeout: 3 * time.Second}
+	resp, err := client.Get(consulURL)
+	if err != nil {
+		log.Printf("Failed to check existing instances: %v", err)
+		return true // Assume it's first if we can't check
+	}
+	defer resp.Body.Close()
+
+	var services []interface{}
+	if err := json.NewDecoder(resp.Body).Decode(&services); err != nil {
+		log.Printf("Failed to decode Consul response: %v", err)
+		return true // Assume it's first if we can't decode
+	}
+
+	// If no services exist, this is the first
+	return len(services) == 0
+}
+
+// Check if any instances remain after deregistration
+func hasRemainingInstances(serviceName string) bool {
+	consulURL := fmt.Sprintf("http://localhost:8500/v1/health/service/%s?passing=true", serviceName)
+
+	client := &http.Client{Timeout: 3 * time.Second}
+	resp, err := client.Get(consulURL)
+	if err != nil {
+		log.Printf("Failed to check remaining instances: %v", err)
+		return false // Assume no instances if we can't check
+	}
+	defer resp.Body.Close()
+
+	var services []interface{}
+	if err := json.NewDecoder(resp.Body).Decode(&services); err != nil {
+		log.Printf("Failed to decode Consul response: %v", err)
+		return false // Assume no instances if we can't decode
+	}
+
+	return len(services) > 0
+}
+
+func registerWithConsul(serviceName string, port int, instanceId string) {
+	// Check if this is the first instance BEFORE registering
+	isFirst := isFirstInstance(serviceName)
+
 	consulURL := "http://localhost:8500/v1/agent/service/register"
 
 	data := map[string]interface{}{
-		"Name":    serviceName,
-		"Address": "localhost",
+		"ID":      instanceId,  // Unique instance ID
+		"Name":    serviceName, // Same service name for all instances
+		"Address": "host.docker.internal",
 		"Port":    port,
+		"Tags":    []string{instanceId, "v1"},
 		"Check": map[string]interface{}{
-			"HTTP":     fmt.Sprintf("http://localhost:%d/health", port),
+			"HTTP":     fmt.Sprintf("http://host.docker.internal:%d/health", port),
 			"Interval": "10s",
+			"Timeout":  "3s",
 		},
 	}
 
 	body, _ := json.Marshal(data)
 	req, err := http.NewRequest(http.MethodPut, consulURL, bytes.NewReader(body))
 	if err != nil {
-		log.Fatalf("Failed to create request: %v", err)
+		log.Printf("[%s] Failed to create request: %v", instanceId, err)
+		return
 	}
 	req.Header.Set("Content-Type", "application/json")
 
-	client := &http.Client{}
+	client := &http.Client{Timeout: 5 * time.Second}
 	resp, err := client.Do(req)
 	if err != nil {
-		log.Fatalf("Failed to register service: %v", err)
+		log.Printf("[%s] Failed to register service: %v", instanceId, err)
+		return
 	}
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
 		bodyBytes, _ := io.ReadAll(resp.Body)
-		log.Fatalf("Failed to register service: %s", string(bodyBytes))
+		log.Printf("[%s] Failed to register service: %s", instanceId, string(bodyBytes))
+		return
 	}
 
-	log.Printf("Registered %s with Consul", serviceName)
+	log.Printf("[%s] Registered %s with Consul on port %d", instanceId, serviceName, port)
 
-	//send notification to psp
+	// Only notify PSP if this is the first instance
+	if isFirst {
+		log.Printf("[%s] This is the first instance, notifying PSP", instanceId)
+		notifyPSPCreate(serviceName, instanceId)
+	} else {
+		log.Printf("[%s] Other instances already exist, skipping PSP notification", instanceId)
+	}
+}
+
+func deregisterFromConsul(instanceId string, serviceName string) {
+	consulURL := fmt.Sprintf("http://localhost:8500/v1/agent/service/deregister/%s", instanceId)
+
+	req, err := http.NewRequest(http.MethodPut, consulURL, nil)
+	if err != nil {
+		log.Printf("[%s] Failed to create deregistration request: %v", instanceId, err)
+		return
+	}
+
+	client := &http.Client{Timeout: 5 * time.Second}
+	resp, err := client.Do(req)
+	if err != nil {
+		log.Printf("[%s] Failed to deregister from Consul: %v", instanceId, err)
+		return
+	}
+	defer resp.Body.Close()
+
+	log.Printf("[%s] Deregistered from Consul", instanceId)
+
+	// Wait a moment for Consul to process the deregistration
+	time.Sleep(1 * time.Second)
+
+	// Check if any instances remain
+	if !hasRemainingInstances(serviceName) {
+		log.Printf("[%s] No remaining instances, notifying PSP about service removal", instanceId)
+		notifyPSPRemove(serviceName)
+	} else {
+		log.Printf("[%s] Other instances still running, skipping PSP notification", instanceId)
+	}
+}
+
+func notifyPSPCreate(serviceName, instanceId string) {
 	url := "https://localhost:9000/newPaymentService/create"
-	serviceNameBody := serviceName
 
-	serviceReq, serviceErr := http.NewRequest("POST", url, bytes.NewBufferString(serviceNameBody))
-	if serviceErr != nil {
-		panic(serviceErr)
+	req, err := http.NewRequest("POST", url, bytes.NewBufferString(serviceName))
+	if err != nil {
+		log.Printf("[%s] Failed to create PSP notification request: %v", instanceId, err)
+		return
 	}
 
-	// Set headers (optional, but usually good)
-	serviceReq.Header.Set("Content-Type", "text/plain")
+	req.Header.Set("Content-Type", "text/plain")
 
-	httpClient := &http.Client{
+	client := &http.Client{
 		Transport: &http.Transport{
 			TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
 		},
+		Timeout: 5 * time.Second,
 	}
 
-	// Send request
-	serviceResp, err := httpClient.Do(serviceReq)
+	resp, err := client.Do(req)
 	if err != nil {
-		panic(err)
+		log.Printf("[%s] Failed to notify PSP: %v", instanceId, err)
+		return
 	}
-	defer serviceResp.Body.Close()
+	defer resp.Body.Close()
 
+	log.Printf("[%s] Notified PSP about new service: %s", instanceId, serviceName)
+}
+
+func notifyPSPRemove(serviceName string) {
+	url := "https://localhost:9000/newPaymentService/remove"
+
+	req, err := http.NewRequest("POST", url, bytes.NewBufferString(serviceName))
+	if err != nil {
+		log.Printf("Failed to create PSP removal request: %v", err)
+		return
+	}
+	req.Header.Set("Content-Type", "text/plain")
+
+	client := &http.Client{
+		Transport: &http.Transport{
+			TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+		},
+		Timeout: 5 * time.Second,
+	}
+
+	resp, err := client.Do(req)
+	if err != nil {
+		log.Printf("Failed to notify PSP about removal: %v", err)
+		return
+	}
+	defer resp.Body.Close()
+
+	log.Printf("Notified PSP about service removal: %s", serviceName)
 }
 
 func main() {
-	logFilePath := "F:/Nevena/faks/master/SEP/projekat/sep/monitoring/logs/ethPayment.log"
+	// Find an available port starting from 8084
+	port, err := findAvailablePort(8084)
+	if err != nil {
+		log.Fatalf("Failed to find available port: %v", err)
+	}
+
+	// Create instance-specific log file and ID
+	instanceId := fmt.Sprintf("eth-%d", port)
+	logFilePath := fmt.Sprintf("F:/Nevena/faks/master/SEP/projekat/sep/monitoring/logs/%s.log", instanceId)
 	logFile, err := os.OpenFile(logFilePath, os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
 	if err != nil {
-		log.Fatalf("[EthPayment] Failed to open log file: %v", err)
+		log.Fatalf("[%s] Failed to open log file: %v", instanceId, err)
 	}
+	defer logFile.Close()
 	log.SetOutput(logFile)
+
+	log.Printf("[%s] Starting instance on port %d", instanceId, port)
 
 	database = initDB()
 	if database == nil {
-		log.Println("FAILED TO CONNECT TO DB")
+		log.Printf("[%s] FAILED TO CONNECT TO DB", instanceId)
 		return
 	}
 
@@ -158,68 +302,46 @@ func main() {
 	http.HandleFunc("/eth", getWalletIds)
 	http.HandleFunc("/eth/saveTransaction", saveTransaction)
 	http.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
-		w.Write([]byte("OK"))
+		response := fmt.Sprintf(`{"status":"OK","instance":"%s","port":%d,"timestamp":"%s"}`,
+			instanceId, port, time.Now().Format(time.RFC3339))
+		w.Write([]byte(response))
 	})
 	http.Handle("/metrics", promhttp.Handler())
 
-	// Create server object
-	srv := &http.Server{Addr: ":8084"}
+	// Create server object with dynamic port
+	serverAddr := fmt.Sprintf(":%d", port)
+	srv := &http.Server{Addr: serverAddr}
 
-	// Start HTTP server in a goroutine (so main thread can catch signals)
+	// Start HTTP server in a goroutine
 	go func() {
-		log.Println("[EthPayment] EthService is running on :8084")
-		registerWithConsul("eth", 8084)
+		log.Printf("[%s] EthService instance is running on port %d", instanceId, port)
 
 		if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
-			log.Fatalf("ListenAndServe error: %v", err)
+			log.Fatalf("[%s] ListenAndServe error: %v", instanceId, err)
 		}
 	}()
 
+	// Wait for server to start, then register
+	time.Sleep(2 * time.Second)
+	registerWithConsul("eth", port, instanceId)
+
 	// Wait until a shutdown signal is received
 	<-stop
-	fmt.Println("Shutting down...")
+	log.Printf("[%s] Shutting down...", instanceId)
+
+	// Deregister and check if PSP should be notified
+	deregisterFromConsul(instanceId, "eth")
 
 	// Gracefully stop the HTTP server
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 	if err := srv.Shutdown(ctx); err != nil {
-		log.Printf("HTTP server shutdown error: %v", err)
+		log.Printf("[%s] HTTP server shutdown error: %v", instanceId, err)
 	}
 
-	// Notify PSP after shutdown
-	notifyPSP("eth")
-
-	fmt.Println("Shutdown complete.")
-}
-
-func notifyPSP(serviceName string) {
-	url := "https://localhost:9000/newPaymentService/remove"
-
-	req, err := http.NewRequest("POST", url, bytes.NewBufferString(serviceName))
-	if err != nil {
-		fmt.Println("Request build error:", err)
-		return
-	}
-	req.Header.Set("Content-Type", "text/plain")
-
-	client := &http.Client{
-		Transport: &http.Transport{
-			TLSClientConfig: &tls.Config{InsecureSkipVerify: true}, // only for dev
-		},
-		Timeout: 5 * time.Second, // don’t hang forever
-	}
-
-	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
-	defer cancel()
-	req = req.WithContext(ctx)
-
-	resp, err := client.Do(req)
-	if err != nil {
-		fmt.Println("Request error:", err)
-		return
-	}
-	defer resp.Body.Close()
+	log.Printf("[%s] Shutdown complete.", instanceId)
 }
 
 func getWalletIds(w http.ResponseWriter, r *http.Request) {

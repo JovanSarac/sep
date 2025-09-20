@@ -10,6 +10,7 @@ import { AuthenticationResponse } from './model/authentication-response.model';
 import { User } from './model/user.model';
 import { Registration } from './model/registration.model';
 import { ACCESS_TOKEN } from 'src/app/shared/constants';
+import { UserHelperService } from 'src/app/services/user-helper-service';
 
 @Injectable({
   providedIn: 'root'
@@ -20,15 +21,17 @@ export class AuthService {
 
   constructor(private http: HttpClient,
     private tokenStorage: TokenStorage,
-    private router: Router) { }
+    private router: Router,
+    private userHelperService: UserHelperService) { }
 
   login(login: Login): Observable<AuthenticationResponse> {
+    this.tokenStorage.clear();
     return this.http
       .post<AuthenticationResponse>(environment.apiHost + 'auth/login', login)
       .pipe(
         tap((authenticationResponse) => {
-          this.tokenStorage.saveAccessToken(authenticationResponse.accessToken);
-          this.tokenStorage.saveRefreshToken(authenticationResponse.refreshToken);
+          this.tokenStorage.saveAccessToken(authenticationResponse.access_token);
+          this.tokenStorage.saveRefreshToken(authenticationResponse.refresh_token);
           this.setUser();
         })
       );
@@ -80,12 +83,25 @@ export class AuthService {
     const accessToken = this.tokenStorage.getAccessToken() || "";
      const decodedToken = this.jwtHelperService.decodeToken(accessToken);
      console.log(+decodedToken.id)
-    const user: User = {
-      id: +decodedToken.id,
-      username: decodedToken.username,
-      role: decodedToken.role,
-    };
-    this.user$.next(user);
+     console.log(decodedToken)
+    // const user: User = {
+    //   id: +decodedToken.id,
+    //   username: decodedToken.username,
+    //   roles: decodedToken.role,
+    // };
+    const user = this.userHelperService.getCurrentUser();
+    //this.user$.next(user);
+    if (user) {
+      this.user$.next(user);
+    } else {
+      // Fallback na prazan user objekat ako Keycloak nije autentifikovao
+      this.user$.next({username: "", id: 0, role: "" });
+    }
+  }
+
+  saveToken(token: any): void {
+    this.tokenStorage.saveAccessToken(token.access_token);
+    this.tokenStorage.saveRefreshToken(token.refresh_token);
   }
 
   sendCode(login: Login): Observable<any> {
@@ -95,8 +111,8 @@ export class AuthService {
   codeLogin(login: Login): Observable<AuthenticationResponse> {
     return this.http.post<AuthenticationResponse>(environment.apiHost + 'auth/login/code', login).pipe(
         tap((authenticationResponse) => {
-          this.tokenStorage.saveAccessToken(authenticationResponse.accessToken);
-          this.tokenStorage.saveRefreshToken(authenticationResponse.refreshToken);
+          this.tokenStorage.saveAccessToken(authenticationResponse.access_token);
+          this.tokenStorage.saveRefreshToken(authenticationResponse.refresh_token);
           this.setUser();
         })
       );

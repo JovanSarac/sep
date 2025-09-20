@@ -3,13 +3,14 @@ import { AuthService } from '../auth.service';
 import { Router } from '@angular/router';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Login } from '../model/login.model';
+import { getKeycloak } from '../init/keycloak-init.factory';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
-export class LoginComponent{
+export class LoginComponent {
   wrongCredential: boolean = false;
   errorMessage: string = ""
 
@@ -19,8 +20,6 @@ export class LoginComponent{
   });
 
   constructor(private authService: AuthService, private router: Router) {}
-  
-
   goToRegistration(){
     this.router.navigate(['registration'])
   }
@@ -44,10 +43,7 @@ export class LoginComponent{
       },
       error: (err: any) => {
         if (err.status === 401) {
-          this.errorMessage = "Invalid username or password.";
-          this.wrongCredential = true;
-        } else if (err.status === 423) {
-          this.errorMessage = "Your account is locked due to too many failed login attempts. Try again later.";
+          this.errorMessage = "Invalid username or password or your account is locked.";
           this.wrongCredential = true;
         } else {
           this.errorMessage = "Unexpected error occurred.";

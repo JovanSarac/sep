@@ -51,7 +51,7 @@ public class SubscriptionController {
     }
 
     @PostMapping("/user/create_subscription")
-    @PreAuthorize("hasRole('ROLE_USER')")
+    @PreAuthorize("hasRole('ROLE_USER') and hasRole('ROLE_WEB_SHOP')")
     public ResponseEntity<SubscriptionDto> createSubscription(@RequestBody SubscriptionRequest request) {
         logger.info("Checking PSP service and user info before creating a new subscription");
         PSPService service = pspServiceRepository.findById(request.getServiceId()).orElseThrow(() -> new ResourceNotFoundException("Service not found"));
@@ -74,7 +74,7 @@ public class SubscriptionController {
     }
 
     @GetMapping("/user_active_subscription/{userId}")
-    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('ROLE_WEB_SHOP', 'ROLE_USER', 'ROLE_ADMIN')")
     public List<SubscriptionDto> getActiveSubscriptionsByUserId(@PathVariable Long userId) {
         return subscriptionService.getActiveSubscriptionsByUserId(userId);
     }
@@ -86,7 +86,7 @@ public class SubscriptionController {
     }
 
     @PutMapping("/user/update_subscription")
-    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('ROLE_WEB_SHOP', 'ROLE_ADMIN')")
     public ResponseEntity<String> updateSubscription(@RequestBody SubscriptionDto subscriptionDTO) {
         try {
             subscriptionService.updateSubscription(subscriptionDTO);

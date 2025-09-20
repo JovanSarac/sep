@@ -1,5 +1,5 @@
 export interface AuthenticationResponse {
     id: number;
-    accessToken: string;
-    refreshToken: string;
+    access_token: string;
+    refresh_token: string;
   }

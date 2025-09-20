@@ -9,8 +9,6 @@
       <change beforePath="$PROJECT_DIR$/../API-GATEWAY/apigateway.crt" beforeDir="false" afterPath="$PROJECT_DIR$/../API-GATEWAY/apigateway.crt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../API-GATEWAY/apigateway.key" beforeDir="false" afterPath="$PROJECT_DIR$/../API-GATEWAY/apigateway.key" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../API-GATEWAY/certificate.conf" beforeDir="false" afterPath="$PROJECT_DIR$/../API-GATEWAY/certificate.conf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../API-GATEWAY/go.mod" beforeDir="false" afterPath="$PROJECT_DIR$/../API-GATEWAY/go.mod" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../API-GATEWAY/go.sum" beforeDir="false" afterPath="$PROJECT_DIR$/../API-GATEWAY/go.sum" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../API-GATEWAY/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/../API-GATEWAY/main.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Bank1/backend/.idea/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/../Bank1/backend/.idea/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Bank1/backend/.idea/backend.iml" beforeDir="false" afterPath="$PROJECT_DIR$/../Bank1/backend/.idea/backend.iml" afterDir="false" />
@@ -107,6 +105,7 @@
       <change beforePath="$PROJECT_DIR$/../Bank2/.mvn/wrapper/maven-wrapper.properties" beforeDir="false" afterPath="$PROJECT_DIR$/../Bank2/.mvn/wrapper/maven-wrapper.properties" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Bank2/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Bank2/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Bank2/src/main/java/com/bank2/Bank2/Bank2Application.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Bank2/src/main/java/com/bank2/Bank2/Bank2Application.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Bank2/src/main/java/com/bank2/Bank2/config/AppConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Bank2/src/main/java/com/bank2/Bank2/config/AppConfig.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Bank2/src/main/java/com/bank2/Bank2/config/OtlpConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Bank2/src/main/java/com/bank2/Bank2/config/OtlpConfig.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Bank2/src/main/java/com/bank2/Bank2/config/WebConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Bank2/src/main/java/com/bank2/Bank2/config/WebConfig.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Bank2/src/main/java/com/bank2/Bank2/controller/AccountController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Bank2/src/main/java/com/bank2/Bank2/controller/AccountController.java" afterDir="false" />
@@ -334,6 +333,7 @@
       <change beforePath="$PROJECT_DIR$/../PSP/backend/PSP/src/main/java/com/example/PSP/controllers/RequestController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../PSP/backend/PSP/src/main/java/com/example/PSP/controllers/RequestController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../PSP/backend/PSP/src/main/java/com/example/PSP/controllers/SessionController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../PSP/backend/PSP/src/main/java/com/example/PSP/controllers/SessionController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../PSP/backend/PSP/src/main/java/com/example/PSP/controllers/SubscriptionController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../PSP/backend/PSP/src/main/java/com/example/PSP/controllers/SubscriptionController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../PSP/backend/PSP/src/main/java/com/example/PSP/controllers/TestKeycloakController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../PSP/backend/PSP/src/main/java/com/example/PSP/controllers/TestKeycloakController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../PSP/backend/PSP/src/main/java/com/example/PSP/controllers/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../PSP/backend/PSP/src/main/java/com/example/PSP/controllers/UserController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../PSP/backend/PSP/src/main/java/com/example/PSP/dtos/AccessToken.java" beforeDir="false" afterPath="$PROJECT_DIR$/../PSP/backend/PSP/src/main/java/com/example/PSP/dtos/AccessToken.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../PSP/backend/PSP/src/main/java/com/example/PSP/dtos/CartDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/../PSP/backend/PSP/src/main/java/com/example/PSP/dtos/CartDto.java" afterDir="false" />
@@ -440,13 +440,14 @@
       <change beforePath="$PROJECT_DIR$/../PSP/frontend/PSP/src/app/feature-modules/payments/subscription-dialog/subscription-dialog.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/../PSP/frontend/PSP/src/app/feature-modules/payments/subscription-dialog/subscription-dialog.component.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../PSP/frontend/PSP/src/app/feature-modules/payments/subscription-dialog/subscription-dialog.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/../PSP/frontend/PSP/src/app/feature-modules/payments/subscription-dialog/subscription-dialog.component.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../PSP/frontend/PSP/src/app/feature-modules/payments/subscription-dialog/subscription-dialog.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../PSP/frontend/PSP/src/app/feature-modules/payments/subscription-dialog/subscription-dialog.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../PSP/frontend/PSP/src/app/infrastructure/auth/auth.guard.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../PSP/frontend/PSP/src/app/infrastructure/auth/auth.guard.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../PSP/frontend/PSP/src/app/infrastructure/auth/auth.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../PSP/frontend/PSP/src/app/infrastructure/auth/auth.module.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../PSP/frontend/PSP/src/app/infrastructure/auth/auth.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../PSP/frontend/PSP/src/app/infrastructure/auth/auth.service.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../PSP/frontend/PSP/src/app/infrastructure/auth/code-login/code-login.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/../PSP/frontend/PSP/src/app/infrastructure/auth/code-login/code-login.component.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../PSP/frontend/PSP/src/app/infrastructure/auth/code-login/code-login.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/../PSP/frontend/PSP/src/app/infrastructure/auth/code-login/code-login.component.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../PSP/frontend/PSP/src/app/infrastructure/auth/code-login/code-login.component.spec.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../PSP/frontend/PSP/src/app/infrastructure/auth/code-login/code-login.component.spec.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../PSP/frontend/PSP/src/app/infrastructure/auth/code-login/code-login.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../PSP/frontend/PSP/src/app/infrastructure/auth/code-login/code-login.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../PSP/frontend/PSP/src/app/infrastructure/auth/guard/auth.guard.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../PSP/frontend/PSP/src/app/infrastructure/auth/guard/auth.guard.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../PSP/frontend/PSP/src/app/infrastructure/auth/init/keycloak-init.factory.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../PSP/frontend/PSP/src/app/infrastructure/auth/init/keycloak-init.factory.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../PSP/frontend/PSP/src/app/infrastructure/auth/jwt/jwt.interceptor.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../PSP/frontend/PSP/src/app/infrastructure/auth/jwt/jwt.interceptor.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../PSP/frontend/PSP/src/app/infrastructure/auth/jwt/token.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../PSP/frontend/PSP/src/app/infrastructure/auth/jwt/token.service.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../PSP/frontend/PSP/src/app/infrastructure/auth/login/login.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/../PSP/frontend/PSP/src/app/infrastructure/auth/login/login.component.css" afterDir="false" />
@@ -460,6 +461,8 @@
       <change beforePath="$PROJECT_DIR$/../PSP/frontend/PSP/src/app/infrastructure/auth/registration/registration.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/../PSP/frontend/PSP/src/app/infrastructure/auth/registration/registration.component.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../PSP/frontend/PSP/src/app/infrastructure/auth/registration/registration.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../PSP/frontend/PSP/src/app/infrastructure/auth/registration/registration.component.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../PSP/frontend/PSP/src/app/infrastructure/material/material.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../PSP/frontend/PSP/src/app/infrastructure/material/material.module.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../PSP/frontend/PSP/src/app/services/keycloakservice.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../PSP/frontend/PSP/src/app/services/keycloakservice.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../PSP/frontend/PSP/src/app/services/user-helper-service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../PSP/frontend/PSP/src/app/services/user-helper-service.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../PSP/frontend/PSP/src/app/shared/components/input/input.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/../PSP/frontend/PSP/src/app/shared/components/input/input.component.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../PSP/frontend/PSP/src/app/shared/components/input/input.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/../PSP/frontend/PSP/src/app/shared/components/input/input.component.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../PSP/frontend/PSP/src/app/shared/components/input/input.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../PSP/frontend/PSP/src/app/shared/components/input/input.component.ts" afterDir="false" />
@@ -471,6 +474,7 @@
       <change beforePath="$PROJECT_DIR$/../PSP/frontend/PSP/src/app/shared/components/secondary-button/secondary-button.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../PSP/frontend/PSP/src/app/shared/components/secondary-button/secondary-button.component.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../PSP/frontend/PSP/src/app/shared/constants.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../PSP/frontend/PSP/src/app/shared/constants.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../PSP/frontend/PSP/src/app/shared/shared.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../PSP/frontend/PSP/src/app/shared/shared.module.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../PSP/frontend/PSP/src/assets/silent-check-sso.html" beforeDir="false" afterPath="$PROJECT_DIR$/../PSP/frontend/PSP/src/assets/silent-check-sso.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../PSP/frontend/PSP/src/env/environment.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../PSP/frontend/PSP/src/env/environment.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../PSP/frontend/PSP/src/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/../PSP/frontend/PSP/src/index.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../PSP/frontend/PSP/src/main.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../PSP/frontend/PSP/src/main.ts" afterDir="false" />
@@ -478,8 +482,6 @@
       <change beforePath="$PROJECT_DIR$/../PSP/frontend/PSP/tsconfig.app.json" beforeDir="false" afterPath="$PROJECT_DIR$/../PSP/frontend/PSP/tsconfig.app.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../PSP/frontend/PSP/tsconfig.json" beforeDir="false" afterPath="$PROJECT_DIR$/../PSP/frontend/PSP/tsconfig.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../PSP/frontend/PSP/tsconfig.spec.json" beforeDir="false" afterPath="$PROJECT_DIR$/../PSP/frontend/PSP/tsconfig.spec.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../QRCodePayment-microservice/go.mod" beforeDir="false" afterPath="$PROJECT_DIR$/../QRCodePayment-microservice/go.mod" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../QRCodePayment-microservice/go.sum" beforeDir="false" afterPath="$PROJECT_DIR$/../QRCodePayment-microservice/go.sum" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../QRCodePayment-microservice/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/../QRCodePayment-microservice/main.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../VIVONET/backend/VIVONET/.gitattributes" beforeDir="false" afterPath="$PROJECT_DIR$/../VIVONET/backend/VIVONET/.gitattributes" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../VIVONET/backend/VIVONET/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/../VIVONET/backend/VIVONET/.gitignore" afterDir="false" />
@@ -489,11 +491,14 @@
       <change beforePath="$PROJECT_DIR$/../VIVONET/backend/VIVONET/src/main/java/com/example/VIVONET/VivonetApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/../VIVONET/backend/VIVONET/src/main/java/com/example/VIVONET/VivonetApplication.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../VIVONET/backend/VIVONET/src/main/java/com/example/VIVONET/configs/ApiKeyMessage.java" beforeDir="false" afterPath="$PROJECT_DIR$/../VIVONET/backend/VIVONET/src/main/java/com/example/VIVONET/configs/ApiKeyMessage.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../VIVONET/backend/VIVONET/src/main/java/com/example/VIVONET/configs/ApiKeyResponseMessage.java" beforeDir="false" afterPath="$PROJECT_DIR$/../VIVONET/backend/VIVONET/src/main/java/com/example/VIVONET/configs/ApiKeyResponseMessage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../VIVONET/backend/VIVONET/src/main/java/com/example/VIVONET/configs/KeycloakJwtAuthenticationConverter.java" beforeDir="false" afterPath="$PROJECT_DIR$/../VIVONET/backend/VIVONET/src/main/java/com/example/VIVONET/configs/KeycloakJwtAuthenticationConverter.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../VIVONET/backend/VIVONET/src/main/java/com/example/VIVONET/configs/MQConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/../VIVONET/backend/VIVONET/src/main/java/com/example/VIVONET/configs/MQConfig.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../VIVONET/backend/VIVONET/src/main/java/com/example/VIVONET/configs/MessageListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/../VIVONET/backend/VIVONET/src/main/java/com/example/VIVONET/configs/MessageListener.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../VIVONET/backend/VIVONET/src/main/java/com/example/VIVONET/configs/OtlpConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/../VIVONET/backend/VIVONET/src/main/java/com/example/VIVONET/configs/OtlpConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../VIVONET/backend/VIVONET/src/main/java/com/example/VIVONET/configs/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/../VIVONET/backend/VIVONET/src/main/java/com/example/VIVONET/configs/SecurityConfig.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../VIVONET/backend/VIVONET/src/main/java/com/example/VIVONET/controllers/ApiKeyController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../VIVONET/backend/VIVONET/src/main/java/com/example/VIVONET/controllers/ApiKeyController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../VIVONET/backend/VIVONET/src/main/java/com/example/VIVONET/controllers/AuthController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../VIVONET/backend/VIVONET/src/main/java/com/example/VIVONET/controllers/AuthController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../VIVONET/backend/VIVONET/src/main/java/com/example/VIVONET/controllers/TestKeycloakController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../VIVONET/backend/VIVONET/src/main/java/com/example/VIVONET/controllers/TestKeycloakController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../VIVONET/backend/VIVONET/src/main/java/com/example/VIVONET/controllers/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../VIVONET/backend/VIVONET/src/main/java/com/example/VIVONET/controllers/UserController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../VIVONET/backend/VIVONET/src/main/java/com/example/VIVONET/controllers/VivonetServicesController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../VIVONET/backend/VIVONET/src/main/java/com/example/VIVONET/controllers/VivonetServicesController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../VIVONET/backend/VIVONET/src/main/java/com/example/VIVONET/dtos/AccessToken.java" beforeDir="false" afterPath="$PROJECT_DIR$/../VIVONET/backend/VIVONET/src/main/java/com/example/VIVONET/dtos/AccessToken.java" afterDir="false" />
@@ -582,13 +587,14 @@
       <change beforePath="$PROJECT_DIR$/../VIVONET/frontend/VivoNet/src/app/feature-modules/service-offerings/television/television.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/../VIVONET/frontend/VivoNet/src/app/feature-modules/service-offerings/television/television.component.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../VIVONET/frontend/VivoNet/src/app/feature-modules/service-offerings/television/television.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/../VIVONET/frontend/VivoNet/src/app/feature-modules/service-offerings/television/television.component.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../VIVONET/frontend/VivoNet/src/app/feature-modules/service-offerings/television/television.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../VIVONET/frontend/VivoNet/src/app/feature-modules/service-offerings/television/television.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../VIVONET/frontend/VivoNet/src/app/infrastructure/auth/auth.guard.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../VIVONET/frontend/VivoNet/src/app/infrastructure/auth/auth.guard.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../VIVONET/frontend/VivoNet/src/app/infrastructure/auth/auth.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../VIVONET/frontend/VivoNet/src/app/infrastructure/auth/auth.module.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../VIVONET/frontend/VivoNet/src/app/infrastructure/auth/auth.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../VIVONET/frontend/VivoNet/src/app/infrastructure/auth/auth.service.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../VIVONET/frontend/VivoNet/src/app/infrastructure/auth/code-login/code-login.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/../VIVONET/frontend/VivoNet/src/app/infrastructure/auth/code-login/code-login.component.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../VIVONET/frontend/VivoNet/src/app/infrastructure/auth/code-login/code-login.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/../VIVONET/frontend/VivoNet/src/app/infrastructure/auth/code-login/code-login.component.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../VIVONET/frontend/VivoNet/src/app/infrastructure/auth/code-login/code-login.component.spec.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../VIVONET/frontend/VivoNet/src/app/infrastructure/auth/code-login/code-login.component.spec.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../VIVONET/frontend/VivoNet/src/app/infrastructure/auth/code-login/code-login.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../VIVONET/frontend/VivoNet/src/app/infrastructure/auth/code-login/code-login.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../VIVONET/frontend/VivoNet/src/app/infrastructure/auth/guard/auth.guard.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../VIVONET/frontend/VivoNet/src/app/infrastructure/auth/guard/auth.guard.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../VIVONET/frontend/VivoNet/src/app/infrastructure/auth/init/keycloak-init.factory.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../VIVONET/frontend/VivoNet/src/app/infrastructure/auth/init/keycloak-init.factory.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../VIVONET/frontend/VivoNet/src/app/infrastructure/auth/jwt/jwt.interceptor.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../VIVONET/frontend/VivoNet/src/app/infrastructure/auth/jwt/jwt.interceptor.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../VIVONET/frontend/VivoNet/src/app/infrastructure/auth/jwt/token.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../VIVONET/frontend/VivoNet/src/app/infrastructure/auth/jwt/token.service.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../VIVONET/frontend/VivoNet/src/app/infrastructure/auth/login/login.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/../VIVONET/frontend/VivoNet/src/app/infrastructure/auth/login/login.component.css" afterDir="false" />
@@ -597,11 +603,14 @@
       <change beforePath="$PROJECT_DIR$/../VIVONET/frontend/VivoNet/src/app/infrastructure/auth/model/authentication-response.model.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../VIVONET/frontend/VivoNet/src/app/infrastructure/auth/model/authentication-response.model.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../VIVONET/frontend/VivoNet/src/app/infrastructure/auth/model/login.model.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../VIVONET/frontend/VivoNet/src/app/infrastructure/auth/model/login.model.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../VIVONET/frontend/VivoNet/src/app/infrastructure/auth/model/registration.model.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../VIVONET/frontend/VivoNet/src/app/infrastructure/auth/model/registration.model.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../VIVONET/frontend/VivoNet/src/app/infrastructure/auth/model/tokenRefreshRequest.model.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../VIVONET/frontend/VivoNet/src/app/infrastructure/auth/model/tokenRefreshRequest.model.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../VIVONET/frontend/VivoNet/src/app/infrastructure/auth/model/user.model.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../VIVONET/frontend/VivoNet/src/app/infrastructure/auth/model/user.model.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../VIVONET/frontend/VivoNet/src/app/infrastructure/auth/registration/registration.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/../VIVONET/frontend/VivoNet/src/app/infrastructure/auth/registration/registration.component.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../VIVONET/frontend/VivoNet/src/app/infrastructure/auth/registration/registration.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/../VIVONET/frontend/VivoNet/src/app/infrastructure/auth/registration/registration.component.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../VIVONET/frontend/VivoNet/src/app/infrastructure/auth/registration/registration.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../VIVONET/frontend/VivoNet/src/app/infrastructure/auth/registration/registration.component.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../VIVONET/frontend/VivoNet/src/app/infrastructure/material/material.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../VIVONET/frontend/VivoNet/src/app/infrastructure/material/material.module.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../VIVONET/frontend/VivoNet/src/app/services/keycloakservice.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../VIVONET/frontend/VivoNet/src/app/services/keycloakservice.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../VIVONET/frontend/VivoNet/src/app/services/user-helper-service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../VIVONET/frontend/VivoNet/src/app/services/user-helper-service.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../VIVONET/frontend/VivoNet/src/app/shared/components/input/input.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/../VIVONET/frontend/VivoNet/src/app/shared/components/input/input.component.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../VIVONET/frontend/VivoNet/src/app/shared/components/input/input.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/../VIVONET/frontend/VivoNet/src/app/shared/components/input/input.component.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../VIVONET/frontend/VivoNet/src/app/shared/components/input/input.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../VIVONET/frontend/VivoNet/src/app/shared/components/input/input.component.ts" afterDir="false" />
@@ -613,6 +622,7 @@
       <change beforePath="$PROJECT_DIR$/../VIVONET/frontend/VivoNet/src/app/shared/components/secondary-button/secondary-button.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../VIVONET/frontend/VivoNet/src/app/shared/components/secondary-button/secondary-button.component.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../VIVONET/frontend/VivoNet/src/app/shared/constants.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../VIVONET/frontend/VivoNet/src/app/shared/constants.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../VIVONET/frontend/VivoNet/src/app/shared/shared.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../VIVONET/frontend/VivoNet/src/app/shared/shared.module.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../VIVONET/frontend/VivoNet/src/assets/silent-check-sso.html" beforeDir="false" afterPath="$PROJECT_DIR$/../VIVONET/frontend/VivoNet/src/assets/silent-check-sso.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../VIVONET/frontend/VivoNet/src/env/environment.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../VIVONET/frontend/VivoNet/src/env/environment.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../VIVONET/frontend/VivoNet/src/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/../VIVONET/frontend/VivoNet/src/index.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../VIVONET/frontend/VivoNet/src/main.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../VIVONET/frontend/VivoNet/src/main.ts" afterDir="false" />
@@ -626,6 +636,7 @@
       <change beforePath="$PROJECT_DIR$/../monitoring/grafana/grafana.db" beforeDir="false" afterPath="$PROJECT_DIR$/../monitoring/grafana/grafana.db" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../monitoring/grafana/lokiDashboard.json" beforeDir="false" afterPath="$PROJECT_DIR$/../monitoring/grafana/lokiDashboard.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../monitoring/grafana/prometheusDashboard.json" beforeDir="false" afterPath="$PROJECT_DIR$/../monitoring/grafana/prometheusDashboard.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../monitoring/otel-collector-config.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/../monitoring/otel-collector-config.yaml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../monitoring/prometheus/config/prometheus.yml" beforeDir="false" afterPath="$PROJECT_DIR$/../monitoring/prometheus/config/prometheus.yml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../monitoring/promtail/config/promtail.yml" beforeDir="false" afterPath="$PROJECT_DIR$/../monitoring/promtail/config/promtail.yml" afterDir="false" />
     </list>
@@ -652,20 +663,20 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Application.PSP-MQ.executor": "Debug",
-    "Application.PspMqApplication.executor": "Debug",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "develop",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "F:/Nevena/faks/master/SEP/projekat/sep/PSP-MQ",
-    "project.structure.last.edited": "Project",
-    "project.structure.proportion": "0.0",
-    "project.structure.side.proportion": "0.0"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Application.PSP-MQ.executor&quot;: &quot;Debug&quot;,
+    &quot;Application.PspMqApplication.executor&quot;: &quot;Debug&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;SSO&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;F:/Nevena/faks/master/SEP/projekat/sep/PSP-MQ&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyClassDialog.RECENTS_KEY">
       <recent name="com.vivo_psp.PSP_MQ.dtos" />
@@ -696,8 +707,58 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/com/vivo_psp/PSP_MQ/controllers/MessageController.java</url>
-          <line>33</line>
-          <option name="timeStamp" value="7" />
+          <line>191</line>
+          <option name="timeStamp" value="8" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/vivo_psp/PSP_MQ/controllers/MessageController.java</url>
+          <line>215</line>
+          <option name="timeStamp" value="9" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/vivo_psp/PSP_MQ/controllers/MessageController.java</url>
+          <line>222</line>
+          <option name="timeStamp" value="10" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/vivo_psp/PSP_MQ/controllers/MessageController.java</url>
+          <line>156</line>
+          <option name="timeStamp" value="12" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/vivo_psp/PSP_MQ/controllers/MessageController.java</url>
+          <line>163</line>
+          <option name="timeStamp" value="13" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/vivo_psp/PSP_MQ/controllers/MessageController.java</url>
+          <line>197</line>
+          <option name="timeStamp" value="15" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/vivo_psp/PSP_MQ/controllers/MessageController.java</url>
+          <line>35</line>
+          <option name="timeStamp" value="16" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/vivo_psp/PSP_MQ/controllers/MessageController.java</url>
+          <line>61</line>
+          <option name="timeStamp" value="17" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/vivo_psp/PSP_MQ/controllers/MessageController.java</url>
+          <line>86</line>
+          <option name="timeStamp" value="18" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/vivo_psp/PSP_MQ/controllers/MessageController.java</url>
+          <line>99</line>
+          <option name="timeStamp" value="19" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/vivo_psp/PSP_MQ/controllers/MessageController.java</url>
+          <line>129</line>
+          <option name="timeStamp" value="20" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

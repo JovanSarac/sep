@@ -31,23 +31,23 @@ export class MyProfileComponent implements OnInit{
     this.authService.user$.subscribe((user) => {
       this.user = user;
     });
-
-    this.layoutService.getUserInfoById(this.user.id).subscribe({
-      next: (result) =>{
-        this.userInfo = result;
-        if(this.user.role == 'ROLE_USER'){
-          this.paymentService.getSubscriptionsForUser(this.user.id).subscribe({
-            next:(result)=>{
-              this.subscriptions = result
-              console.log(this.subscriptions)
-            }
-          });
+    console.log(this.user.id)
+    if (this.user.role == 'ROLE_WEB_SHOP')
+    {
+      this.layoutService.getUserInfoById(this.user.id).subscribe({
+        next: (result) =>{
+          this.userInfo = result;
+          if(this.user.role == 'ROLE_WEB_SHOP'){
+            this.paymentService.getSubscriptionsForUser(this.user.id).subscribe({
+              next:(result)=>{
+                this.subscriptions = result
+                console.log(this.subscriptions)
+              }
+            });
+          }
         }
-        
-      }
-    });
-
-    
+      });
+    }
   }
 
   changeTab(tab: string){
