@@ -275,7 +275,7 @@ func main() {
 
 	// Create instance-specific log file and ID
 	instanceId := fmt.Sprintf("eth-%d", port)
-	logFilePath := fmt.Sprintf("F:/Nevena/faks/master/SEP/projekat/sep/monitoring/logs/%s.log", instanceId)
+	logFilePath := "F:/Nevena/faks/master/SEP/projekat/sep/monitoring/logs/ethPayment.log"
 	logFile, err := os.OpenFile(logFilePath, os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
 	if err != nil {
 		log.Fatalf("[%s] Failed to open log file: %v", instanceId, err)
