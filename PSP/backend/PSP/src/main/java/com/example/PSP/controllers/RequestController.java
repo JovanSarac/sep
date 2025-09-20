@@ -68,7 +68,7 @@ public class RequestController {
         HttpHeaders headers = new HttpHeaders();
         headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
         headers.setBearerAuth(token);
-        RequestDto requestDto = sessionService.createRequestBySession(sessionId);
+        RequestDto requestDto = sessionService.createRequestBySession(sessionId, apiKey);
         HttpEntity<RequestDto> entity = new HttpEntity<RequestDto>(requestDto, headers);
 
         ResponseEntity<RequestQRCodePaymentDto> response = restTemplate.exchange("https://localhost:9001/bank1QRCodeValidateRequest", HttpMethod.POST, entity, RequestQRCodePaymentDto.class);
@@ -111,7 +111,7 @@ public class RequestController {
         HttpHeaders headers = new HttpHeaders();
         headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
         headers.setContentType(MediaType.APPLICATION_JSON);
-        RequestDto requestDto = sessionService.createRequestBySession(sessionId);
+        RequestDto requestDto = sessionService.createRequestBySession(sessionId, apiKey);
         HttpEntity<RequestDto> entity = new HttpEntity<RequestDto>(requestDto, headers);
 
         ResponseEntity<RequestPaymentDto> response = restTemplate.exchange("https://localhost:9001/bank1ValidateRequest", HttpMethod.POST, entity, RequestPaymentDto.class);
