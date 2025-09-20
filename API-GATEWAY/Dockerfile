@@ -22,7 +22,7 @@ COPY apigateway.crt .
 COPY apigateway.key .
 
 # Expose port
-EXPOSE 8080
+EXPOSE 9001
 
 # Run
 CMD ["./apigateway"]

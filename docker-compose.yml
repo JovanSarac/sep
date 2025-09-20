@@ -117,7 +117,7 @@ services:
       dockerfile: Dockerfile
     container_name: apigateway
     ports:
-      - "8080:8080"
+      - "9001:9001"
     environment:
       CONSUL_HOST: consul
       CONSUL_PORT: 8500
