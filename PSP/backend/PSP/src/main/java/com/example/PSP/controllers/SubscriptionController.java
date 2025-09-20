@@ -51,7 +51,7 @@ public class SubscriptionController {
     }
 
     @PostMapping("/user/create_subscription")
-    @PreAuthorize("hasRole('ROLE_USER') and hasRole('ROLE_WEB_SHOP')")
+    @PreAuthorize("hasRole('ROLE_WEB_SHOP')")
     public ResponseEntity<SubscriptionDto> createSubscription(@RequestBody SubscriptionRequest request) {
         logger.info("Checking PSP service and user info before creating a new subscription");
         PSPService service = pspServiceRepository.findById(request.getServiceId()).orElseThrow(() -> new ResourceNotFoundException("Service not found"));

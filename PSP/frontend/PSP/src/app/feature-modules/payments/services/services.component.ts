@@ -7,6 +7,7 @@ import { SubscriptionDto } from '../model/subscription.model';
 import { AuthService } from 'src/app/infrastructure/auth/auth.service';
 import { User } from 'src/app/infrastructure/auth/model/user.model';
 import { ToastrService } from 'ngx-toastr';
+import { UserHelperService } from 'src/app/services/user-helper-service';
 
 @Component({
   selector: 'app-services',
@@ -23,20 +24,22 @@ export class ServicesComponent implements OnInit{
     private service: PaymentsService,
     private dialog: MatDialog,
     private authService: AuthService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private userHelperService: UserHelperService
   ) {}
 
   ngOnInit(): void {
-    this.authService.user$.subscribe((user) => {
-      this.user = user;
-    });
+    // this.authService.user$.subscribe((user) => {
+    //   this.user = user;
+    // });
 
+    this.user = this.userHelperService.getCurrentUser() || {username: "", id: 0, role: "" };
     this.service.getActivePaymentServices().subscribe({
       next: (result)=>{
         this.paymentServices = result;
       }
     });
-
+    console.log("1", this.user.id)
     this.service.getSubscriptionsForUser(this.user.id).subscribe({
       next:(result)=>{
         this.yourSubscriptions = result

@@ -8,6 +8,7 @@ import { PaymentsService } from '../../payments/payments.service';
 import { SubscriptionDialogComponent } from '../../payments/subscription-dialog/subscription-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import { ExtendSubscriptionDialogComponent } from '../../payments/extend-subscription-dialog/extend-subscription-dialog.component';
+import { UserHelperService } from 'src/app/services/user-helper-service';
 
 @Component({
   selector: 'app-my-profile',
@@ -24,14 +25,17 @@ export class MyProfileComponent implements OnInit{
     private authService: AuthService,
     private layoutService: LayoutService,
     private paymentService: PaymentsService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private userHelperService: UserHelperService
   ){}
 
   ngOnInit(): void {
-    this.authService.user$.subscribe((user) => {
-      this.user = user;
-    });
+    // this.authService.user$.subscribe((user) => {
+    //   this.user = user;
+    // });
+    this.user = this.userHelperService.getCurrentUser() || {username: "", id: 0, role: "" }
     console.log(this.user.id)
+    console.log(this.user.role)
     if (this.user.role == 'ROLE_WEB_SHOP')
     {
       this.layoutService.getUserInfoById(this.user.id).subscribe({

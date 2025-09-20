@@ -9,6 +9,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { SubscriptionDto } from '../model/subscription.model';
 import { SubscriptionRequest } from '../model/subscription-request.model';
 import { ApiKeyDto } from '../model/api-key.model';
+import { UserHelperService } from 'src/app/services/user-helper-service';
 
 @Component({
   selector: 'app-subscription-dialog',
@@ -31,12 +32,14 @@ export class SubscriptionDialogComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: PaymentService,
     private service: PaymentsService,
     private authService: AuthService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private userHelperService: UserHelperService
   ) { }
 
 
   ngOnInit(): void {
-    this.user = this.authService.user$.value;
+    //this.user = this.authService.user$.value;
+    this.user = this.userHelperService.getCurrentUser() || {username: "", id: 0, role: "" };
     this.paymentService = this.data;
     this.subscribeForm.controls.subscriptionDuration.valueChanges.subscribe((value) => {
       this.duration = Number(value);
