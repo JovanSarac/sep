@@ -129,16 +129,24 @@ public class RequestController {
     }
 
     @GetMapping("/sendRequestCrypto")
-    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN', 'ROLE_BUSINESS_USER', 'ROLE_PERSONAL_USER', 'ROLE_WEB_SHOP')")
+    //@PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN', 'ROLE_BUSINESS_USER', 'ROLE_PERSONAL_USER', 'ROLE_WEB_SHOP')")
     public ResponseEntity<ArrayList<String>> sendRequestCrypto() {
         logger.info("Processing crypto request..");
         HttpHeaders headers = new HttpHeaders();
         headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
         HttpEntity<Void> entity = new HttpEntity<>(headers);
 
-        ResponseEntity<ArrayList<String>> response = restTemplate.exchange("https://localhost:9001/eth", HttpMethod.GET, entity, new ParameterizedTypeReference<ArrayList<String>>() {});
-        ArrayList<String> walletIds = response.getBody();
+        try
+        {
+            ResponseEntity<ArrayList<String>> response = restTemplate.exchange("https://localhost:9001/eth", HttpMethod.GET, entity, new ParameterizedTypeReference<ArrayList<String>>() {});
+            ArrayList<String> walletIds = response.getBody();
+            return ResponseEntity.ok(walletIds);
+        }
+        catch(Exception e)
+        {
+            System.out.println(e);
+        }
+        return ResponseEntity.ok(null);
 
-        return ResponseEntity.ok(walletIds);
     }
 }

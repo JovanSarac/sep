@@ -31,7 +31,21 @@ func initKeycloak() {
 }
 
 func authMiddleware(next http.Handler) http.Handler {
+
+	publicRoutes := []string{
+		"/eth",
+		"/eth/saveTransaction",
+	}
+
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+
+		for _, route := range publicRoutes {
+			if r.URL.Path == route {
+				next.ServeHTTP(w, r)
+				return
+			}
+		}
+
 		authHeader := r.Header.Get("Authorization")
 		if authHeader == "" || !strings.HasPrefix(authHeader, "Bearer ") {
 			http.Error(w, "Missing or invalid Authorization header", http.StatusUnauthorized)
