@@ -116,7 +116,7 @@ export class CartComponent implements OnInit{
           totalItems: this.totalItems,
           totalPrice: this.totalPrice,
         },
-        webShopId: '5',
+        webShopId: '1',
         webShopName: 'VivoNet',
         webShopUrl: window.location.origin,
         
