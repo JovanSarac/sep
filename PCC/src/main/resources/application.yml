@@ -19,7 +19,7 @@ spring:
       password: secret123
 
 tracing:
-  url: http://localhost:4318/v1/traces
+  url: ${TRACING_URL:http://localhost:4318/v1/traces}
 
 logging:
   pattern:
