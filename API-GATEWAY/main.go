@@ -21,7 +21,8 @@ var verifier *oidc.IDTokenVerifier
 
 func initKeycloak() {
 	ctx := context.Background()
-	provider, err := oidc.NewProvider(ctx, "http://localhost:8080/realms/sep-realm")
+	var keycloakURL = getEnv("KEYCLOAK_URL", "http://localhost:8080/realms/sep-realm")
+	provider, err := oidc.NewProvider(ctx, keycloakURL)
 	if err != nil {
 		panic(err)
 	}

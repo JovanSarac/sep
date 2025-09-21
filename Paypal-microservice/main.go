@@ -33,11 +33,10 @@ type PaypalPaymentDto struct {
 	ApprovalUrl string `json:"approvalUrl"`
 }
 
-// initPaypal inicijalizuje paypal SDK i uzme token
 func initPaypal() {
 	clientID := os.Getenv("PAYPAL_CLIENT_ID")
 	secret := os.Getenv("PAYPAL_SECRET")
-	env := os.Getenv("PAYPAL_ENV") // sandbox|live
+	env := os.Getenv("PAYPAL_ENV")
 
 	if clientID == "" || secret == "" {
 		log.Fatal("PAYPAL_CLIENT_ID and PAYPAL_SECRET must be set")
@@ -54,7 +53,6 @@ func initPaypal() {
 		log.Fatalf("failed to create paypal client: %v", err)
 	}
 
-	// get access token
 	_, err = c.GetAccessToken(context.Background())
 	if err != nil {
 		log.Fatalf("failed to get paypal access token: %v", err)
@@ -72,7 +70,7 @@ func registerWithConsul(name string, port int) {
 
 	serviceAddr := os.Getenv("SERVICE_ADDRESS")
 	if serviceAddr == "" {
-		serviceAddr = "localhost"
+		serviceAddr = "host.docker.internal"
 	}
 
 	data := map[string]interface{}{
@@ -80,7 +78,7 @@ func registerWithConsul(name string, port int) {
 		"Address": serviceAddr,
 		"Port":    port,
 		"Check": map[string]interface{}{
-			"HTTP":     fmt.Sprintf("http://localhost:%d/health", port),
+			"HTTP":     fmt.Sprintf("http://%s:%d/health", serviceAddr, port),
 			"Interval": "10s",
 		},
 	}
@@ -104,7 +102,6 @@ func registerWithConsul(name string, port int) {
 	}
 	log.Printf("Registered %s with Consul", name)
 
-	// notify PSP create
 	psp := os.Getenv("PSP_NOTIFY_URL")
 	if psp != "" {
 		pspNotify = psp
@@ -125,7 +122,6 @@ func registerWithConsul(name string, port int) {
 	}
 }
 
-// deregisterFromConsul deregistruje servis i notify-uje PSP remove endpoint
 func deregisterFromConsul(name string) {
 	consulEnv := os.Getenv("CONSUL_ADDR")
 	if consulEnv != "" {
@@ -142,7 +138,6 @@ func deregisterFromConsul(name string) {
 		log.Printf("Deregistered %s from Consul (status %d)", name, resp.StatusCode)
 	}
 
-	// notify PSP remove
 	pspR := os.Getenv("PSP_REMOVE_URL")
 	if pspR != "" {
 		pspRemove = pspR
@@ -159,7 +154,6 @@ func deregisterFromConsul(name string) {
 	}
 }
 
-// health handler
 func healthHandler(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 	w.Write([]byte("OK"))
@@ -273,10 +267,8 @@ func main() {
 		Handler: mux,
 	}
 
-	// register & notify PSP
 	go registerWithConsul(serviceName, port)
 
-	// graceful shutdown
 	stop := make(chan os.Signal, 1)
 	signal.Notify(stop, syscall.SIGINT, syscall.SIGTERM)
 
@@ -296,7 +288,6 @@ func main() {
 		log.Printf("server shutdown error: %v", err)
 	}
 
-	// deregister & notify PSP remove
 	deregisterFromConsul(serviceName)
 	log.Println("shutdown complete")
 }

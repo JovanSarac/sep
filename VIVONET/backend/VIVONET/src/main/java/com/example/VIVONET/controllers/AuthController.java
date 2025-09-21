@@ -14,6 +14,7 @@ import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.messaging.MessagingException;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -42,9 +43,12 @@ public class AuthController {
     private UserService userService;
     private static final Logger logger = LoggerFactory.getLogger(AuthController.class);
 
+    @Value("${keycloak.auth-server-url}")
+    private String keycloakUrl;
+
     @PostMapping("/login")
     public ResponseEntity<?> loginUser(@Valid @RequestBody CredentialDto loginRequest) {
-        String tokenUrl = "http://localhost:8080/realms/sep-realm/protocol/openid-connect/token";
+        String tokenUrl = String.format("%s/realms/sep-realm/protocol/openid-connect/token", keycloakUrl);
 
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.add("client_id", "sep-vivonet-backend");
@@ -109,7 +113,7 @@ public class AuthController {
     public ResponseEntity<String> registerUser(@RequestBody RegistrationDto registrationDto) {
         try
         {
-            String adminTokenUrl = "http://localhost:8080/realms/master/protocol/openid-connect/token";
+            String adminTokenUrl = String.format("%s/realms/master/protocol/openid-connect/token",keycloakUrl);
 
             // 1. Uzmi admin token
             MultiValueMap<String, String> tokenParams = new LinkedMultiValueMap<>();
@@ -126,7 +130,7 @@ public class AuthController {
             String adminAccessToken = (String) tokenResponse.getBody().get("access_token");
 
             // 2. Napravi user-a
-            String createUserUrl = "http://localhost:8080/admin/realms/sep-realm/users";
+            String createUserUrl = String.format("%s/admin/realms/sep-realm/users", keycloakUrl);
 
             headers = new HttpHeaders();
             headers.setBearerAuth(adminAccessToken);
@@ -167,7 +171,7 @@ public class AuthController {
 
     @PostMapping("/signout")
     public ResponseEntity<?> logoutUser(@Valid @RequestBody TokenRefreshRequest request) {
-        String logoutUrl = "http://localhost:8080/realms/sep-realm/protocol/openid-connect/logout";
+        String logoutUrl = String.format("%s/realms/sep-realm/protocol/openid-connect/logout", keycloakUrl);
 
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.add("client_id", "sep-vivonet-backend");
@@ -254,7 +258,7 @@ public class AuthController {
 
     @PostMapping("/refresh")
     public ResponseEntity<?> refreshToken(@Valid @RequestBody TokenRefreshRequest request) {
-        String tokenUrl = "http://localhost:8080/realms/sep-realm/protocol/openid-connect/token";
+        String tokenUrl = String.format("%s/realms/sep-realm/protocol/openid-connect/token", keycloakUrl);
 
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.add("client_id", "sep-vivonet-backend");

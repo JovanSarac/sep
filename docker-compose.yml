@@ -38,6 +38,19 @@ services:
       - "5672:5672"
       - "15672:15672"
 
+  keycloak:
+    image: quay.io/keycloak/keycloak:latest
+    container_name: keycloak
+    command: start-dev
+    environment:
+      - KEYCLOAK_ADMIN=admin
+      - KEYCLOAK_ADMIN_PASSWORD=admin
+    ports:
+      - "8080:8080"
+    networks:
+      - default
+
+
   vivonet-backend:
     build:
       context: ./VIVONET/backend/VIVONET
@@ -47,18 +60,26 @@ services:
       SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/vivonet
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: super
+      TRACING_URL: http://jaeger:4318/v1/traces
+      KEYCLOAK_URL: http://keycloak:8080
     ports:
       - "8093:8093"
     depends_on:
       - db
       - consul
       - rabbitmq
+      - keycloak
+    networks:
+      - default
+      - monitoring
 
   vivonet-frontend:
     build:
       context: ./VIVONET/frontend/VivoNet
       dockerfile: Dockerfile
     container_name: vivonet-frontend
+    environment:
+      KEYCLOAK_URL: http://keycloak:8080
     ports:
       - "4200:443"
     depends_on:
@@ -79,17 +100,25 @@ services:
       RABBITMQ_USER: guest
       RABBITMQ_PASS: guest
       API_GATEWAY_HOST: https://apigateway:8080
+      TRACING_URL: http://jaeger:4318/v1/traces
+      KEYCLOAK_URL: http://keycloak:8080
     ports:
       - "8090:8090"
     depends_on:
       - db
       - rabbitmq
+      - keycloak
+    networks:
+      - default
+      - monitoring
 
   psp-frontend:
     build:
       context: ./PSP/frontend/PSP
       dockerfile: Dockerfile
     container_name: psp-frontend
+    environment:
+      KEYCLOAK_URL: http://keycloak:8080
     ports:
       - "4201:443"
     depends_on:
@@ -121,8 +150,10 @@ services:
     environment:
       CONSUL_HOST: consul
       CONSUL_PORT: 8500
+      KEYCLOAK_URL: http://keycloak:8080/realms/sep-realm
     depends_on:
       - consul
+      - keycloak
 
   paypal-service:
     build:
