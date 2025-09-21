@@ -9,7 +9,7 @@ VALUES
     TRUE
     ),
     (-2, 
-    'Bank Payment Service (QR Code)', 
+    'Bank Payment Service (QRCode)', 
     'This payment service facilitates transactions through QR codes. Users can easily pay by scanning the provided QR code using their mobile banking apps or QR scanners. The service is highly convenient and ideal for in-store and online payments, providing fast and secure transactions without needing physical cards.', 
     129.99, 
     TRUE

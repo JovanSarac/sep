@@ -52,4 +52,11 @@ export class CartService {
       responseType: 'text' as 'json', // Angular očekuje JSON, ali specificiramo tekst
     });
   }
+
+  capturePaypalOrder(orderId: string, payerId: string): Observable<any> {
+    return this.http.post('https://localhost:8090/api/psp/requests/capturePaypalOrder', {
+      orderId,
+      payerId
+    });
+  }
 }

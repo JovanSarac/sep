@@ -3,11 +3,9 @@ package com.example.PSP.controllers;
 import com.example.PSP.configs.ApiKeyResponseMessage;
 import com.example.PSP.configs.MQConfig;
 import com.example.PSP.configs.RequestMessage;
-import com.example.PSP.dtos.PaymentDataDto;
-import com.example.PSP.dtos.RequestDto;
-import com.example.PSP.dtos.RequestPaymentDto;
-import com.example.PSP.dtos.RequestQRCodePaymentDto;
+import com.example.PSP.dtos.*;
 import com.example.PSP.models.ApiKey;
+import com.example.PSP.models.Session;
 import com.example.PSP.services.ApiKeyService;
 import com.example.PSP.services.SessionService;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -23,9 +22,7 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.UUID;
+import java.util.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -40,6 +37,9 @@ public class RequestController {
     private ApiKeyService apiKeyService;
 
     private ApiKeyResponseMessage responseMessage;
+
+    @Value("${api.gateway.url}")
+    private String apiGatewayUrl;
 
     private static final Logger logger = LoggerFactory.getLogger(RequestController.class);
 
@@ -71,7 +71,8 @@ public class RequestController {
         RequestDto requestDto = sessionService.createRequestBySession(sessionId, apiKey);
         HttpEntity<RequestDto> entity = new HttpEntity<RequestDto>(requestDto, headers);
 
-        ResponseEntity<RequestQRCodePaymentDto> response = restTemplate.exchange("https://localhost:9001/bank1QRCodeValidateRequest", HttpMethod.POST, entity, RequestQRCodePaymentDto.class);
+        ResponseEntity<RequestQRCodePaymentDto> response = restTemplate.exchange(apiGatewayUrl + "/bank1QRCodeValidateRequest", HttpMethod.POST, entity, RequestQRCodePaymentDto.class);
+
         RequestQRCodePaymentDto requestPaymentQRDto = response.getBody();
 
         //ovde dodajem string za qr data, posle treba namestiti da se ti podaci uzimaju iz banke prodavca i da
@@ -116,7 +117,7 @@ public class RequestController {
         RequestDto requestDto = sessionService.createRequestBySession(sessionId, apiKey);
         HttpEntity<RequestDto> entity = new HttpEntity<RequestDto>(requestDto, headers);
 
-        ResponseEntity<RequestPaymentDto> response = restTemplate.exchange("https://localhost:9001/bank1ValidateRequest", HttpMethod.POST, entity, RequestPaymentDto.class);
+        ResponseEntity<RequestPaymentDto> response = restTemplate.exchange(apiGatewayUrl + "/bank1ValidateRequest", HttpMethod.POST, entity, RequestPaymentDto.class);
         RequestPaymentDto requestPaymentDto = response.getBody();
 
         //restTemplate.exchange("http://localhost:8080/bank1", HttpMethod.POST, entity, String.class).getBody();
@@ -140,7 +141,7 @@ public class RequestController {
 
         try
         {
-            ResponseEntity<ArrayList<String>> response = restTemplate.exchange("https://localhost:9001/eth", HttpMethod.GET, entity, new ParameterizedTypeReference<ArrayList<String>>() {});
+            ResponseEntity<ArrayList<String>> response = restTemplate.exchange(apiGatewayUrl  + "/eth", HttpMethod.GET, entity, new ParameterizedTypeReference<ArrayList<String>>() {});        
             ArrayList<String> walletIds = response.getBody();
             return ResponseEntity.ok(walletIds);
         }
@@ -151,4 +152,72 @@ public class RequestController {
         return ResponseEntity.ok(null);
 
     }
+
+    @GetMapping("/sendRequestPaypal")
+    @PreAuthorize("permitAll()")
+    public ResponseEntity<PaypalPaymentDto> sendRequestPaypal(@RequestParam Long sessionId, @RequestHeader("Authorization") String authorizationHeader) {
+        logger.info("Processing PayPal request for sessionId: {}", sessionId);
+
+        Session sessionInfo = sessionService.getSessionById(sessionId);
+
+
+        PaypalRequestDto requestBody = new PaypalRequestDto();
+        requestBody.setAmount(sessionInfo.getCart().getTotalPrice().toString());
+        requestBody.setCurrency("USD");
+        requestBody.setSuccessUrl("https://localhost:4200/transaction-status/success");
+        requestBody.setCancelUrl("https://localhost:4200/transaction-status/cancel");
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        String token = authorizationHeader.replace("Bearer ", "").trim();
+        headers.setBearerAuth(token);
+        HttpEntity<PaypalRequestDto> entity = new HttpEntity<>(requestBody, headers);
+
+        ResponseEntity<PaypalPaymentDto> response = restTemplate.exchange(
+                apiGatewayUrl + "/paypal/create-order",
+                HttpMethod.POST,
+                entity,
+                PaypalPaymentDto.class
+        );
+
+        return ResponseEntity.ok(response.getBody());
+    }
+
+    @PostMapping("/capturePaypalOrder")
+    @PreAuthorize("permitAll()")
+    public ResponseEntity<?> capturePaypalOrder(
+            @RequestBody PaypalCaptureRequestDto request, @RequestHeader("Authorization") String authorizationHeader) {
+
+        logger.info("Capturing PayPal order: {} for PayerID: {}", request.getOrderId(), request.getPayerId());
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        String token = authorizationHeader.replace("Bearer ", "").trim();
+        headers.setBearerAuth(token);
+
+        Map<String, String> requestBody = new HashMap<>();
+        requestBody.put("orderId", request.getOrderId());
+        requestBody.put("payerId", request.getPayerId());
+
+        HttpEntity<Map<String, String>> entity = new HttpEntity<>(requestBody, headers);
+
+        try {
+            ResponseEntity<PaypalCaptureDto> response = restTemplate.exchange(
+                    apiGatewayUrl + "/paypal/capture-order",
+                    HttpMethod.POST,
+                    entity,
+                    PaypalCaptureDto.class
+            );
+
+            // Ako treba snimi transakciju
+            // transactionService.savePaypalTransaction(request.getOrderId(), request.getPayerId(), response.getBody());
+
+            return ResponseEntity.ok(response.getBody());
+
+        } catch (Exception e) {
+            logger.error("Error capturing PayPal order: {}", e.getMessage(), e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+
 }

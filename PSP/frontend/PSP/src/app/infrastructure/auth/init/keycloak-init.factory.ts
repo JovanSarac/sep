@@ -1,9 +1,11 @@
 // src/app/infrastructure/auth/init/keycloak-init.factory.ts
 import Keycloak from 'keycloak-js';
 
+const keycloakUrl = (window as any).__env?.KEYCLOAK_URL || 'http://localhost:8080';
+
 // Kreiraj Keycloak instancu bez tipova da izbegneš greške
 export const keycloak = new (Keycloak as any)({
-  url: 'http://localhost:8080',
+  url: keycloakUrl,
   realm: 'sep-realm',
   clientId: 'sep-psp-frontend',
 });

@@ -291,4 +291,34 @@ public class MessageController {
         template.convertAndSend(MQConfig.EXCHANGE_CONSUL,
                 MQConfig.ROUTING_KEY_CONSUL, message);
     }
+
+    @GetMapping("/publishSendRequestPaypal/{sessionId}")
+    public ResponseEntity<PaypalPaymentDto> publishSendRequestPaypal(
+            @RequestHeader Map<String, String> headers,
+            @PathVariable Long sessionId) {
+
+        PaypalMessage message = new PaypalMessage(
+                UUID.randomUUID().toString(),
+                headers.get("authorization"),
+                new Date(),
+                sessionId
+        );
+
+        try {
+            Object response = asyncRabbitTemplate.convertSendAndReceive(
+                    MQConfig.EXCHANGE_PAYPAL,
+                    MQConfig.ROUTING_KEY_PAYPAL,
+                    message).get();
+
+            if (response instanceof String) {
+                PaypalPaymentDto dto = objectMapper.readValue((String) response, PaypalPaymentDto.class);
+                return ResponseEntity.ok(dto);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+    }
+
 }

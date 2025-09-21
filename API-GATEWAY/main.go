@@ -8,6 +8,7 @@ import (
 	"io"
 	"log"
 	"net/http"
+	"os"
 	"strings"
 
 	"github.com/coreos/go-oidc"
@@ -20,7 +21,8 @@ var verifier *oidc.IDTokenVerifier
 
 func initKeycloak() {
 	ctx := context.Background()
-	provider, err := oidc.NewProvider(ctx, "http://localhost:8080/realms/sep-realm")
+	var keycloakURL = getEnv("KEYCLOAK_URL", "http://localhost:8080/realms/sep-realm")
+	provider, err := oidc.NewProvider(ctx, keycloakURL)
 	if err != nil {
 		panic(err)
 	}
@@ -101,8 +103,24 @@ type RequestDto struct {
 	ErrorUrl         string    `json:"errorUrl"`
 }
 
+type PaypalRequestDto struct {
+	Amount     string `json:"amount"`
+	Currency   string `json:"currency"`
+	SuccessUrl string `json:"successUrl"`
+	CancelUrl  string `json:"cancelUrl"`
+}
+
+type PaypalResponseDto struct {
+	PaymentId   string `json:"paymentId"`
+	ApprovalUrl string `json:"approvalUrl"`
+}
+
+var consulHost = getEnv("CONSUL_HOST", "localhost")
+var consulPort = getEnv("CONSUL_PORT", "8500")
+
 func getServiceURL(serviceName string) (string, error) {
-	resp, err := http.Get("http://localhost:8500/v1/catalog/service/" + serviceName + "?passing=true")
+	url := fmt.Sprintf("http://%s:%s/v1/catalog/service/%s?passing=true", consulHost, consulPort, serviceName)
+	resp, err := http.Get(url)
 	if err != nil {
 		return "", err
 	}
@@ -120,6 +138,13 @@ func getServiceURL(serviceName string) (string, error) {
 		return "", fmt.Errorf("service %s not found", serviceName)
 	}
 	return fmt.Sprintf("http://%s:%d", services[0].ServiceAddress, services[0].ServicePort), nil
+}
+
+func getEnv(key, fallback string) string {
+	if value, ok := os.LookupEnv(key); ok {
+		return value
+	}
+	return fallback
 }
 
 func main() {
@@ -171,6 +196,23 @@ func main() {
 		}
 		proxy("/eth/saveTransaction", url)(w, r)
 	}).Methods("POST")
+	router.HandleFunc("/paypal/create-order", func(w http.ResponseWriter, r *http.Request) {
+		url, err := getServiceURL("paypal")
+		if err != nil {
+			http.Error(w, "PayPal service unavailable", http.StatusServiceUnavailable)
+			return
+		}
+		proxy("/paypal/create-order", url)(w, r)
+	}).Methods("POST")
+
+	router.HandleFunc("/paypal/capture-order", func(w http.ResponseWriter, r *http.Request) {
+		url, err := getServiceURL("paypal")
+		if err != nil {
+			http.Error(w, "PayPal service unavailable", http.StatusServiceUnavailable)
+			return
+		}
+		proxy("/paypal/capture-order", url)(w, r)
+	}).Methods("POST")
 
 	c := cors.New(cors.Options{
 		AllowedOrigins:   []string{"*"},
@@ -213,6 +255,44 @@ func proxy(path, target string) http.HandlerFunc {
 				log.Println("READ THE BODY")
 				requestBody = bytes.NewReader(marshaled)
 				break
+			case "/paypal/create-order":
+				log.Println("PAYPAL CREATE ORDER")
+				w.Header().Set("Content-Type", "application/json")
+				var requestDto PaypalRequestDto
+				if err := json.NewDecoder(r.Body).Decode(&requestDto); err != nil {
+					http.Error(w, "Invalid PayPal request body", http.StatusBadRequest)
+					return
+				}
+				log.Printf("Parsed PaypalRequestDto: %+v\n", requestDto)
+
+				marshaled, err := json.Marshal(requestDto)
+				if err != nil {
+					http.Error(w, "Failed to marshal PayPal request body", http.StatusInternalServerError)
+					return
+				}
+				requestBody = bytes.NewReader(marshaled)
+				break
+			case "/paypal/capture-order":
+				log.Println("PAYPAL CAPTURE ORDER")
+				w.Header().Set("Content-Type", "application/json")
+				var requestDto struct {
+					OrderID string `json:"orderId"`
+					PayerID string `json:"payerId"`
+				}
+				if err := json.NewDecoder(r.Body).Decode(&requestDto); err != nil {
+					http.Error(w, "Invalid PayPal capture request body", http.StatusBadRequest)
+					return
+				}
+				log.Printf("Parsed PaypalCaptureRequest: %+v\n", requestDto)
+
+				marshaled, err := json.Marshal(requestDto)
+				if err != nil {
+					http.Error(w, "Failed to marshal PayPal capture request body", http.StatusInternalServerError)
+					return
+				}
+				requestBody = bytes.NewReader(marshaled)
+				break
+
 			default:
 				//pass the raw body
 				bodyBytes, err := io.ReadAll(r.Body)

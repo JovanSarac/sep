@@ -21,17 +21,17 @@ spring:
       resourceserver:
         jwt:
           issuer-uri: http://localhost:8080/realms/sep-realm
-          jwk-set-uri: http://localhost:8080/realms/sep-realm/protocol/openid-connect/certs
+          jwk-set-uri: ${KEYCLOAK_URL:http://localhost:8080}/realms/sep-realm/protocol/openid-connect/certs
 
 keycloak:
   realm: sep-realm
-  auth-server-url: http://localhost:8080
+  auth-server-url: ${KEYCLOAK_URL:http://localhost:8080}
   resource: sep-bank1-backend
   credentials:
     secret: r8Mh0Jq59HkhLr2GC8NNjx6twBOsDhFj
 
 tracing:
-  url: http://localhost:4318/v1/traces
+  url: ${TRACING_URL:http://localhost:4318/v1/traces}
 
 logging:
   pattern:

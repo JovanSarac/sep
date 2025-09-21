@@ -51,6 +51,10 @@ public class MQConfig {
     public static final String EXCHANGE_CONSUL = "exchange_consul";
     public static final String ROUTING_KEY_CONSUL = "routing_key_consul";
 
+    public static final String QUEUE_PAYPAL = "queue_paypal";
+    public static final String EXCHANGE_PAYPAL = "exchange_paypal";
+    public static final String ROUTING_KEY_PAYPAL = "routing_key_paypal";
+
     @Bean
     public Queue queue(){
         return new Queue(QUEUE_SUBSCRIPTION);
@@ -211,6 +215,24 @@ public class MQConfig {
                 .bind(queueConsul)
                 .to(exchangeConsul)
                 .with(ROUTING_KEY_CONSUL);
+    }
+
+    @Bean
+    public Queue queuePaypal(){
+        return new Queue(QUEUE_PAYPAL);
+    }
+
+    @Bean
+    public TopicExchange exchangePaypal(){
+        return new TopicExchange(EXCHANGE_PAYPAL);
+    }
+
+    @Bean
+    public Binding bindingPaypal(Queue queuePaypal, TopicExchange exchangePaypal){
+        return BindingBuilder
+                .bind(queuePaypal)
+                .to(exchangePaypal)
+                .with(ROUTING_KEY_PAYPAL);
     }
 
     @Bean
