@@ -96,7 +96,8 @@ services:
       SPRING_DATASOURCE_PASSWORD: super
       SPRING_CLOUD_CONSUL_HOST: consul
       SPRING_CLOUD_CONSUL_PORT: 8500
-      RABBITMQ_HOST: amqp://guest:guest@rabbitmq:5672
+      RABBITMQ_HOST: rabbitmq
+      RABBITMQ_PORT: 5672
       RABBITMQ_USER: guest
       RABBITMQ_PASS: guest
       API_GATEWAY_HOST: https://apigateway:8080
