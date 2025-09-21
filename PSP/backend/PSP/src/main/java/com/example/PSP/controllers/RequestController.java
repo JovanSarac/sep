@@ -186,12 +186,14 @@ public class RequestController {
     @PostMapping("/capturePaypalOrder")
     @PreAuthorize("permitAll()")
     public ResponseEntity<?> capturePaypalOrder(
-            @RequestBody PaypalCaptureRequestDto request) {
+            @RequestBody PaypalCaptureRequestDto request, @RequestHeader("Authorization") String authorizationHeader) {
 
         logger.info("Capturing PayPal order: {} for PayerID: {}", request.getOrderId(), request.getPayerId());
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
+        String token = authorizationHeader.replace("Bearer ", "").trim();
+        headers.setBearerAuth(token);
 
         Map<String, String> requestBody = new HashMap<>();
         requestBody.put("orderId", request.getOrderId());
