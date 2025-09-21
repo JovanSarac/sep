@@ -155,7 +155,7 @@ public class RequestController {
 
     @GetMapping("/sendRequestPaypal")
     @PreAuthorize("permitAll()")
-    public ResponseEntity<PaypalPaymentDto> sendRequestPaypal(@RequestParam Long sessionId) {
+    public ResponseEntity<PaypalPaymentDto> sendRequestPaypal(@RequestParam Long sessionId, @RequestHeader("Authorization") String authorizationHeader) {
         logger.info("Processing PayPal request for sessionId: {}", sessionId);
 
         Session sessionInfo = sessionService.getSessionById(sessionId);
@@ -169,6 +169,8 @@ public class RequestController {
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
+        String token = authorizationHeader.replace("Bearer ", "").trim();
+        headers.setBearerAuth(token);
         HttpEntity<PaypalRequestDto> entity = new HttpEntity<>(requestBody, headers);
 
         ResponseEntity<PaypalPaymentDto> response = restTemplate.exchange(
