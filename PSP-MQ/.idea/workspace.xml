@@ -679,7 +679,7 @@
     &quot;Application.PspMqApplication.executor&quot;: &quot;Debug&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;develop&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;feat/paypalService&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
     &quot;last_opened_file_path&quot;: &quot;F:/Nevena/faks/master/SEP/projekat/sep/PSP-MQ&quot;,
     &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
@@ -724,6 +724,11 @@
           <url>file://$PROJECT_DIR$/src/main/java/com/vivo_psp/PSP_MQ/controllers/MessageController.java</url>
           <line>61</line>
           <option name="timeStamp" value="17" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/vivo_psp/PSP_MQ/controllers/MessageController.java</url>
+          <line>99</line>
+          <option name="timeStamp" value="18" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
