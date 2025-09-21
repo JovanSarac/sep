@@ -68,7 +68,7 @@ public class RequestController {
         HttpHeaders headers = new HttpHeaders();
         headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
         headers.setBearerAuth(token);
-        RequestDto requestDto = sessionService.createRequestBySession(sessionId);
+        RequestDto requestDto = sessionService.createRequestBySession(sessionId, apiKey);
         HttpEntity<RequestDto> entity = new HttpEntity<RequestDto>(requestDto, headers);
 
         ResponseEntity<RequestQRCodePaymentDto> response = restTemplate.exchange(apiGatewayUrl + "/bank1QRCodeValidateRequest", HttpMethod.POST, entity, RequestQRCodePaymentDto.class);
@@ -84,7 +84,7 @@ public class RequestController {
 
     @GetMapping("/sendRequest/{sessionId}")
     @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN', 'ROLE_BUSINESS_USER', 'ROLE_PERSONAL_USER', 'ROLE_WEB_SHOP')")
-    public RequestPaymentDto sendRequest(@PathVariable Long sessionId) {
+    public RequestPaymentDto sendRequest(@PathVariable Long sessionId, @RequestHeader("Authorization") String authorizationHeader) {
         logger.info("Processing car payment request..");
         //formira se objekat request
         //ocekuje se rezultat da bude objekat koji ce imati payment_url i payment_id
@@ -112,7 +112,9 @@ public class RequestController {
         HttpHeaders headers = new HttpHeaders();
         headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
         headers.setContentType(MediaType.APPLICATION_JSON);
-        RequestDto requestDto = sessionService.createRequestBySession(sessionId);
+        String token = authorizationHeader.replace("Bearer ", "").trim();
+        headers.setBearerAuth(token);
+        RequestDto requestDto = sessionService.createRequestBySession(sessionId, apiKey);
         HttpEntity<RequestDto> entity = new HttpEntity<RequestDto>(requestDto, headers);
 
         ResponseEntity<RequestPaymentDto> response = restTemplate.exchange(apiGatewayUrl + "/bank1ValidateRequest", HttpMethod.POST, entity, RequestPaymentDto.class);
@@ -130,17 +132,25 @@ public class RequestController {
     }
 
     @GetMapping("/sendRequestCrypto")
-    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN', 'ROLE_BUSINESS_USER', 'ROLE_PERSONAL_USER', 'ROLE_WEB_SHOP')")
+    //@PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN', 'ROLE_BUSINESS_USER', 'ROLE_PERSONAL_USER', 'ROLE_WEB_SHOP')")
     public ResponseEntity<ArrayList<String>> sendRequestCrypto() {
         logger.info("Processing crypto request..");
         HttpHeaders headers = new HttpHeaders();
         headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
         HttpEntity<Void> entity = new HttpEntity<>(headers);
 
-        ResponseEntity<ArrayList<String>> response = restTemplate.exchange(apiGatewayUrl  + "/eth", HttpMethod.GET, entity, new ParameterizedTypeReference<ArrayList<String>>() {});
-        ArrayList<String> walletIds = response.getBody();
+        try
+        {
+            ResponseEntity<ArrayList<String>> response = restTemplate.exchange(apiGatewayUrl  + "/eth", HttpMethod.GET, entity, new ParameterizedTypeReference<ArrayList<String>>() {});        
+            ArrayList<String> walletIds = response.getBody();
+            return ResponseEntity.ok(walletIds);
+        }
+        catch(Exception e)
+        {
+            System.out.println(e);
+        }
+        return ResponseEntity.ok(null);
 
-        return ResponseEntity.ok(walletIds);
     }
 
     @GetMapping("/sendRequestPaypal")

@@ -26,9 +26,9 @@ export class UserHelperService {
   }
 
   private extractUserRole(idToken: any): string {
-    const realmRoles = idToken?.realm_access?.roles;
+    const realmRoles = idToken?.realm_role;
     
-    if (realmRoles && realmRoles.length > 0) {
+      if (realmRoles && realmRoles.length > 0) {
         if (realmRoles.includes('ROLE_WEB_SHOP')) {
         return 'ROLE_WEB_SHOP';
       }
@@ -50,7 +50,7 @@ export class UserHelperService {
       );
       return userRoles[0] || 'ROLE_PERSONAL_USER';
     }
-    
+
     return 'ROLE_PERSONAL_USER';
   }
 

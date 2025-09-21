@@ -29,7 +29,7 @@ public class PSPServiceController {
     }
 
     @GetMapping("/user/active_payment_services")
-    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN', 'ROLE_WEB_SHOP', 'ROLE_BUSINESS_USER', 'ROLE_PERSONAL_USER')")
+    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN', 'ROLE_BUSINESS_USER', 'ROLE_PERSONAL_USER', 'ROLE_WEB_SHOP')")
     public ResponseEntity<List<PSPService>> getActiveServices() {
         List<String> registeredServices = discoveryClient.getServices()
                 .stream()

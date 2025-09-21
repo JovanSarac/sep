@@ -9,6 +9,8 @@
       <change beforePath="$PROJECT_DIR$/../API-GATEWAY/apigateway.crt" beforeDir="false" afterPath="$PROJECT_DIR$/../API-GATEWAY/apigateway.crt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../API-GATEWAY/apigateway.key" beforeDir="false" afterPath="$PROJECT_DIR$/../API-GATEWAY/apigateway.key" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../API-GATEWAY/certificate.conf" beforeDir="false" afterPath="$PROJECT_DIR$/../API-GATEWAY/certificate.conf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../API-GATEWAY/go.mod" beforeDir="false" afterPath="$PROJECT_DIR$/../API-GATEWAY/go.mod" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../API-GATEWAY/go.sum" beforeDir="false" afterPath="$PROJECT_DIR$/../API-GATEWAY/go.sum" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../API-GATEWAY/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/../API-GATEWAY/main.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Bank1/backend/.idea/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/../Bank1/backend/.idea/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Bank1/backend/.idea/backend.iml" beforeDir="false" afterPath="$PROJECT_DIR$/../Bank1/backend/.idea/backend.iml" afterDir="false" />
@@ -92,6 +94,12 @@
       <change beforePath="$PROJECT_DIR$/../Bank1/frontend/Bank1/src/app/feature-modules/layout/user-data/user-data.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/../Bank1/frontend/Bank1/src/app/feature-modules/layout/user-data/user-data.component.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Bank1/frontend/Bank1/src/app/feature-modules/layout/user-data/user-data.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/../Bank1/frontend/Bank1/src/app/feature-modules/layout/user-data/user-data.component.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Bank1/frontend/Bank1/src/app/feature-modules/layout/user-data/user-data.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../Bank1/frontend/Bank1/src/app/feature-modules/layout/user-data/user-data.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Bank1/frontend/Bank1/src/app/infrastracture/auth/guard/auth.guard.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../Bank1/frontend/Bank1/src/app/infrastracture/auth/guard/auth.guard.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Bank1/frontend/Bank1/src/app/infrastracture/auth/init/keycloak-init.factory.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../Bank1/frontend/Bank1/src/app/infrastracture/auth/init/keycloak-init.factory.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Bank1/frontend/Bank1/src/app/infrastracture/auth/jwt/jwt.interceptor.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../Bank1/frontend/Bank1/src/app/infrastracture/auth/jwt/jwt.interceptor.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Bank1/frontend/Bank1/src/app/infrastracture/auth/model/user.model.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../Bank1/frontend/Bank1/src/app/infrastracture/auth/model/user.model.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Bank1/frontend/Bank1/src/app/services/keycloakservice.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../Bank1/frontend/Bank1/src/app/services/keycloakservice.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Bank1/frontend/Bank1/src/app/services/user-helper-service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../Bank1/frontend/Bank1/src/app/services/user-helper-service.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Bank1/frontend/Bank1/src/custom-typings/qrcode.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../Bank1/frontend/Bank1/src/custom-typings/qrcode.d.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Bank1/frontend/Bank1/src/env/environment.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../Bank1/frontend/Bank1/src/env/environment.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Bank1/frontend/Bank1/src/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/../Bank1/frontend/Bank1/src/index.html" afterDir="false" />
@@ -329,6 +337,7 @@
       <change beforePath="$PROJECT_DIR$/../PSP/backend/PSP/src/main/java/com/example/PSP/configs/UserInfoMessage.java" beforeDir="false" afterPath="$PROJECT_DIR$/../PSP/backend/PSP/src/main/java/com/example/PSP/configs/UserInfoMessage.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../PSP/backend/PSP/src/main/java/com/example/PSP/controllers/AuthController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../PSP/backend/PSP/src/main/java/com/example/PSP/controllers/AuthController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../PSP/backend/PSP/src/main/java/com/example/PSP/controllers/CheckoutDataController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../PSP/backend/PSP/src/main/java/com/example/PSP/controllers/CheckoutDataController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../PSP/backend/PSP/src/main/java/com/example/PSP/controllers/HealthController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../PSP/backend/PSP/src/main/java/com/example/PSP/controllers/HealthController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../PSP/backend/PSP/src/main/java/com/example/PSP/controllers/PSPServiceController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../PSP/backend/PSP/src/main/java/com/example/PSP/controllers/PSPServiceController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../PSP/backend/PSP/src/main/java/com/example/PSP/controllers/RequestController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../PSP/backend/PSP/src/main/java/com/example/PSP/controllers/RequestController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../PSP/backend/PSP/src/main/java/com/example/PSP/controllers/SessionController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../PSP/backend/PSP/src/main/java/com/example/PSP/controllers/SessionController.java" afterDir="false" />
@@ -482,6 +491,8 @@
       <change beforePath="$PROJECT_DIR$/../PSP/frontend/PSP/tsconfig.app.json" beforeDir="false" afterPath="$PROJECT_DIR$/../PSP/frontend/PSP/tsconfig.app.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../PSP/frontend/PSP/tsconfig.json" beforeDir="false" afterPath="$PROJECT_DIR$/../PSP/frontend/PSP/tsconfig.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../PSP/frontend/PSP/tsconfig.spec.json" beforeDir="false" afterPath="$PROJECT_DIR$/../PSP/frontend/PSP/tsconfig.spec.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../QRCodePayment-microservice/go.mod" beforeDir="false" afterPath="$PROJECT_DIR$/../QRCodePayment-microservice/go.mod" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../QRCodePayment-microservice/go.sum" beforeDir="false" afterPath="$PROJECT_DIR$/../QRCodePayment-microservice/go.sum" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../QRCodePayment-microservice/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/../QRCodePayment-microservice/main.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../VIVONET/backend/VIVONET/.gitattributes" beforeDir="false" afterPath="$PROJECT_DIR$/../VIVONET/backend/VIVONET/.gitattributes" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../VIVONET/backend/VIVONET/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/../VIVONET/backend/VIVONET/.gitignore" afterDir="false" />
@@ -633,7 +644,6 @@
       <change beforePath="$PROJECT_DIR$/../VIVONET/frontend/VivoNet/vivonet-fe.crt" beforeDir="false" afterPath="$PROJECT_DIR$/../VIVONET/frontend/VivoNet/vivonet-fe.crt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../VIVONET/frontend/VivoNet/vivonet-fe.key" beforeDir="false" afterPath="$PROJECT_DIR$/../VIVONET/frontend/VivoNet/vivonet-fe.key" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../monitoring/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/../monitoring/docker-compose.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../monitoring/grafana/grafana.db" beforeDir="false" afterPath="$PROJECT_DIR$/../monitoring/grafana/grafana.db" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../monitoring/grafana/lokiDashboard.json" beforeDir="false" afterPath="$PROJECT_DIR$/../monitoring/grafana/lokiDashboard.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../monitoring/grafana/prometheusDashboard.json" beforeDir="false" afterPath="$PROJECT_DIR$/../monitoring/grafana/prometheusDashboard.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../monitoring/otel-collector-config.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/../monitoring/otel-collector-config.yaml" afterDir="false" />
@@ -669,7 +679,7 @@
     &quot;Application.PspMqApplication.executor&quot;: &quot;Debug&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;SSO&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;develop&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
     &quot;last_opened_file_path&quot;: &quot;F:/Nevena/faks/master/SEP/projekat/sep/PSP-MQ&quot;,
     &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
@@ -707,58 +717,13 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/com/vivo_psp/PSP_MQ/controllers/MessageController.java</url>
-          <line>191</line>
-          <option name="timeStamp" value="8" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/vivo_psp/PSP_MQ/controllers/MessageController.java</url>
-          <line>215</line>
-          <option name="timeStamp" value="9" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/vivo_psp/PSP_MQ/controllers/MessageController.java</url>
-          <line>222</line>
-          <option name="timeStamp" value="10" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/vivo_psp/PSP_MQ/controllers/MessageController.java</url>
-          <line>156</line>
-          <option name="timeStamp" value="12" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/vivo_psp/PSP_MQ/controllers/MessageController.java</url>
           <line>163</line>
           <option name="timeStamp" value="13" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/com/vivo_psp/PSP_MQ/controllers/MessageController.java</url>
-          <line>197</line>
-          <option name="timeStamp" value="15" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/vivo_psp/PSP_MQ/controllers/MessageController.java</url>
-          <line>35</line>
-          <option name="timeStamp" value="16" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/vivo_psp/PSP_MQ/controllers/MessageController.java</url>
           <line>61</line>
           <option name="timeStamp" value="17" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/vivo_psp/PSP_MQ/controllers/MessageController.java</url>
-          <line>86</line>
-          <option name="timeStamp" value="18" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/vivo_psp/PSP_MQ/controllers/MessageController.java</url>
-          <line>99</line>
-          <option name="timeStamp" value="19" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/vivo_psp/PSP_MQ/controllers/MessageController.java</url>
-          <line>129</line>
-          <option name="timeStamp" value="20" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

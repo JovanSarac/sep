@@ -45,10 +45,9 @@ public class SessionService {
         return sessionRepository.findById(id).get();
     }
 
-    public RequestDto createRequestBySession(Long id) {
+    public RequestDto createRequestBySession(Long id, ApiKey apiKey) {
         logger.info("Retrieving API key by sessionId " + id);
         Session session = getSessionById(id);
-        ApiKey apiKey = apiKeyService.findByWebShopId(session.getUser().getId());
 
         RequestDto requestDto = new RequestDto();
         requestDto.merchantId = apiKey.getMerchantId();

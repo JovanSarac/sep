@@ -17,7 +17,7 @@ export class UserHelperService {
 
     const idToken = this.keycloakService.getIdTokenParsed();
     const username = this.keycloakService.getUsername();
-    
+    console.log("IDTOKEN" + idToken.id)
     return {
       id: idToken?.id || 0,
       username: username || '',
@@ -26,13 +26,12 @@ export class UserHelperService {
   }
 
   private extractUserRole(idToken: any): string {
-    const realmRoles = idToken?.realm_access?.roles;
+    const realmRoles = idToken?.realm_role;
     
-    if (realmRoles && realmRoles.length > 0) {
+      if (realmRoles && realmRoles.length > 0) {
         if (realmRoles.includes('ROLE_WEB_SHOP')) {
         return 'ROLE_WEB_SHOP';
       }
-      // Traži specifične uloge
       if (realmRoles.includes('ROLE_BUSINESS_USER')) {
         return 'ROLE_BUSINESS_USER';
       }
@@ -51,7 +50,7 @@ export class UserHelperService {
       );
       return userRoles[0] || 'ROLE_PERSONAL_USER';
     }
-    
+
     return 'ROLE_PERSONAL_USER';
   }
 
