@@ -130,10 +130,12 @@ func initKeycloak() {
 }
 
 func validateToken(r *http.Request) (*jwt.Token, error) {
+	fmt.Printf("VADIATE TOKEN")
 	authHeader := r.Header.Get("Authorization")
 	if authHeader == "" {
 		return nil, fmt.Errorf("missing Authorization header")
 	}
+	fmt.Printf("DALJE KROZ TOKEN")
 
 	parts := strings.Split(authHeader, " ")
 	if len(parts) != 2 || parts[0] != "Bearer" {
@@ -141,6 +143,7 @@ func validateToken(r *http.Request) (*jwt.Token, error) {
 	}
 
 	tokenString := parts[1]
+	fmt.Printf("PARSIRANJE")
 
 	token, err := jwt.Parse(tokenString, keycloakJWKS.Keyfunc)
 	if err != nil {
@@ -160,6 +163,8 @@ func validateToken(r *http.Request) (*jwt.Token, error) {
 	if !ok {
 		return nil, fmt.Errorf("missing aud claim")
 	}
+
+	fmt.Printf("ALOO")
 
 	validAud := false
 

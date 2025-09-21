@@ -57,6 +57,7 @@ func authMiddleware(next http.Handler) http.Handler {
 
 		ctx := r.Context()
 		idToken, err := verifier.Verify(ctx, token)
+		fmt.Sprint("ID TOKEN SUGAVI STO NEMA NEKE STVARI: ", idToken)
 		if err != nil {
 			http.Error(w, "Invalid token", http.StatusUnauthorized)
 			return

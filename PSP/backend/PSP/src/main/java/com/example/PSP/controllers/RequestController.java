@@ -83,7 +83,7 @@ public class RequestController {
 
     @GetMapping("/sendRequest/{sessionId}")
     @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN', 'ROLE_BUSINESS_USER', 'ROLE_PERSONAL_USER', 'ROLE_WEB_SHOP')")
-    public RequestPaymentDto sendRequest(@PathVariable Long sessionId) {
+    public RequestPaymentDto sendRequest(@PathVariable Long sessionId, @RequestHeader("Authorization") String authorizationHeader) {
         logger.info("Processing car payment request..");
         //formira se objekat request
         //ocekuje se rezultat da bude objekat koji ce imati payment_url i payment_id
@@ -111,6 +111,8 @@ public class RequestController {
         HttpHeaders headers = new HttpHeaders();
         headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
         headers.setContentType(MediaType.APPLICATION_JSON);
+        String token = authorizationHeader.replace("Bearer ", "").trim();
+        headers.setBearerAuth(token);
         RequestDto requestDto = sessionService.createRequestBySession(sessionId, apiKey);
         HttpEntity<RequestDto> entity = new HttpEntity<RequestDto>(requestDto, headers);
 
