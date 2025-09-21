@@ -266,6 +266,40 @@ services:
       - default
       - monitoring
 
+  ethereum-service:
+    build:
+      context: ./EthereumPayment-microservice
+      dockerfile: Dockerfile
+    container_name: ethereum-service
+    volumes:
+      - ./monitoring/logs:/app/logs
+    environment:
+      DATABASE_URL: "host=db user=postgres password=super dbname=EthPayment port=5432 sslmode=disable"
+      CONSUL_ADDR: http://consul:8500
+      PSP_NOTIFY_URL: https://psp-mq:9000/newPaymentService/create
+      PSP_REMOVE_URL: https://psp-mq:9000/newPaymentService/remove
+      SERVICE_PORT: 8084
+      SERVICE_NAME: ethereum
+      SERVICE_ADDRESS: ethereum-service
+      LOG_FILE: /app/logs/ethPayment.log
+    ports:
+      - "8084:8084"
+    depends_on:
+      - consul
+      - keycloak
+
+  ethereum-frontend:
+    build:
+      context: ./EthereumPayment Frontend/ethereum-payment
+      dockerfile: Dockerfile
+    container_name: ethereum-frontend
+    environment:
+      KEYCLOAK_URL: http://keycloak:8080
+    ports:
+      - "4203:443"
+    depends_on:
+      - ethereum-service
+
 
   prometheus:
     image: prom/prometheus:v2.35.0

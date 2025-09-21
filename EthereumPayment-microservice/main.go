@@ -34,7 +34,10 @@ import (
 var database *gorm.DB
 
 func initDB() *gorm.DB {
-	connStr := "user=postgres dbname=EthPayment password=super sslmode=disable"
+	connStr := os.Getenv("DATABASE_URL")
+	if connStr == "" {
+		connStr = "host=localhost user=postgres password=super dbname=EthPayment port=5432 sslmode=disable"
+	}
 	db, err := gorm.Open(postgres.Open(connStr), &gorm.Config{})
 	if err != nil {
 		panic(err)
@@ -42,11 +45,20 @@ func initDB() *gorm.DB {
 	return db
 }
 
+func getEnv(key, fallback string) string {
+	if value, exists := os.LookupEnv(key); exists {
+		return value
+	}
+	return fallback
+}
+
 func initTracer() func() {
 	ctx := context.Background()
 
+	tracingUrl := getEnv("TRACING_URL", "localhost:4318")
+
 	exp, err := otlptracehttp.New(ctx,
-		otlptracehttp.WithEndpoint("localhost:4318"),
+		otlptracehttp.WithEndpoint(tracingUrl),
 		otlptracehttp.WithInsecure(),
 	)
 	if err != nil {
@@ -87,7 +99,8 @@ func findAvailablePort(basePort int) (int, error) {
 
 // Check if this is the first instance of the service
 func isFirstInstance(serviceName string) bool {
-	consulURL := fmt.Sprintf("http://localhost:8500/v1/health/service/%s?passing=true", serviceName)
+	consulHost := getEnv("CONSUL_ADDR", "http://localhost:8500")
+	consulURL := fmt.Sprintf("%s/v1/health/service/%s?passing=true", consulHost, serviceName)
 
 	client := &http.Client{Timeout: 3 * time.Second}
 	resp, err := client.Get(consulURL)
@@ -109,7 +122,8 @@ func isFirstInstance(serviceName string) bool {
 
 // Check if any instances remain after deregistration
 func hasRemainingInstances(serviceName string) bool {
-	consulURL := fmt.Sprintf("http://localhost:8500/v1/health/service/%s?passing=true", serviceName)
+	consulHost := getEnv("CONSUL_ADDR", "http://localhost:8500")
+	consulURL := fmt.Sprintf("%s/v1/health/service/%s?passing=true", consulHost, serviceName)
 
 	client := &http.Client{Timeout: 3 * time.Second}
 	resp, err := client.Get(consulURL)
@@ -132,16 +146,18 @@ func registerWithConsul(serviceName string, port int, instanceId string) {
 	// Check if this is the first instance BEFORE registering
 	isFirst := isFirstInstance(serviceName)
 
-	consulURL := "http://localhost:8500/v1/agent/service/register"
+	consulHost := getEnv("CONSUL_ADDR", "http://localhost:8500")
+	consulURL := fmt.Sprintf("%s/v1/agent/service/register", consulHost)
 
+	serviceAddr := getEnv("SERVICE_ADDRESS", "host.docker.internal")
 	data := map[string]interface{}{
 		"ID":      instanceId,  // Unique instance ID
 		"Name":    serviceName, // Same service name for all instances
-		"Address": "host.docker.internal",
+		"Address": serviceAddr,
 		"Port":    port,
 		"Tags":    []string{instanceId, "v1"},
 		"Check": map[string]interface{}{
-			"HTTP":     fmt.Sprintf("http://host.docker.internal:%d/health", port),
+			"HTTP":     fmt.Sprintf("http://%s:%d/health", serviceAddr, port),
 			"Interval": "10s",
 			"Timeout":  "3s",
 		},
@@ -181,7 +197,8 @@ func registerWithConsul(serviceName string, port int, instanceId string) {
 }
 
 func deregisterFromConsul(instanceId string, serviceName string) {
-	consulURL := fmt.Sprintf("http://localhost:8500/v1/agent/service/deregister/%s", instanceId)
+	consulHost := getEnv("CONSUL_ADDR", "http://localhost:8500")
+	consulURL := fmt.Sprintf("%s/v1/agent/service/deregister/%s", consulHost, instanceId)
 
 	req, err := http.NewRequest(http.MethodPut, consulURL, nil)
 	if err != nil {
@@ -212,7 +229,7 @@ func deregisterFromConsul(instanceId string, serviceName string) {
 }
 
 func notifyPSPCreate(serviceName, instanceId string) {
-	url := "https://localhost:9000/newPaymentService/create"
+	url := getEnv("PSP_NOTIFY_URL", "https://localhost:9000/newPaymentService/create")
 
 	req, err := http.NewRequest("POST", url, bytes.NewBufferString(serviceName))
 	if err != nil {
@@ -240,7 +257,7 @@ func notifyPSPCreate(serviceName, instanceId string) {
 }
 
 func notifyPSPRemove(serviceName string) {
-	url := "https://localhost:9000/newPaymentService/remove"
+	url := getEnv("PSP_REMOVE_URL", "https://localhost:9000/newPaymentService/remove")
 
 	req, err := http.NewRequest("POST", url, bytes.NewBufferString(serviceName))
 	if err != nil {
@@ -276,7 +293,10 @@ func main() {
 	// Create instance-specific log file and ID
 	instanceId := fmt.Sprintf("eth-%d", port)
 
-	logFilePath := "F:/Nevena/faks/master/SEP/projekat/sep/monitoring/logs/ethPayment.log"
+	logFilePath := os.Getenv("LOG_FILE")
+	if logFilePath == "" {
+		logFilePath = "F:/Nevena/faks/master/SEP/projekat/sep/monitoring/logs/ethPayment.log" // fallback kad nisi u dockeru
+	}
 
 	logFile, err := os.OpenFile(logFilePath, os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
 	if err != nil {
