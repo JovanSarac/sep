@@ -10,6 +10,7 @@ import (
 	"net/http"
 	"os"
 	"strings"
+	"time"
 
 	"github.com/coreos/go-oidc"
 	"github.com/google/uuid"
@@ -19,17 +20,36 @@ import (
 
 var verifier *oidc.IDTokenVerifier
 
+func getEnv(key, fallback string) string {
+	if value, ok := os.LookupEnv(key); ok {
+		return value
+	}
+	return fallback
+}
+
 func initKeycloak() {
 	ctx := context.Background()
 	var keycloakURL = getEnv("KEYCLOAK_URL", "http://localhost:8080/realms/sep-realm")
-	provider, err := oidc.NewProvider(ctx, keycloakURL)
+	var provider *oidc.Provider
+	var err error
+	for i := 0; i < 10; i++ {
+		provider, err = oidc.NewProvider(ctx, keycloakURL)
+		if err == nil {
+			break
+		}
+		log.Println("[Keycloak] not ready yet, retrying in 2s...")
+		time.Sleep(2 * time.Second)
+	}
 	if err != nil {
-		panic(err)
+		log.Fatalf("[Keycloak] failed to initialize: %v", err)
 	}
 
 	verifier = provider.Verifier(&oidc.Config{
-		ClientID: "sep-api-gateway",
+		ClientID:        "sep-api-gateway",
+		SkipIssuerCheck: true,
 	})
+
+	log.Println("[Keycloak] initialized successfully")
 }
 
 func authMiddleware(next http.Handler) http.Handler {
@@ -40,9 +60,11 @@ func authMiddleware(next http.Handler) http.Handler {
 	}
 
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		log.Println("[Auth] Incoming request:", r.Method, r.URL.Path)
 
 		for _, route := range publicRoutes {
 			if r.URL.Path == route {
+				log.Println("[Auth] Public route, skipping token verification")
 				next.ServeHTTP(w, r)
 				return
 			}
@@ -50,6 +72,13 @@ func authMiddleware(next http.Handler) http.Handler {
 
 		authHeader := r.Header.Get("Authorization")
 		if authHeader == "" || !strings.HasPrefix(authHeader, "Bearer ") {
+			log.Println("[Auth] Missing or invalid Authorization header")
+			log.Println("[Auth] Full headers received:")
+			for name, values := range r.Header {
+				for _, value := range values {
+					log.Printf("%s: %s\n", name, value)
+				}
+			}
 			http.Error(w, "Missing or invalid Authorization header", http.StatusUnauthorized)
 			fmt.Sprintf("Invalid token " + authHeader)
 			return
@@ -59,17 +88,32 @@ func authMiddleware(next http.Handler) http.Handler {
 
 		ctx := r.Context()
 		idToken, err := verifier.Verify(ctx, token)
+
+		if idToken.Issuer != "http://localhost:8080/realms/sep-realm" &&
+			idToken.Issuer != "http://keycloak:8080/realms/sep-realm" {
+			log.Println("[Auth] Invalid token issuer:", idToken.Issuer)
+			http.Error(w, "Invalid token issuer", http.StatusUnauthorized)
+			return
+		}
+
+		log.Println("[Auth] Token verified, issuer OK:", idToken.Issuer, "subject:", idToken.Subject)
+
 		fmt.Sprint("ID TOKEN SUGAVI STO NEMA NEKE STVARI: ", idToken)
 		if err != nil {
+			log.Println("[Auth] Token verification failed:", err)
 			http.Error(w, "Invalid token", http.StatusUnauthorized)
 			return
 		}
+
+		log.Println("[Auth] Token verified:", idToken.Subject)
 
 		var claims struct {
 			Aud []string `json:"aud"`
 		}
 
 		if err := idToken.Claims(&claims); err != nil {
+			log.Println("[Auth] Failed to parse claims:", err)
+
 			http.Error(w, "Failed to parse claims", http.StatusUnauthorized)
 			return
 		}
@@ -83,9 +127,12 @@ func authMiddleware(next http.Handler) http.Handler {
 		}
 
 		if !validAud {
+			log.Println("[Auth] Token audience invalid:", claims.Aud)
 			http.Error(w, "Token not intended for this service", http.StatusForbidden)
 			return
 		}
+
+		log.Println("[Auth] Request authorized")
 
 		// token je validan → pusti dalje
 		next.ServeHTTP(w, r)
@@ -138,13 +185,6 @@ func getServiceURL(serviceName string) (string, error) {
 		return "", fmt.Errorf("service %s not found", serviceName)
 	}
 	return fmt.Sprintf("http://%s:%d", services[0].ServiceAddress, services[0].ServicePort), nil
-}
-
-func getEnv(key, fallback string) string {
-	if value, ok := os.LookupEnv(key); ok {
-		return value
-	}
-	return fallback
 }
 
 func main() {

@@ -13,7 +13,7 @@ FROM nginx:alpine
 WORKDIR /etc/nginx
 
 # Copy built Angular app
-COPY --from=build /app/dist/ethereum-payment /usr/share/nginx/html
+COPY --from=build /app/dist/ethereum-payment/browser /usr/share/nginx/html
 
 # Copy SSL certificate and key
 COPY ethpayment-fe.crt /etc/ssl/certs/ethpayment-fe.crt

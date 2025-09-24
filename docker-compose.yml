@@ -60,6 +60,10 @@ services:
       SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/vivonet
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: super
+      RABBITMQ_HOST: rabbitmq
+      RABBITMQ_PORT: 5672
+      RABBITMQ_USER: guest
+      RABBITMQ_PASS: guest
       TRACING_URL: http://jaeger:4318/v1/traces
       KEYCLOAK_URL: http://keycloak:8080
     ports:
@@ -100,9 +104,10 @@ services:
       RABBITMQ_PORT: 5672
       RABBITMQ_USER: guest
       RABBITMQ_PASS: guest
-      API_GATEWAY_HOST: https://apigateway:8080
+      API_GATEWAY_HOST: https://apigateway:9001
       TRACING_URL: http://jaeger:4318/v1/traces
       KEYCLOAK_URL: http://keycloak:8080
+      PSP_MQ_HOST: https://psp-mq:9000
     ports:
       - "8090:8090"
     depends_on:
@@ -190,6 +195,7 @@ services:
       SERVICE_PORT: 8082
       SERVICE_NAME: card
       SERVICE_ADDRESS: card-service
+      BANK1_VALIDATE_URL: https://bank1:8091/api/bank1/requests/validateRequest
     ports:
       - "8082:8082"
     depends_on:
@@ -197,11 +203,11 @@ services:
       - keycloak
       - psp-mq
 
-  bank-1-backend:
+  bank1:
     build:
       context: ./Bank1/backend/Bank1
       dockerfile: Dockerfile
-    container_name: bank-1-backend
+    container_name: bank1
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/Bank1
       SPRING_DATASOURCE_USERNAME: postgres
@@ -228,7 +234,7 @@ services:
     ports:
       - "4202:443"
     depends_on:
-      - bank-1-backend
+      - bank1
 
   pcc:
     build:
@@ -248,11 +254,11 @@ services:
       - default
       - monitoring
 
-  bank-2-backend:
+  bank2:
     build:
       context: ./Bank2
       dockerfile: Dockerfile
-    container_name: bank-2-backend
+    container_name: bank2
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/Bank2
       SPRING_DATASOURCE_USERNAME: postgres
@@ -266,11 +272,11 @@ services:
       - default
       - monitoring
 
-  ethereum-service:
+  ethereum-service-1:
     build:
       context: ./EthereumPayment-microservice
       dockerfile: Dockerfile
-    container_name: ethereum-service
+    container_name: ethereum-service-1
     volumes:
       - ./monitoring/logs:/app/logs
     environment:
@@ -280,10 +286,32 @@ services:
       PSP_REMOVE_URL: https://psp-mq:9000/newPaymentService/remove
       SERVICE_PORT: 8084
       SERVICE_NAME: ethereum
-      SERVICE_ADDRESS: ethereum-service
-      LOG_FILE: /app/logs/ethPayment.log
+      SERVICE_ADDRESS: ethereum-service-1
+      LOG_FILE: /app/logs/ethPayment-1.log
     ports:
       - "8084:8084"
+    depends_on:
+      - consul
+      - keycloak
+
+  ethereum-service-2:
+    build:
+      context: ./EthereumPayment-microservice
+      dockerfile: Dockerfile
+    container_name: ethereum-service-2
+    volumes:
+      - ./monitoring/logs:/app/logs
+    environment:
+      DATABASE_URL: "host=db user=postgres password=super dbname=EthPayment port=5432 sslmode=disable"
+      CONSUL_ADDR: http://consul:8500
+      PSP_NOTIFY_URL: https://psp-mq:9000/newPaymentService/create
+      PSP_REMOVE_URL: https://psp-mq:9000/newPaymentService/remove
+      SERVICE_PORT: 8085
+      SERVICE_NAME: ethereum
+      SERVICE_ADDRESS: ethereum-service-2
+      LOG_FILE: /app/logs/ethPayment-2.log
+    ports:
+      - "8085:8085"
     depends_on:
       - consul
       - keycloak
@@ -298,7 +326,28 @@ services:
     ports:
       - "4203:443"
     depends_on:
-      - ethereum-service
+      - ethereum-service-1
+      - ethereum-service-2
+
+  qrcode-service:
+    build:
+      context: ./QRCodePayment-microservice
+      dockerfile: Dockerfile
+    container_name: qrcode-service
+    environment:
+      KEYCLOAK_URL: http://keycloak:8080
+      CONSUL_ADDR: http://consul:8500
+      PSP_NOTIFY_URL: https://psp-mq:9000/newPaymentService/create
+      PSP_REMOVE_URL: https://psp-mq:9000/newPaymentService/remove
+      SERVICE_PORT: 8083
+      SERVICE_NAME: qrcode
+      SERVICE_ADDRESS: qrcode-service
+      BANK1_VALIDATE_URL: https://bank1:8091/api/bank1/requests/validateRequestQRCode
+    ports:
+      - "8083:8083"
+    depends_on:
+      - consul
+      - keycloak
 
 
   prometheus:

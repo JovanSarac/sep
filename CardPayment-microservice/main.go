@@ -345,7 +345,13 @@ func validateRequest(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	client := &http.Client{}
+	tr := &http.Transport{
+		TLSClientConfig: &tls.Config{
+			InsecureSkipVerify: true, //only for dev
+		},
+	}
+
+	client := &http.Client{Transport: tr}
 	resp, err := client.Do(req)
 
 	fmt.Println("BILO STA")

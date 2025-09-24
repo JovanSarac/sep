@@ -51,15 +51,24 @@ type RequestDto struct {
 	ErrorUrl         string    `json:"errorUrl"`
 }
 
+func getEnv(key, fallback string) string {
+	if value, exists := os.LookupEnv(key); exists {
+		return value
+	}
+	return fallback
+}
+
 func registerWithConsul(serviceName string, port int) {
-	consulURL := "http://localhost:8500/v1/agent/service/register"
+	consulURL := getEnv("CONSUL_ADDR", "http://localhost:8500") + "/v1/agent/service/register"
+
+	serviceAddr := getEnv("SERVICE_ADDRESS", "host.docker.internal")
 
 	data := map[string]interface{}{
 		"Name":    serviceName,
-		"Address": "host.docker.internal",
+		"Address": serviceAddr,
 		"Port":    port,
 		"Check": map[string]interface{}{
-			"HTTP":     fmt.Sprintf("http://host.docker.internal:%d/health", port),
+			"HTTP":     fmt.Sprintf("http://%s:%d/health", serviceAddr, port),
 			"Interval": "10s",
 		},
 	}
@@ -86,7 +95,7 @@ func registerWithConsul(serviceName string, port int) {
 	log.Printf("Registered %s with Consul", serviceName)
 
 	//send notification to psp
-	url := "https://localhost:9000/newPaymentService/create"
+	url := getEnv("PSP_NOTIFY_URL", "https://localhost:9000/newPaymentService/create")
 	serviceNameBody := serviceName
 
 	serviceReq, serviceErr := http.NewRequest("POST", url, bytes.NewBufferString(serviceNameBody))
@@ -112,7 +121,10 @@ func registerWithConsul(serviceName string, port int) {
 }
 
 func initKeycloak() {
-	jwksURL := "http://localhost:8080/realms/sep-realm/protocol/openid-connect/certs" // zameni sa tvojim Keycloak URL-om
+	jwksURL := fmt.Sprintf("%s/realms/%s/protocol/openid-connect/certs",
+		getEnv("KEYCLOAK_URL", "http://localhost:8080"),
+		getEnv("KEYCLOAK_REALM", "sep-realm"),
+	)
 
 	// Kreiramo JWKS sa automatskim osvežavanjem svakih 10 minuta
 	options := keyfunc.Options{
@@ -257,7 +269,7 @@ func validateRequest(w http.ResponseWriter, r *http.Request) {
 
 	token := r.Header.Get("Authorization")
 	req, err := http.NewRequest("POST",
-		"https://localhost:8091/api/bank1/requests/validateRequestQRCode",
+		getEnv("BANK1_VALIDATE_URL", "https://localhost:8091/api/bank1/requests/validateRequestQRCode"),
 		bytes.NewBuffer(body),
 	)
 
@@ -269,7 +281,13 @@ func validateRequest(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	client := &http.Client{}
+	tr := &http.Transport{
+		TLSClientConfig: &tls.Config{
+			InsecureSkipVerify: true, //only for dev
+		},
+	}
+
+	client := &http.Client{Transport: tr}
 	//resp, err := http.Post(fmt.Sprintf("https://localhost:8091/api/bank1/requests/validateRequestQRCode"), "application/json", bytes.NewBuffer(body))
 	resp, err := client.Do(req)
 	fmt.Println("BILO STA")
@@ -313,7 +331,7 @@ func validateRequest(w http.ResponseWriter, r *http.Request) {
 }
 
 func notifyPSP(serviceName string) {
-	url := "https://localhost:9000/newPaymentService/remove"
+	url := getEnv("PSP_REMOVE_URL", "https://localhost:9000/newPaymentService/remove")
 
 	req, err := http.NewRequest("POST", url, bytes.NewBufferString(serviceName))
 	if err != nil {
@@ -342,7 +360,8 @@ func notifyPSP(serviceName string) {
 }
 
 func deregisterFromConsul(serviceName string) {
-	consulURL := fmt.Sprintf("http://localhost:8500/v1/agent/service/deregister/%s", serviceName)
+	consulAddr := getEnv("CONSUL_ADDR", "http://localhost:8500")
+	consulURL := fmt.Sprintf("%s/v1/agent/service/deregister/%s", consulAddr, serviceName)
 
 	req, err := http.NewRequest(http.MethodPut, consulURL, nil)
 	if err != nil {

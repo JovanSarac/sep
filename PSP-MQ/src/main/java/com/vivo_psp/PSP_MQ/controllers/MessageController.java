@@ -304,6 +304,8 @@ public class MessageController {
                 sessionId
         );
 
+        System.out.println("JWT token in message: " + headers.get("authorization"));
+
         try {
             Object response = asyncRabbitTemplate.convertSendAndReceive(
                     MQConfig.EXCHANGE_PAYPAL,

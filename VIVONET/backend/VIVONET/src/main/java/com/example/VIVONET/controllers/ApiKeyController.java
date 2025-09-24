@@ -17,7 +17,7 @@ public class ApiKeyController {
     private ApiKeyService apiKeyService;
 
     @PostMapping("/apiKey")
-    @PreAuthorize("hasAnyRole('ROLE_BUSINESS_USER', 'ROLE_PERSONAL_USER', 'ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('ROLE_BUSINESS_USER', 'ROLE_PERSONAL_USER', 'ROLE_WEB_SHOP', 'ROLE_ADMIN')")
     public ResponseEntity<String> saveApiKey(@RequestBody ApiKeyDto apiKeyDto){
          ApiKey apiKey = apiKeyService.create(apiKeyDto);
 

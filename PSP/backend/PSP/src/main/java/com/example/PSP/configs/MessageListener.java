@@ -61,14 +61,24 @@ public class MessageListener {
                 "https://localhost:8090/api/psp/requests/sendRequest/" + message.getSessionId()
                 : "https://localhost:8090/api/psp/requests/sendRequestQRCode/" + message.getSessionId();
 
+        System.out.println("📩 Received message from queue:");
+        System.out.println("  - typeOfCardPayment: " + message.getTypeOfCardPayment());
+        System.out.println("  - sessionId: " + message.getSessionId());
+        System.out.println("  - raw JWT token: " + message.getJWTToken());
+
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", message.getJWTToken());
 
         var requestEntity = new HttpEntity<>(null, headers);
 
         try {
+            System.out.println("➡️ Sending request to: " + url);
+            System.out.println("➡️ With headers: " + headers);
             ResponseEntity<String> response = restTemplate.exchange(
                     url, HttpMethod.GET, requestEntity, String.class);
+
+            System.out.println("✅ Response status: " + response.getStatusCode());
+            System.out.println("✅ Response body: " + response.getBody());
 
             return response.getBody();
         } catch (HttpClientErrorException e) {
@@ -229,6 +239,8 @@ public class MessageListener {
 
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", message.getJwtToken());
+
+        System.out.println("Calling sendRequestPaypal with token: " + message.getJwtToken());
 
         var requestEntity = new HttpEntity<>(null, headers);
 

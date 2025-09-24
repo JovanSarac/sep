@@ -41,6 +41,9 @@ public class RequestController {
     @Value("${api.gateway.url}")
     private String apiGatewayUrl;
 
+    @Value("${psp.mq.url}")
+    private String pspMqUrl;
+
     private static final Logger logger = LoggerFactory.getLogger(RequestController.class);
 
     @GetMapping("/sendRequestQRCode/{sessionId}")
@@ -48,7 +51,7 @@ public class RequestController {
     public RequestQRCodePaymentDto sendRequestQRCode(@PathVariable Long sessionId, @RequestHeader("Authorization") String authorizationHeader) {
         logger.info("Processing the QR code request..");
         String token = authorizationHeader.replace("Bearer ", "").trim();
-        String url = "https://localhost:9000/publishApiKeyRequest";
+        String url = pspMqUrl + "/publishApiKeyRequest";
         HttpHeaders headersMQ = new HttpHeaders();
         var requestEntity = new HttpEntity<>(-2, headersMQ);
         var method = HttpMethod.POST;
@@ -92,33 +95,62 @@ public class RequestController {
         //mora prvo create subscription da se uradi
 
         //provera apiKey-a pre redirect-a
-        String url = "https://localhost:9000/publishApiKeyRequest";
+        String url = pspMqUrl + "/publishApiKeyRequest";
+        logger.info(url);
         HttpHeaders headersMQ = new HttpHeaders();
         var requestEntity = new HttpEntity<>(-1, headersMQ);
+        logger.info(requestEntity.toString());
         var method = HttpMethod.POST;
         try {
+            logger.info("Pre poziva...");
             String response = restTemplate.exchange(url, method, requestEntity, String.class).getBody();
+            logger.info("Posle poziva: " + response );
         } catch (HttpClientErrorException e) {
             System.out.println("Error calling endpoint: " + e.getMessage());
         }
 
-        while(this.responseMessage == null){
-
+        logger.info("➡️ [sendRequest] Waiting for ApiKeyResponseMessage from MQ...");
+        long start = System.currentTimeMillis();
+        while (this.responseMessage == null) {
+            if (System.currentTimeMillis() - start > 5000) {
+                logger.error("⏰ [sendRequest] Timeout waiting for ApiKeyResponseMessage (5s)");
+                throw new RuntimeException("Timeout waiting for ApiKeyResponseMessage");
+            }
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                throw new RuntimeException("Thread interrupted while waiting for ApiKeyResponseMessage", e);
+            }
         }
+        logger.info("✅ [sendRequest] Received ApiKeyResponseMessage: {}", this.responseMessage);
 
         ApiKey apiKey = apiKeyService.findByMerchantId(UUID.fromString(responseMessage.getMerchantId()));
-        if(!apiKey.getMerchantPassword().equals(responseMessage.getMerchantPassword())) throw new ResourceAccessException("Invalid apiKey");
+        logger.info("➡️ [sendRequest] ApiKey fetched from DB: {}", apiKey);
+
+        if (!apiKey.getMerchantPassword().equals(responseMessage.getMerchantPassword())) {
+            logger.error("❌ [sendRequest] Invalid apiKey for merchantId={}", responseMessage.getMerchantId());
+            throw new ResourceAccessException("Invalid apiKey");
+        }
+        logger.info("✅ [sendRequest] ApiKey validated successfully.");
 
         HttpHeaders headers = new HttpHeaders();
         headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
         headers.setContentType(MediaType.APPLICATION_JSON);
         String token = authorizationHeader.replace("Bearer ", "").trim();
         headers.setBearerAuth(token);
+        logger.info("➡️ [sendRequest] Authorization header set, token length={}", token.length());
+
         RequestDto requestDto = sessionService.createRequestBySession(sessionId, apiKey);
+        logger.info("➡️ [sendRequest] Created RequestDto: {}", requestDto);
         HttpEntity<RequestDto> entity = new HttpEntity<RequestDto>(requestDto, headers);
+
+        logger.info("➡️ [sendRequest] Sending request to bank1ValidateRequest...");
 
         ResponseEntity<RequestPaymentDto> response = restTemplate.exchange(apiGatewayUrl + "/bank1ValidateRequest", HttpMethod.POST, entity, RequestPaymentDto.class);
         RequestPaymentDto requestPaymentDto = response.getBody();
+        logger.info("✅ [sendRequest] bank1ValidateRequest response: {}", requestPaymentDto);
+
 
         //restTemplate.exchange("http://localhost:8080/bank1", HttpMethod.POST, entity, String.class).getBody();
         //return ResponseEntity.ok("{\"message\": \"Uspesno\"}");
@@ -128,6 +160,7 @@ public class RequestController {
     @RabbitListener(queues = MQConfig.QUEUE_APIKEY_RESPONSE)
     public void apiKeyListener(ApiKeyResponseMessage message){
 
+        logger.info("Api key je:" + message);
         this.responseMessage = message;
     }
 
@@ -170,6 +203,7 @@ public class RequestController {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         String token = authorizationHeader.replace("Bearer ", "").trim();
+        System.out.println("Calling sendRequestPaypal with token: " + token);
         headers.setBearerAuth(token);
         HttpEntity<PaypalRequestDto> entity = new HttpEntity<>(requestBody, headers);
 
